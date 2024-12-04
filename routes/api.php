@@ -31,7 +31,6 @@ if(fun::getRawCookie('islogin')) {
 
         //? As1001PesertaProfilController
         Route::get('/peserta', myroute::API('As1001PesertaProfilController', 'all'));
-        
         Route::delete('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'delete'));
 
         //? As1001PesertaHasilnilaiController
@@ -69,3 +68,16 @@ if(fun::getRawCookie('__token__')) {
 Route::get('/hello', function(){
     return 'hello';
 });
+
+Route::post('/hello', function(){
+    return 'hello';
+});
+
+Route::put('/hello', function(){
+    return 'hello';
+});
+
+Route::delete('/hello', function(){
+    return 'hello';
+});
+
