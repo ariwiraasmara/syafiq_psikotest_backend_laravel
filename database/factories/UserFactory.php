@@ -1,5 +1,7 @@
 <?php
-
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;

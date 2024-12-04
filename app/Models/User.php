@@ -1,5 +1,7 @@
 <?php
-
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
