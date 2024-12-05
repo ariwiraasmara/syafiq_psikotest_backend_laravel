@@ -6,9 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
-use App\Libraries\myfunction as fun;
 use App\Libraries\jsr;
-
 class As2001KecermatanKolompertanyaanController extends Controller {
     //
     protected as2001_kecermatan_kolompertanyaanRepository $repo;
@@ -30,7 +28,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         $data = $this->repo->get($val);
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Data Soal Psikotest Kecermatan '.$data[0]['kolom_x'], 
+            'pesan'     => 'Data Pertanyaan Psikotest Kecermatan '.$data[0]['kolom_x'], 
             'data'      => $data
         ], 'ok'); 
     }
@@ -39,46 +37,59 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     public function store(Request $request) {
         $data = $this->repo->store([
             'kolom_x' => $request->kolom_x,
-            'nilai_1' => $request->nilai_1,
-            'nilai_2' => $request->nilai_2,
-            'nilai_3' => $request->nilai_3,
-            'nilai_4' => $request->nilai_4,
-            'nilai_5' => $request->nilai_5,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'nilai_A' => $request->nilai_A,
+            'nilai_B' => $request->nilai_B,
+            'nilai_C' => $request->nilai_C,
+            'nilai_D' => $request->nilai_D,
+            'nilai_E' => $request->nilai_E,
         ]);
 
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Menyimpan Data Pertanyaan Psikotest Kecermatan!', 
+            'data'    => $data
+        ], 'created');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Menyimpan Data Soal Psikotest Kecermatan!', 
-            'data'      => $data
-        ], 'created'); 
+            'error'   => 1,
+            'pesan'   => 'Gagal Menyimpan Data Pertanyaan Psikotest Kecermatan!', 
+        ], 'bad request');
     }
 
     #PUT/POST
     public function update(Request $request, int $id) {
-        return $this->repo->update($id, [
-            'nilai_1' => $request->nilai_1,
-            'nilai_2' => $request->nilai_2,
-            'nilai_3' => $request->nilai_3,
-            'nilai_4' => $request->nilai_4,
-            'nilai_5' => $request->nilai_5,
-            'updated_at' => now(),
+        $data = $this->repo->update($id, [
+            'nilai_A' => $request->nilai_A,
+            'nilai_B' => $request->nilai_B,
+            'nilai_C' => $request->nilai_C,
+            'nilai_D' => $request->nilai_D,
+            'nilai_E' => $request->nilai_E,
         ]);
 
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Memperbaharui Data Pertanyaan Psikotest Kecermatan!', 
+            'data'    => $data
+        ], 'ok');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Memperbaharui Data Soal Psikotest Kecermatan!', 
-            'data'      => $data
-        ], 'ok'); 
+            'error'   => 1,
+            'pesan'   => 'Gagal Memperbaharui Data Pertanyaan Psikotest Kecermatan!', 
+        ], 'bad request');
     }
 
     #DELETE/POST
     public function delete(int $id) {
         $data = $this->repo->delete($id);
+        
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Menghapus Data Soal Pertanyaan Kecermatan!', 
+        ], 'ok');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Menghapus Data Soal Psikotest Kecermatan!', 
-        ], 'ok'); 
+            'error'   => 1,
+            'pesan'   => 'Gagal Menghapus Data Soal Pertanyaan Kecermatan!', 
+        ], 'bad request');
     }
 }

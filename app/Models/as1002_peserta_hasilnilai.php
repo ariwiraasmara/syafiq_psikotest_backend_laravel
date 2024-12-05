@@ -6,9 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class as1002_peserta_hasilnilai extends Model
-{
+class as1002_peserta_hasilnilai extends Model {
     /** @use HasFactory<\Database\Factories\As1001PesertaHasilnilaiFactory> */
     use HasFactory;
 

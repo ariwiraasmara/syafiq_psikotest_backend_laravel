@@ -6,9 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-class as2001_kecermatan_kolompertanyaan extends Model
-{
+class as2001_kecermatan_kolompertanyaan extends Model {
     /** @use HasFactory<\Database\Factories\As2001KecermatanKolompertanyaanFactory> */
     use HasFactory;
 
@@ -18,11 +16,11 @@ class as2001_kecermatan_kolompertanyaan extends Model
     protected $fillable = [
         // 'id',
         'kolom_x',
-        'nilai_1',
-        'nilai_2',
-        'nilai_3',
-        'nilai_4',
-        'nilai_5',
+        'nilai_A',
+        'nilai_B',
+        'nilai_C',
+        'nilai_D',
+        'nilai_E',
         'created_at',
         'updated_at',
     ];

@@ -5,87 +5,93 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
-use App\Repositories\as2002_kecermatan_soaljawabanRepository;
-use App\Libraries\myfunction as fun;
+use App\Services\as2002_kecermatan_soalService;
 use App\Libraries\jsr;
-
 class As2002KecermatanSoaljawabanController extends Controller {
     //
-    protected as2001_kecermatan_kolompertanyaanRepository $repo1;
-    protected as2002_kecermatan_soaljawabanRepository $repo2;
-    public function __construct(
-        as2001_kecermatan_kolompertanyaanRepository $repo1,
-        as2002_kecermatan_soaljawabanRepository $repo2
+    protected as2002_kecermatan_soalService $service;
+    public function __construct(as2002_kecermatan_soalService $service
     ) {
-        $this->repo1 = $repo1;
-        $this->repo2 = $repo2;
+        $this->service = $service;
     }
 
     #GET
     public function all(int $id) {
-        $data = $this->repo1->get($id);
+        $data = $this->service->all($id);
         return jsr::print([
-            'success'       => 1,
-            'pesan'         => 'Semua Data Soal dan Jawaban Psikotest Kecermatan '.$data[0]['kolom_x'], 
-            'data_soal'     => $data,
-            'data_jawaban'  => $this->repo2->all($id)
+            'success'      => 1,
+            'pesan'        => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['data1'][0]['kolom_x'], 
+            'pertanyaan'   => $data['data1'],
+            'soaljawaban'  => $data['data2']
         ], 'ok'); 
     }
 
     #GET
     public function get(String $kolom, int $id) {
-        $data_soal    = $this->repo1->get($kolom);
-        $data_jawaban = $this->repo2->get($id);
+        $data = $this->service->get($kolom, $id);
         return jsr::print([
-            'success'       => 1,
-            'pesan'         => 'Data Soal dan Jawaban Psikotest Kecermatan : '.$data_soal[0]['kolom_x'].' Nomor '.$data_jawaban[0]['id'], 
-            'data_soal'     => $data_soal,
-            'data_jawaban'  => $data_jawaban,
+            'success'      => 1,
+            'pesan'        => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['soal'][0]['kolom_x'].' Nomor '.$data['jawaban'][0]['id'], 
+            'pertanyaan'   => $data['data1'],
+            'soaljawaban'  => $data['data2']
         ], 'ok'); 
     }
 
     #POST
     public function store(Request $request, int $id) {
-        $data1 = $this->repo1->get($id);
-        $data2 = $this->repo2->store([
-            'id2001'     => $id,
-            'pertanyaan' => $request->pertanyaan,
-            'jawaban'    => $request->jawaban,
-            'created_at' => $request->created_at,
-            'updated_at' => $request->updated_at,
+        $data = $this->service->store($id, [
+            'id2001'       => $id,
+            'soal_jawaban' => $request->soal_jawaban,
+            'created_at'   => $request->created_at,
+            'updated_at'   => $request->updated_at,
         ]);
 
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'data'    => $data['data']
+        ], 'created');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data1[0]['kolom_x'], 
-            'data'      => $data2
-        ], 'created'); 
+            'error'   => 1,
+            'pesan'   => 'Gagal Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+        ], 'bad request');
     }
 
     #PUT/POST
     public function update(Request $request, int $id1, int $id2) {
-        $data1 = $this->repo1->get($id1);
-        $data2 = $this->repo2->update($id2, [
-            'pertanyaan' => $request->pertanyaan,
-            'jawaban'    => $request->jawaban,
-            'updated_at' => $request->updated_at,
+        $data = $this->service->get($id1, $id2, [
+            'soal_jawaban' => $request->soal_jawaban,
+            'updated_at'   => $request->updated_at,
         ]);
 
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'data'    => $data['data']
+        ], 'ok');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data1[0]['kolom_x'], 
-            'data'      => $data2
-        ], 'ok'); 
+            'error' => 1,
+            'pesan' => 'Gagal Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'data'  => $data['data']
+        ], 'bad request');
     }
 
     #DELETE/POST
     public function delete(int $id1, int $id2) {
-        $data1 = $this->repo1->get($id1);
-        $data2 = $this->repo2->delete($id2);
+        $data = $this->service->get($id1, $id2);
+        
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'data'    => $data['data']
+        ], 'ok');
+
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data1[0]['kolom_x'], 
-        ], 'ok'); 
+            'error' => 1,
+            'pesan' => 'Gagal Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'data'  => $data['data']
+        ], 'bad request');
     }
 }

@@ -4,44 +4,25 @@
 //! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers;
 
-use App\Repositories\userRepository;
+use App\Services\userService;
 use Illuminate\Http\Request;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-
 class UserController extends Controller {
     //
-    protected userRepository $repo;
-    public function __construct(userRepository $repo) {
-        $this->repo = $repo;
+    protected userService $service;
+    public function __construct(userService $service) {
+        $this->service = $service;
     }
 
     #POST
     public function login(Request $request) {
-        $where   = array('email' => $request->user);
-        $cekUser = $this->repo->get($where);
+        $data = $this->service->login($request->email, $request->password);
             
-        if( is_null($cekUser) ) {
-            // return collect(['pesan' => 'Email Salah!', 'error' => 1]); //'Wrong Username / Email';
-            return jsr::print([
-                'pesan' => 'Email Salah!', 
-                'error' => -1
-            ], 'ok');
-        }
-        
-        if (!Hash::check($request->pass, $cekUser[0]['password'])) { 
-            // return collect(['pesan' => 'Password Salah! Silahkan Coba Lagi!', 'error' => 2]); //'Wrong Password!';
-            return jsr::print([
-                'pesan' => 'Password Salah!', 
-                'error' => -2
-            ], 'ok');
-        }
-        
-        // if($data['success']) {
-        if($cekUser) {
+        if($data['success']) {
             $credentials = $request->validate([
                 'email'     => ['required'],
                 'password'  => ['required'],
@@ -52,8 +33,8 @@ class UserController extends Controller {
      
                 fun::setCookie([
                     'islogin'      => 1,
-                    "mcr_x_aswq_1" => $cekUser[0]['id'],
-                    "mcr_x_aswq_2" => $cekUser[0]['email'],
+                    "mcr_x_aswq_1" => $data['data'][0]['id'],
+                    "mcr_x_aswq_2" => $data['data'][0]['email'],
                 ], true, 1, 24, 60, 60, '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev');
     
                 return jsr::print([
@@ -62,6 +43,18 @@ class UserController extends Controller {
                 ], 'ok');
             }
         }
+
+        return match($data->get('error')){
+            1 => jsr::print([
+                'pesan' => 'Username / Email Salah!', 
+                'error'=> 1], 'bad request'),
+            2 => jsr::print([
+                'pesan' => 'Password Salah!', 
+                'error'=> 2],'bad request'),
+            default => jsr::print([
+                'pesan' => 'Terjadi Kesalahan!', 
+                'error'=> -1])            
+        };
     }
 
     #GET
@@ -82,7 +75,7 @@ class UserController extends Controller {
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Dashboard!', 
-            'data'      => $this->repo->get(['email' => fun::getCookie('mcr_x_aswq_2')])
+            'data'      => $this->service->dashboard()
         ], 'ok');
     }
 }

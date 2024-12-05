@@ -7,9 +7,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\as2001_kecermatan_kolompertanyaan;
-
-class As2001KecermatanKolompertanyaanSeeder extends Seeder
-{
+class As2001KecermatanKolompertanyaanSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
@@ -19,51 +17,51 @@ class As2001KecermatanKolompertanyaanSeeder extends Seeder
         as2001_kecermatan_kolompertanyaan::create(
             [
                 'kolom_x' => 'Kolom 1',
-                'nilai_1' => 7,
-                'nilai_2' => 2,
-                'nilai_3' => 5,
-                'nilai_4' => 1,
-                'nilai_5' => 9,
+                'nilai_A' => 7,
+                'nilai_B' => 2,
+                'nilai_C' => 5,
+                'nilai_D' => 1,
+                'nilai_E' => 9,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'kolom_x' => 'Kolom 2',
-                'nilai_1' => 2,
-                'nilai_2' => 8,
-                'nilai_3' => 6,
-                'nilai_4' => 7,
-                'nilai_5' => 5,
+                'nilai_A' => 2,
+                'nilai_B' => 8,
+                'nilai_C' => 6,
+                'nilai_D' => 7,
+                'nilai_E' => 5,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'kolom_x' => 'Kolom 3',
-                'nilai_1' => 1,
-                'nilai_2' => 6,
-                'nilai_3' => 8,
-                'nilai_4' => 4,
-                'nilai_5' => 9,
+                'nilai_A' => 1,
+                'nilai_B' => 6,
+                'nilai_C' => 8,
+                'nilai_D' => 4,
+                'nilai_E' => 9,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'kolom_x' => 'Kolom 4',
-                'nilai_1' => 3,
-                'nilai_2' => 7,
-                'nilai_3' => 9,
-                'nilai_4' => 6,
-                'nilai_5' => 4,
+                'nilai_A' => 3,
+                'nilai_B' => 7,
+                'nilai_C' => 9,
+                'nilai_D' => 6,
+                'nilai_E' => 4,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'kolom_x' => 'Kolom 5',
-                'nilai_1' => 4,
-                'nilai_2' => 2,
-                'nilai_3' => 7,
-                'nilai_4' => 5,
-                'nilai_5' => 3,
+                'nilai_A' => 4,
+                'nilai_B' => 2,
+                'nilai_C' => 7,
+                'nilai_D' => 5,
+                'nilai_E' => 3,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

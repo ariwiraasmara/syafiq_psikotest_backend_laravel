@@ -5,9 +5,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,11 +14,11 @@ return new class extends Migration
         Schema::create('as2001_kecermatan_kolompertanyaan', function (Blueprint $table) {
             $table->id();
             $table->string('kolom_x', 255);
-            $table->integer('nilai_1');
-            $table->integer('nilai_2');
-            $table->integer('nilai_3');
-            $table->integer('nilai_4');
-            $table->integer('nilai_5');
+            $table->integer('nilai_A');
+            $table->integer('nilai_B');
+            $table->integer('nilai_C');
+            $table->integer('nilai_D');
+            $table->integer('nilai_E');
             $table->timestamps();
         });
     }

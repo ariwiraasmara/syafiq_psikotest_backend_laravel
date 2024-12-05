@@ -7,9 +7,7 @@ namespace Database\Seeders;
 use App\Models\as0001_variabelsetting;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
-class As0001VariabelsettingSeeder extends Seeder
-{
+class As0001VariabelsettingSeeder extends Seeder {
     /**
      * Run the database seeds.
      */
