@@ -33,7 +33,7 @@ if(fun::getRawCookie('islogin')) {
         Route::get('/peserta', myroute::API('As1001PesertaProfilController', 'all'));
         Route::delete('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'delete'));
 
-        //? As1001PesertaHasilnilaiController
+        //? As1002PesertaHasilnilaiController
         Route::get('/peserta/hasil-tes', myroute::API('As1001PesertaHasilnilaiController', 'all'));
         Route::delete('/peserta/hasil-tes/{id}', myroute::API('As1001PesertaHasilnilaiController', 'delete'));
 
@@ -65,8 +65,8 @@ if(fun::getRawCookie('__token__')) {
     }
 }
 
-Route::get('/hello', function(){
-    return 'hello';
+Route::get('/hello', function(Request $request) {
+    return 'hello '.gettype($request);
 });
 
 Route::post('/hello', function(){

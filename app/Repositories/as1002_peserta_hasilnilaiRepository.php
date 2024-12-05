@@ -6,7 +6,6 @@
 namespace App\Repositories;
 
 use App\Models\as1002_peserta_hasilnilai;
-
 class as1002_peserta_hasilnilaiRepository {
 
     protected as1002_peserta_hasilnilai $model;

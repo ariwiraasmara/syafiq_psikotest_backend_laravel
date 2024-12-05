@@ -6,7 +6,6 @@
 namespace App\Repositories;
 
 use App\Models\as2001_kecermatan_kolompertanyaan;
-
 class as2001_kecermatan_kolompertanyaanRepository {
 
     protected as2001_kecermatan_kolompertanyaan $model;

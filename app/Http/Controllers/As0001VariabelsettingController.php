@@ -5,73 +5,87 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\as0001_variabelsettingRepository;
+use App\Services\as0001_variabelsettingService;
 use App\Libraries\jsr;
-
 class As0001VariabelsettingController extends Controller {
     //
-    protected as0001_variabelsettingRepository $repo;
-    public function __construct(as0001_variabelsettingRepository $repo) {
-        $this->repo = $repo;
+    protected as0001_variabelsettingService $service;
+    public function __construct(as0001_variabelsettingService $service) {
+        $this->service = $service;
     }
 
     #GET
     public function all() {
-        $data = $this->repo->all();
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Setting Variabel',
-            'data'      => $data
+            'data'      => $$this->service->all()
         ], 'ok');
     }
 
     #GET
     public function get(int $id) {
-        $data = $this->repo->get(['id' => $id]);
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Data Setting Variabel',
-            'data'      => $data
+            'data'      => $this->service->get($id)
         ], 'ok');
     }
 
     #POST
     public function store(Request $request) {
-        $data = $this->repo->store([
-            'variabel'      => $request->variabel,
-            'values'        => $request->values,
-            'created_at'    => now(),
-            'updated_at'    => now(),
+        $data = $this->service->store([
+            'variabel' => $request->variabel,
+            'values'   => $request->values,
         ]);
 
-        return jsr::print([
+        if($data > 0) return jsr::print([
             'success'   => 1,
             'pesan'     => 'Berhasil Menyimpan Data Setting Variabel',
             'data'      => $data
         ], 'created');
+
+        return jsr::print([
+            'error'  => 1,
+            'pesan'  => 'Gagal Menyimpan Data Setting Variabel',
+            'data'   => $data
+        ], 'bad request');
     }
 
     #PUT/POST
     public function update(Request $request, int $id) {
-        $data = $this->repo->update($id, [
+        $data = $this->service->update($id, [
             'variabel'      => $request->variabel,
             'values'        => $request->values,
-            'updated_at'    => now(),
         ]);
 
-        return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Memperbaharui Data Setting Variabel',
-            'data'      => $data
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Memperbaharui Data Setting Variabel',
+            'data'    => $data
         ], 'ok');
+
+        return jsr::print([
+            'error'   => 1,
+            'pesan'   => 'Gagal Memperbaharui Data Setting Variabel',
+            'data'    => $data
+        ], 'bad request');
     }
 
     #POST/DELETE
     public function delete(int $id) {
-        $data = $this->repo->delete($id);
-        return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Berhasil Menghapus Data Setting Variabel',
+        $data = $this->service->delete($id);
+        
+        if($data > 0) return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Menghapus Data Setting Variabel',
+            'data'    => $data
         ], 'ok');
+
+        return jsr::print([
+            'error'   => 1,
+            'pesan'   => 'Gagal Menghapus Data Setting Variabel',
+            'data'    => $data
+        ], 'bad request');
     }
 }

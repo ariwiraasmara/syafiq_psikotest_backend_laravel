@@ -2,7 +2,6 @@
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
-
 namespace App\Repositories;
 
 use App\Models\as1001_peserta_profil;
