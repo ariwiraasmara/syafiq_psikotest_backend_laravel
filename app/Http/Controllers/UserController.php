@@ -8,9 +8,12 @@ use App\Services\userService;
 use Illuminate\Http\Request;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 class UserController extends Controller {
     //
     protected userService $service;
@@ -20,6 +23,10 @@ class UserController extends Controller {
 
     #POST
     public function login(Request $request) {
+        // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
+        // $domain = 'localhost';
+
+        // return $request;
         $data = $this->service->login($request->email, $request->password);
             
         if($data['success']) {
@@ -29,18 +36,30 @@ class UserController extends Controller {
             ]);
 
             if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-     
-                fun::setCookie([
-                    'islogin'      => 1,
-                    "mcr_x_aswq_1" => $data['data'][0]['id'],
-                    "mcr_x_aswq_2" => $data['data'][0]['email'],
-                ], true, 1, 24, 60, 60, '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev');
+                // $request->session()->regenerate();
+                // return $data['data'];
+                // fun::setCookie([
+                //     'islogin'      => 1,
+                //     "mcr_x_aswq_1" => $data['data'][0]['id'],
+                //     "mcr_x_aswq_2" => $data['data'][0]['email'],
+                // ], true, 1, 24, 60, 60, $domain);
     
-                return jsr::print([
+                // return jsr::print([
+                //     'pesan' => 'Yehaa! Berhasil Login!', 
+                //     'success' => 1
+                // ], 'ok');
+
+                $response = new Response([
                     'pesan' => 'Yehaa! Berhasil Login!', 
                     'success' => 1
-                ], 'ok');
+                ]);
+                // self::encrypt(self::enval($val))
+                // $response->withCookie(cookie('token', 'your_token_value', 60));
+                $response->withCookie(cookie('islogin', fun::encrypt(fun::enval(1)), 60));
+                $response->withCookie(cookie('email', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
+                // $response->withCookie(cookie('mcr_x_aswq_2', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
+                // return Auth::user();
+                return $response;
             }
         }
 
@@ -59,11 +78,13 @@ class UserController extends Controller {
 
     #GET
     public function logout() {
-        $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
+        // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
+        $domain = 'localhost';
         Auth::logout();
+        // fun::setCookieOff('token', true, $domain);
         fun::setCookieOff('islogin', true, $domain);
-        fun::setCookieOff('mcr_x_aswq_1', true, $domain);
-        fun::setCookieOff('mcr_x_aswq_2', true, $domain);
+        fun::setCookieOff('email', true, $domain);
+        // cookie(Hash::make('email'), null);
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Akhirnya Logout!'
@@ -72,10 +93,12 @@ class UserController extends Controller {
 
     #GET
     public function dashboard() {
+        // return fun::getCookie('email');
+        $data = $this->service->dashboard();
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Dashboard!', 
-            'data'      => $this->service->dashboard()
+            'data'      => $data
         ], 'ok');
     }
 }

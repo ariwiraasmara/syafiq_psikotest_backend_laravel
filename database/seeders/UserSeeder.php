@@ -16,21 +16,23 @@ class UserSeeder extends Seeder {
     public function run(): void
     {
         //
-        User::create(
+        User::insert([
             [
                 'name'              => 'Ari Wiraasmara',
                 'email'             => 'ariwiraasmara.sc37@gmail.com',
                 'email_verified_at' => now(),
                 'password'          => Hash::make('admin'),
                 'remember_token'    => Str::random(10),
+                'created_at'        => now(),
             ],
             [
                 'name'              => 'Syafiq',
-                'email'             => '',
+                'email'             => 'syafiq@gmail.com',
                 'email_verified_at' => now(),
                 'password'          => Hash::make('admin'),
                 'remember_token'    => Str::random(10),
+                'created_at'        => now(),
             ]
-        );
+        ]);
     }
 }

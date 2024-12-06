@@ -6,7 +6,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-class As1002PesertaHasilnilaiSeeder extends Seeder
+class As1002PesertaHasilnilaiTesKecermatanSeeder extends Seeder
 {
     /**
      * Run the database seeds.

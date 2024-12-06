@@ -2,14 +2,13 @@
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
-
 namespace App\Repositories;
 
-use App\Models\as1002_peserta_hasilnilai;
-class as1002_peserta_hasilnilaiRepository {
+use App\Models\as1002_peserta_hasilnilai_teskecermatan;
+class as1002_peserta_hasilnilai_teskecermatanRepository {
 
-    protected as1002_peserta_hasilnilai $model;
-    public function __construct(as1002_peserta_hasilnilai $model) {
+    protected as1002_peserta_hasilnilai_teskecermatan $model;
+    public function __construct(as1002_peserta_hasilnilai_teskecermatan $model) {
         $this->model = $model;
     }
 
@@ -18,7 +17,9 @@ class as1002_peserta_hasilnilaiRepository {
     }
 
     public function get(array $where) {
-        return $this->model->where($where)->get();
+        $res = $this->model->where($where);
+        if($res->first()) return $res->get();
+        return null;
     }
 
     public function store(array $values) {

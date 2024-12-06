@@ -292,14 +292,14 @@ class myfunction {
     }
 
     public static function setOneCookie(string $name = 'token', $val=1, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $domain = null) {
-        if($isencrypt) setcookie($name, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
-        else setcookie($name, $val, time() + ($hari * $jam * $menit * $detik), "/");
+        if($isencrypt) cookie($name, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
+        else cookie($name, $val, time() + ($hari * $jam * $menit * $detik), "/");
     }
 
     public static function setCookie($array, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $domain = null) {
         foreach($array as $arr => $val) {
-            if($isencrypt) setcookie($arr, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
-            else setcookie($arr, $val, time() + ($hari * $jam * $menit * $detik), "/"); // 86400 = 1 day
+            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
+            else cookie($arr, $val, time() + ($hari * $jam * $menit * $detik), "/"); // 86400 = 1 day
         }
     }
 

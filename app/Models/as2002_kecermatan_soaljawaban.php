@@ -20,6 +20,9 @@ class as2002_kecermatan_soaljawaban extends Model {
         'created_at',
         'updated_at',
     ];
+    protected $casts = [
+        'soal_jawaban' => 'array',  // Pastikan ini ada, untuk meng-cast kolom JSON menjadi array
+    ];
 
     public $timestamps = true;
     const CREATED_AT = 'created_at';

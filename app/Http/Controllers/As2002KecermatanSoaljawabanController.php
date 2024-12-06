@@ -16,37 +16,40 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #GET
-    public function all(int $id) {
+    public function json(int $id) {
+        $data = $this->service->json($id);
+        return $data;
+    }
+
+    #GET
+    public function allRaw(int $id) {
         $data = $this->service->all($id);
+        return $data;
         return jsr::print([
-            'success'      => 1,
-            'pesan'        => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['data1'][0]['kolom_x'], 
-            'pertanyaan'   => $data['data1'],
-            'soaljawaban'  => $data['data2']
+            'success' => 1,
+            'pesan'   => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['pertanyaan'][0]['kolom_x'], 
+            'data'    => $data,
         ], 'ok'); 
     }
 
     #GET
-    public function get(String $kolom, int $id) {
-        $data = $this->service->get($kolom, $id);
+    public function allCooked(String|int $kolom) {
+        $data = $this->service->get($kolom);
         return jsr::print([
-            'success'      => 1,
-            'pesan'        => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['soal'][0]['kolom_x'].' Nomor '.$data['jawaban'][0]['id'], 
-            'pertanyaan'   => $data['data1'],
-            'soaljawaban'  => $data['data2']
+            'success' => 1,
+            'pesan'   => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['pertanyaan'][0]['kolom_x'], 
+            'data'    => $data,
         ], 'ok'); 
     }
 
     #POST
     public function store(Request $request, int $id) {
         $data = $this->service->store($id, [
-            'id2001'       => $id,
-            'soal_jawaban' => $request->soal_jawaban,
-            'created_at'   => $request->created_at,
-            'updated_at'   => $request->updated_at,
+            'id2001'        => $id,
+            'soal_jawaban'  => $request->soal_jawaban,
         ]);
 
-        if($data > 0) return jsr::print([
+        if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
             'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
             'data'    => $data['data']
@@ -60,12 +63,11 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
     #PUT/POST
     public function update(Request $request, int $id1, int $id2) {
-        $data = $this->service->get($id1, $id2, [
+        $data = $this->service->update($id1, $id2, [
             'soal_jawaban' => $request->soal_jawaban,
-            'updated_at'   => $request->updated_at,
         ]);
 
-        if($data > 0) return jsr::print([
+        if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
             'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
             'data'    => $data['data']
@@ -80,9 +82,9 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
     #DELETE/POST
     public function delete(int $id1, int $id2) {
-        $data = $this->service->get($id1, $id2);
+        $data = $this->service->delete($id1, $id2);
         
-        if($data > 0) return jsr::print([
+        if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
             'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
             'data'    => $data['data']

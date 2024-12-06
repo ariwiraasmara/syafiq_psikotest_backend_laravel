@@ -5,13 +5,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Services\as1001_peserta_profilService;
+use App\Libraries\myfunction as fun;
 use App\Libraries\jsr;
 class As1001PesertaProfilController extends Controller {
     //
     protected as1001_peserta_profilService $service;
     public function __construct(as1001_peserta_profilService $service) {
         $this->service = $service;
+    }
+
+    #GET
+    public function generate_token_first(Request $request) {
+        $response = new Response([
+            'success' => 1,
+            'pesan' => 'Generate Token Untuk Peserta Ujian Berhasil!'
+        ]);
+        $expirein = 3 * 60; // jam * menit
+        $response->withCookie(cookie('__token__', fun::encrypt(fun::enval(fun::random('combwisp'))), $expirein));
+        $response->withCookie(cookie('__unique__', fun::enval(fun::random('combwisp')), $expirein));
+        
+        return $response;
     }
 
     #GET
@@ -24,37 +39,33 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
-    public function get(string $no_identitas) {
-        $data = $this->service->get($no_identitas);
+    public function get(string $id) {
+        $data = $this->service->get($id);
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Data Peserta\n'.$data[0]['nama'].' ('.$no_identitas.')', 
+            'pesan'     => 'Data Peserta '.$data[0]['nama'].' ('.$data[0]['no_identitas'].')', 
             'data'      => $data
         ], 'ok'); 
     }
 
     #POST
     public function store(Request $request) {
+        // return $request;
         $data = $this->service->store([
             'nama'          => $request->nama,
             'no_identitas'  => $request->no_identitas,
             'email'         => $request->email,
             'tgl_lahir'     => $request->tgl_lahir,
-            'usia'          => $request->usia,
             'asal'          => $request->asal,
-            'tgl_ujian'     => $request->tgl_ujian,
         ]);
 
         if($data > 0) return jsr::print([
             'success' => 1,
             'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!', 
-            'data'    => $data
+            // $data
         ], 'created'); 
 
-        return jsr::print([
-            'error'   => 1,
-            'pesan'   => 'Gagal Menyimpan Data Peserta Tes!', 
-        ], 'bad request'); 
+        return jsr::print($data->toArray(), 'bad request'); 
     }
 
     #PUT/POST
@@ -62,25 +73,42 @@ class As1001PesertaProfilController extends Controller {
         $data = $this->service->update($id, [
             'email'         => $request->email,
             'tgl_lahir'     => $request->tgl_lahir,
-            'usia'          => $request->usia,
             'asal'          => $request->asal,
-            'tgl_ujian'     => $request->tgl_ujian,
         ]);
 
         if($data > 0) return jsr::print([
             'success' => 1,
             'pesan'   => 'Berhasil Memperbaharui Data Peserta Tes!', 
-            'data'    => $data
+            // 'data'    => $data
         ], 'ok'); 
     
-        return jsr::print([
-            'error' => 1,
-            'pesan' => 'Gagal Memperbaharui Data Peserta Tes!', 
-            'data'  => $data
-        ], 'bad request'); 
+        return jsr::print($data->toArray(), 'bad request'); 
     }
 
-    #POST/DELETE
+    #POST
+    public function setUpPesertaTes(Request $request) {
+        // return $request->no_identitas;
+        $data = $this->service->setUpPesertaTes([
+            'nama'          => $request->nama,
+            'no_identitas'  => $request->no_identitas,
+            'email'         => $request->email,
+            'tgl_lahir'     => $request->tgl_lahir,
+            'usia'          => $request->usia,
+            'asal'          => $request->asal,
+        ]);
+
+        if($data > 0 || $data == 'err2') return jsr::print([
+            'pesan' => 'Gagal Setup Data Peserta Tes!', 
+            'data'  => $data
+        ], 'bad request');
+        
+        return jsr::print([
+            'pesan' => 'Berhasil Setup Data Peserta Tes!', 
+            'data'  => $data
+        ], 'ok');
+    }
+
+    #DELETE/POST
     public function delete(int $id) {
         $data = $this->service->delete($id);
 

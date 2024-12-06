@@ -5,12 +5,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\as1002_peserta_hasilnilaiService;
+use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
 use App\Libraries\jsr;
-class As1001PesertaHasilnilaiController extends Controller {
+class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     //
-    protected as1002_peserta_hasilnilaiService $service;
-    public function __construct(as1002_peserta_hasilnilaiService $service) {
+    protected as1002_peserta_hasilnilai_teskecermatanService $service;
+    public function __construct(as1002_peserta_hasilnilai_teskecermatanService $service) {
         $this->service = $service;
     }
 
@@ -27,9 +27,9 @@ class As1001PesertaHasilnilaiController extends Controller {
     public function get(int $id) {
         $data = $this->service->get($id);
         return jsr::print([
-            'success'   => 1,
-            'pesan'     => 'Data Hasil Nilai Peserta '.$data[0]['nama'], 
-            'data'      => $data
+            'success' => 1,
+            'pesan'   => 'Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'], 
+            'data'    => $data
         ], 'ok'); 
     }
 

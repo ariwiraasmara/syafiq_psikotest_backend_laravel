@@ -14,13 +14,13 @@ class As0001VariabelsettingSeeder extends Seeder {
     public function run(): void
     {
         //
-        as0001_variabelsetting::create(
+        as0001_variabelsetting::insert([
             [
                 'variabel'      => 'timer',
                 'values'        => '60',
-                // 'created_at'    => now(),
-                // 'updated_at'    => now(),
+                'created_at'    => now(),
+                'updated_at'    => now(),
             ]
-        );
+        ]);
     }
 }

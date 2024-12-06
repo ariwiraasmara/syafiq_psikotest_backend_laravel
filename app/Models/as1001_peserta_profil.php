@@ -21,7 +21,6 @@ class as1001_peserta_profil extends Model {
         'tgl_lahir',
         'usia',
         'asal',
-        'tgl_ujian',
     ];
 
     public $timestamps = false;

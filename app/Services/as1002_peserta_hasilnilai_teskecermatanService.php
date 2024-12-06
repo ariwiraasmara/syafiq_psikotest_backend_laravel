@@ -4,25 +4,35 @@
 //! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
-use App\Repositories\as1002_peserta_hasilnilaiRepository;
-class as1002_peserta_hasilnilaiService {
+use App\Repositories\as1001_peserta_profilRepository;
+use App\Repositories\as1002_peserta_hasilnilai_teskecermatanRepository;
+class as1002_peserta_hasilnilai_teskecermatanService {
 
-    protected as1002_peserta_hasilnilaiRepository $repo;
-    public function __construct(as1002_peserta_hasilnilaiRepository $repo) {
-        $this->repo = $repo;
+    protected as1001_peserta_profilRepository $repo1;
+    protected as1002_peserta_hasilnilai_teskecermatanRepository $repo2;
+    public function __construct(
+        as1001_peserta_profilRepository $repo1,
+        as1002_peserta_hasilnilai_teskecermatanRepository $repo2 
+    ) {
+        $this->repo1 = $repo1;
+        $this->repo2 = $repo2;
     }
 
     public function all() {
-        return $this->repo->all();
+        return $this->repo2->all();
     }
 
     public function get(int $id) {
-        return $this->repo->get(['id' => $id]);
+        return collect([
+            'peserta'  => $this->repo1->get(['id' => $id]),
+            'hasiltes' => $this->repo2->get(['id1001' => $id])
+        ]);
     }
 
     public function store(int $id, array $val) {
-        $res = $this->repo->store([
+        $res = $this->repo2->store([
             'id1001'             => $id,
+            'tgl_ujian'          => date('Y-m-d H:i:s'),
             'hasilnilai_kolom_1' => $val['hasilnilai_kolom_1'],
             'hasilnilai_kolom_2' => $val['hasilnilai_kolom_2'],
             'hasilnilai_kolom_3' => $val['hasilnilai_kolom_3'],
@@ -34,7 +44,7 @@ class as1002_peserta_hasilnilaiService {
     }
 
     public function update(int $id, array $val) {
-        $res = $this->repo->update($id, [
+        $res = $this->repo2->update($id, [
             'hasilnilai_kolom_1' => $val['hasilnilai_kolom_1'],
             'hasilnilai_kolom_2' => $val['hasilnilai_kolom_2'],
             'hasilnilai_kolom_3' => $val['hasilnilai_kolom_3'],
@@ -46,7 +56,7 @@ class as1002_peserta_hasilnilaiService {
     }
 
     public function delete(int $id) {
-        $res = $this->repo->delete($id);
+        $res = $this->repo2->delete($id);
         if($res > 0) return $res;
         return 0;
     }

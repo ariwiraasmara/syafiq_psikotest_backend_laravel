@@ -14,12 +14,11 @@ return new class extends Migration {
         Schema::create('as1001_peserta_profil', function (Blueprint $table) {
             $table->id();
             $table->string('nama', 255);
-            $table->string('no_identitas', 255);
+            $table->string('no_identitas', 255)->unique();
             $table->string('email', 255)->nullable()->default(null);
             $table->date('tgl_lahir');
             $table->integer('usia')->nullable()->default(null);
             $table->string('asal', 255)->nullable()->default(null);
-            $table->date('tgl_ujian');
         });
     }
 
