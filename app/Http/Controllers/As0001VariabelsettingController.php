@@ -19,7 +19,7 @@ class As0001VariabelsettingController extends Controller {
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Setting Variabel',
-            'data'      => $$this->service->all()
+            'data'      => $this->service->all()
         ], 'ok');
     }
 

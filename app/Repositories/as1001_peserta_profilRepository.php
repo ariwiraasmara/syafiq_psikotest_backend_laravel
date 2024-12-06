@@ -15,11 +15,13 @@ class as1001_peserta_profilRepository {
     public function all() {
         return $this->model
                     ->select('id', 'nama', 'no_identitas', 'email', 'asal')
-                    ->all();
+                    ->get();
     }
 
     public function get(array $where) {
-        return $this->model->where($where)->get();
+        $res = $this->model->where($where);
+        if($res->first()) return $res->get();
+        return null;
     }
 
     public function store(array $values) {

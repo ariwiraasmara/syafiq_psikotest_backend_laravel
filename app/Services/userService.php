@@ -12,7 +12,7 @@ class userService {
 
     protected userRepository $repo;
     public function __construct(userRepository $repo) {
-        $this->repo;
+        $this->repo = $repo;
     }
 
     public function login(String $email, String $pass) {
@@ -35,7 +35,7 @@ class userService {
     }
 
     public function dashboard() {
-        return $this->repo->get(['email' => fun::getCookie('mcr_x_aswq_2')]);
+        return $this->repo->get(['email' => fun::getCookie('email')]);
     }
 
 }

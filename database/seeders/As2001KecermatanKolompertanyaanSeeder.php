@@ -14,7 +14,7 @@ class As2001KecermatanKolompertanyaanSeeder extends Seeder {
     public function run(): void
     {
         //
-        as2001_kecermatan_kolompertanyaan::create(
+        as2001_kecermatan_kolompertanyaan::insert([
             [
                 'kolom_x' => 'Kolom 1',
                 'nilai_A' => 7,
@@ -65,6 +65,6 @@ class As2001KecermatanKolompertanyaanSeeder extends Seeder {
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-        );
+        ]);
     }
 }

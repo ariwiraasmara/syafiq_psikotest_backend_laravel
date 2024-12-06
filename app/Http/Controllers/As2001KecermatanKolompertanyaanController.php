@@ -5,13 +5,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
+use App\Services\as2001_kecermatan_kolompertanyaanService;
 use App\Libraries\jsr;
 class As2001KecermatanKolompertanyaanController extends Controller {
     //
-    protected as2001_kecermatan_kolompertanyaanRepository $repo;
-    public function __construct(as2001_kecermatan_kolompertanyaanRepository $repo) {
-        $this->repo = $repo;
+    protected as2001_kecermatan_kolompertanyaanService $service;
+    public function __construct(as2001_kecermatan_kolompertanyaanService $service) {
+        $this->service = $service;
     }
 
     #GET
@@ -19,13 +19,13 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Soal Psikotest Kecermatan!', 
-            'data'      => $this->repo->all()
+            'data'      => $this->service->all()
         ], 'ok'); 
     }
 
     #GET
     public function get(String|int $val) {
-        $data = $this->repo->get($val);
+        $data = $this->service->get($val);
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Data Pertanyaan Psikotest Kecermatan '.$data[0]['kolom_x'], 
@@ -35,7 +35,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
 
     #POST
     public function store(Request $request) {
-        $data = $this->repo->store([
+        $data = $this->service->store([
             'kolom_x' => $request->kolom_x,
             'nilai_A' => $request->nilai_A,
             'nilai_B' => $request->nilai_B,
@@ -58,7 +58,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
 
     #PUT/POST
     public function update(Request $request, int $id) {
-        $data = $this->repo->update($id, [
+        $data = $this->service->update($id, [
             'nilai_A' => $request->nilai_A,
             'nilai_B' => $request->nilai_B,
             'nilai_C' => $request->nilai_C,
@@ -80,7 +80,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
 
     #DELETE/POST
     public function delete(int $id) {
-        $data = $this->repo->delete($id);
+        $data = $this->service->delete($id);
         
         if($data > 0) return jsr::print([
             'success' => 1,

@@ -14,15 +14,15 @@ class As2002KecermatanSoaljawabanSeeder extends Seeder {
     public function run(): void
     {
         //
-        as2002_kecermatan_soaljawaban::create(
+        as2002_kecermatan_soaljawaban::insert([
             //? Kolom 1, id2001 = 1, id = 1
-            ['id2001' => 1, 'soal_jawaban' => '[2, 1, 9, 5, 7]'],
-
+            ['id2001' => 1, 'soal_jawaban' => json_encode(['soal' => [[2, 1, 9, 5]], 'jawaban' => 7]), 'created_at' => date('Y-m-d H:i:s')],
+            
             //? Kolom 1, id2001 = 1, id = 2
-            ['id2001' => 1, 'soal_jawaban' => '[2, 9, 1, 7, 5]'],
+            ['id2001' => 1, 'soal_jawaban' => json_encode(['soal' => [[2, 9, 1, 7]], 'jawaban' => 5]), 'created_at' => date('Y-m-d H:i:s')],
             
             //? Kolom 1, id2001 = 1, id = 3
-            ['id2001' => 1, 'soal_jawaban' => '[7, 2, 5, 1, 9]',],
-        );
+            ['id2001' => 1, 'soal_jawaban' => json_encode(['soal' => [[7, 2, 5, 1]], 'jawaban' => 9]), 'created_at' => date('Y-m-d H:i:s')],
+        ]);
     }
 }

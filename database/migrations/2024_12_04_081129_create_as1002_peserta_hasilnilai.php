@@ -11,9 +11,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('as1002_peserta_hasilnilai', function (Blueprint $table) {
+        Schema::create('as1002_peserta_hasilnilai_teskecermatan', function (Blueprint $table) {
             $table->id();
             $table->integer('id1001');
+            $table->date('tgl_ujian');
             $table->integer('hasilnilai_kolom_1')->default(null);
             $table->integer('hasilnilai_kolom_2')->default(null);
             $table->integer('hasilnilai_kolom_3')->default(null);
@@ -27,6 +28,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('as1002_peserta_hasilnilai');
+        Schema::dropIfExists('as1002_peserta_hasilnilai_teskecermatan');
     }
 };

@@ -14,7 +14,7 @@ class as2001_kecermatan_kolompertanyaanRepository {
     }
 
     public function all() {
-        return $this->model->select('id', 'kolom_x')->all();
+        return $this->model->select('id', 'kolom_x')->get();
     }
 
     public function get(String|int $val) {
