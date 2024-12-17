@@ -15,22 +15,22 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #GET
-    public function all() {
+    public function all($id) {
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Semua Data Hasil Nilai Peserta Ujian!', 
-            'data'      => $this->service->all()
-        ], 'ok'); 
+            'pesan'     => 'Semua Data Hasil Nilai Peserta Ujian!',
+            'data'      => $this->service->all($id)
+        ], 'ok');
     }
 
     #GET
-    public function get(int $id) {
-        $data = $this->service->get($id);
+    public function get(int $id, String $tgl) {
+        $data = $this->service->get($id, $tgl);
         return jsr::print([
             'success' => 1,
-            'pesan'   => 'Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'], 
+            'pesan'   => 'Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'],
             'data'    => $data
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #POST
@@ -45,13 +45,13 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
 
         if($data > 0) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Menyimpan Data Hasil Nilai Peserta Tes!', 
+            'pesan'   => 'Berhasil Menyimpan Data Hasil Nilai Peserta Tes!',
             'data'    => $data
         ], 'created');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Menyimpan Data Hasil Nilai Peserta Tes!', 
+            'pesan' => 'Gagal Menyimpan Data Hasil Nilai Peserta Tes!',
             'data'  => $data
         ], 'bad request');
     }
@@ -65,17 +65,17 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
             'hasilnilai_kolom_4' => $request->hasilnilai_kolom_4,
             'hasilnilai_kolom_5' => $request->hasilnilai_kolom_5,
         ]);
-        
+
 
         if($data > 0) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Memperbaharui Data Hasil Nilai Peserta Tes!', 
+            'pesan'   => 'Berhasil Memperbaharui Data Hasil Nilai Peserta Tes!',
             'data'    => $data
         ], 'ok');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Memperbaharui Data Hasil Nilai Peserta Tes!', 
+            'pesan' => 'Gagal Memperbaharui Data Hasil Nilai Peserta Tes!',
             'data'  => $data
         ], 'bad request');
     }
@@ -86,13 +86,13 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
 
         if($data > 0) return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Berhasil Menghapus Data Hasil Nilai Peserta Tes!', 
+            'pesan'     => 'Berhasil Menghapus Data Hasil Nilai Peserta Tes!',
             'data'   => $data
         ], 'ok');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Menghapus Data Hasil Nilai Peserta Tes!', 
+            'pesan' => 'Gagal Menghapus Data Hasil Nilai Peserta Tes!',
             'data'  => $data
         ], 'bad request');
     }

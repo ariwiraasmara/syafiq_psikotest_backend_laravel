@@ -1,4 +1,4 @@
-<?php 
+<?php
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
@@ -12,13 +12,12 @@ class as1002_peserta_hasilnilai_teskecermatanRepository {
         $this->model = $model;
     }
 
-    public function all() {
-        return $this->model->all();
+    public function all(array $where) {
+        return $this->model->where($where)->get();
     }
 
     public function get(array $where) {
-        $res = $this->model->where($where);
-        if($res->first()) return $res->get();
+        if($this->model->where($where)->first()) return $this->model->where($where)->get();
         return null;
     }
 

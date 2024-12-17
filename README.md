@@ -3,7 +3,6 @@
 Psikotest adalah aplikasi khusus untuk klien Syafiq berbasis online dan bisa digunakan di perangkat manapun (web based). Sistem ini adalah Server As A Service (SaaS) atau Backend.
 
 # API
-
 - Route **POST**    `/api/login`
 - Route **GET**     `/api/dashboard_admin`
 - Route **GET**     `/api/variabel-setting`

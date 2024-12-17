@@ -23,9 +23,10 @@ class As1001PesertaProfilController extends Controller {
             'pesan' => 'Generate Token Untuk Peserta Ujian Berhasil!'
         ]);
         $expirein = 3 * 60; // jam * menit
+        $response->withCookie(cookie('csrf-token', csrf_token(), $expirein));
         $response->withCookie(cookie('__token__', fun::encrypt(fun::enval(fun::random('combwisp'))), $expirein));
         $response->withCookie(cookie('__unique__', fun::enval(fun::random('combwisp')), $expirein));
-        
+
         return $response;
     }
 
@@ -33,9 +34,9 @@ class As1001PesertaProfilController extends Controller {
     public function all() {
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Semua Data Peserta Tes!', 
+            'pesan'     => 'Semua Data Peserta Tes!',
             'data'      => $this->service->allProfil()
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #GET
@@ -43,9 +44,9 @@ class As1001PesertaProfilController extends Controller {
         $data = $this->service->get($id);
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Data Peserta '.$data[0]['nama'].' ('.$data[0]['no_identitas'].')', 
+            'pesan'     => 'Data Peserta '.$data[0]['nama'].' ('.$data[0]['no_identitas'].')',
             'data'      => $data
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #POST
@@ -61,11 +62,11 @@ class As1001PesertaProfilController extends Controller {
 
         if($data > 0) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!', 
+            'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!',
             // $data
-        ], 'created'); 
+        ], 'created');
 
-        return jsr::print($data->toArray(), 'bad request'); 
+        return jsr::print($data->toArray(), 'bad request');
     }
 
     #PUT/POST
@@ -78,11 +79,11 @@ class As1001PesertaProfilController extends Controller {
 
         if($data > 0) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Memperbaharui Data Peserta Tes!', 
+            'pesan'   => 'Berhasil Memperbaharui Data Peserta Tes!',
             // 'data'    => $data
-        ], 'ok'); 
-    
-        return jsr::print($data->toArray(), 'bad request'); 
+        ], 'ok');
+
+        return jsr::print($data->toArray(), 'bad request');
     }
 
     #POST
@@ -97,13 +98,13 @@ class As1001PesertaProfilController extends Controller {
             'asal'          => $request->asal,
         ]);
 
-        if($data > 0 || $data == 'err2') return jsr::print([
-            'pesan' => 'Gagal Setup Data Peserta Tes!', 
+        if($data['data'] > 0 || $data == 'err2') return jsr::print([
+            'pesan' => 'Gagal Setup Data Peserta Tes!',
             'data'  => $data
         ], 'bad request');
-        
+
         return jsr::print([
-            'pesan' => 'Berhasil Setup Data Peserta Tes!', 
+            'pesan' => 'Berhasil Setup Data Peserta Tes!',
             'data'  => $data
         ], 'ok');
     }
@@ -114,15 +115,15 @@ class As1001PesertaProfilController extends Controller {
 
         if($data > 0) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Menghapus Data Peserta Tes!', 
+            'pesan'   => 'Berhasil Menghapus Data Peserta Tes!',
             'data'    => $data
         ], 'ok');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Menghapus Data Peserta Tes!', 
+            'pesan' => 'Gagal Menghapus Data Peserta Tes!',
             'data'  => $data
-        ], 'bad request'); 
+        ], 'bad request');
     }
 
 }

@@ -101,7 +101,7 @@ return [
     |
     */
 
-    'store' => env('SESSION_STORE'),
+    'store' => env('SESSION_STORE', 'redis'),
 
     /*
     |--------------------------------------------------------------------------
@@ -200,6 +200,7 @@ return [
     */
 
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    // 'same_site' => env('SESSION_SAME_SITE', 'strict'),
 
     /*
     |--------------------------------------------------------------------------
