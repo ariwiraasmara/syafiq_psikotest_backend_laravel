@@ -24,7 +24,6 @@ class UserController extends Controller {
     #POST
     public function login(Request $request) {
         // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
-        // $domain = 'localhost';
 
         // return $request;
         $data = $this->service->login($request->email, $request->password);

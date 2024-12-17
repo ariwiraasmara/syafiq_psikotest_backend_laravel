@@ -12,20 +12,21 @@ class as1002_peserta_hasilnilai_teskecermatanService {
     protected as1002_peserta_hasilnilai_teskecermatanRepository $repo2;
     public function __construct(
         as1001_peserta_profilRepository $repo1,
-        as1002_peserta_hasilnilai_teskecermatanRepository $repo2 
+        as1002_peserta_hasilnilai_teskecermatanRepository $repo2
     ) {
         $this->repo1 = $repo1;
         $this->repo2 = $repo2;
     }
 
-    public function all() {
-        return $this->repo2->all();
+    public function all($id) {
+        return $this->repo2->all(['id1001' => $id]);
     }
 
-    public function get(int $id) {
+    public function get(int $id, String $tgl) {
+        $data = $this->repo1->get(['no_identitas' => $id]);
         return collect([
-            'peserta'  => $this->repo1->get(['id' => $id]),
-            'hasiltes' => $this->repo2->get(['id1001' => $id])
+            'peserta'  => $data,
+            'hasiltes' => $this->repo2->get(['id' => $data[0]['id'], 'tgl_ujian' => $tgl])
         ]);
     }
 
