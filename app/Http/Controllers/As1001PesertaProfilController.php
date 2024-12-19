@@ -22,7 +22,7 @@ class As1001PesertaProfilController extends Controller {
             'success' => 1,
             'pesan' => 'Generate Token Untuk Peserta Ujian Berhasil!'
         ]);
-        $expirein = 3 * 60; // jam * menit
+        $expirein = 6 * 60; // jam * menit
         $response->withCookie(cookie('csrf-token', csrf_token(), $expirein));
         $response->withCookie(cookie('__token__', fun::encrypt(fun::enval(fun::random('combwisp'))), $expirein));
         $response->withCookie(cookie('__unique__', fun::enval(fun::random('combwisp')), $expirein));
@@ -94,19 +94,20 @@ class As1001PesertaProfilController extends Controller {
             'no_identitas'  => $request->no_identitas,
             'email'         => $request->email,
             'tgl_lahir'     => $request->tgl_lahir,
-            'usia'          => $request->usia,
             'asal'          => $request->asal,
         ]);
 
-        if($data['data'] > 0 || $data == 'err2') return jsr::print([
+        if($data['res'] > 0 || $data != 'err2') return jsr::print([
+            'success' => 1,
+            'pesan'   => 'Berhasil Setup Data Peserta Tes!',
+            'data'    => $data
+        ], 'ok');
+
+        return jsr::print([
+            'error' => 1,
             'pesan' => 'Gagal Setup Data Peserta Tes!',
             'data'  => $data
         ], 'bad request');
-
-        return jsr::print([
-            'pesan' => 'Berhasil Setup Data Peserta Tes!',
-            'data'  => $data
-        ], 'ok');
     }
 
     #DELETE/POST

@@ -291,15 +291,15 @@ class myfunction {
         setcookie($name, $val, time() + ($hari * $jam * $menit * $detik), "/"); // 86400 = 1 day
     }
 
-    public static function setOneCookie(string $name = 'token', $val=1, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $domain = null) {
-        if($isencrypt) cookie($name, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
-        else cookie($name, $val, time() + ($hari * $jam * $menit * $detik), "/");
+    public static function setOneCookie(string $name = 'token', $val=1, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $path = '/', $domain = null) {
+        if($isencrypt) cookie($name, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), $path, $domain, true, true); // 86400 = 1 day
+        else cookie($name, $val, time() + ($hari * $jam * $menit * $detik), $path);
     }
 
-    public static function setCookie($array, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $domain = null) {
+    public static function setCookie($array, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $path = '/', $domain = null) {
         foreach($array as $arr => $val) {
-            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), "/", $domain, true, true); // 86400 = 1 day
-            else cookie($arr, $val, time() + ($hari * $jam * $menit * $detik), "/"); // 86400 = 1 day
+            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), $path, $domain, true, true); // 86400 = 1 day
+            else cookie($arr, $val, time() + ($hari * $jam * $menit * $detik), $path); // 86400 = 1 day
         }
     }
 
@@ -402,7 +402,6 @@ class myfunction {
             return "function getBulan() Error: ".$e;
         }
     }
-
 
     // NOTIFICATION
     public static function Notrifger($id, $idtrigger, $txt) {

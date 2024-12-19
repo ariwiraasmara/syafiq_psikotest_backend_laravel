@@ -15,14 +15,13 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*'],
 
     'allowed_methods' => ['*'],
 
-    // 'allowed_origins' => ['*'],
-    'allowed_origins' => [
-        'http://localhost:3000',  // Pastikan ini sesuai dengan URL frontend Anda
-    ],
+    'allowed_origins' => ['http://localhost:3000'],
+    // 'allowed_origins' => [env('FRONTEND_URL', 'http://localhost:3000')],
+    // 'allowed_origins' => ['http://localhost'],
 
     'allowed_origins_patterns' => [],
 
@@ -30,7 +29,7 @@ return [
 
     'exposed_headers' => [],
 
-    'max_age' => 0,
+    'max_age' => 360,
 
     'supports_credentials' => true,
 

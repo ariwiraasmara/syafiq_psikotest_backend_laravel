@@ -2,7 +2,6 @@
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
-
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;
 use App\Http\Middleware\EnsureEmailIsVerified;
@@ -20,19 +19,29 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/token', function (Request $request) {
-    // $token = $request->session()->token();
-    // $token = csrf_token();
-    $token = fun::encrypt(fun::enval(fun::random('combwisp', 20)));
-    Log::info('CSRF Token: '.$token);  // Log token ke file log
-    return response()->json([
-        'token' => $token,
-        'message' => 'CSRF Token Generated!'
+Route::post('/token', function (Request $request) {
+    // return $request;
+    if($request->key) {
+        $session = session('key', 'default');
+        // $token = $request->session()->token();
+        // $token = csrf_token();
+        // $token = fun::encrypt(fun::enval(fun::random('combwisp', 20)));
+        Log::info('CSRF Token: '.$token);  // Log token ke file log
+        $response = new Response([
+            'message' => 'CSRF Token Generated!',
+            'token' => $token,
+            'session' => $session,
+        ]);
+        return $response;
+    }
+    return new Response([
+        'error'     => 1,
+        'message'   => 'Key is null!'
     ]);
 })->middleware([CacheControlMiddleware::class]);
 
-Route::post('/login', myroute::API('UserController', 'login'))
-    ->middleware(VerifyCsrfToken::class);
+Route::post('/login', myroute::API('UserController', 'login'));
+    // ->middleware(VerifyCsrfToken::class);
     // ->middleware([CheckTokenLogin::class, CacheControlMiddleware::class]);
 
 Route::get('/logout', myroute::API('UserController', 'logout'));

@@ -4,6 +4,7 @@
 //! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\userService;
 use Illuminate\Http\Request;
 use App\Libraries\jsr;
@@ -23,11 +24,9 @@ class UserController extends Controller {
 
     #POST
     public function login(Request $request) {
-        // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
-
         // return $request;
         $data = $this->service->login($request->email, $request->password);
-            
+
         if($data['success']) {
             $credentials = $request->validate([
                 'email'     => ['required'],
@@ -35,43 +34,49 @@ class UserController extends Controller {
             ]);
 
             if (Auth::attempt($credentials)) {
+                $path = '/';
+                $domain = 'localhost';
+                // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
+
                 // $request->session()->regenerate();
                 // return $data['data'];
                 // fun::setCookie([
-                //     'islogin'      => 1,
-                //     "mcr_x_aswq_1" => $data['data'][0]['id'],
-                //     "mcr_x_aswq_2" => $data['data'][0]['email'],
-                // ], true, 1, 24, 60, 60, $domain);
-    
+                //     'islogin' => true,
+                //     'isadmin' => true,
+                // ], false, 1, 24, 60, 60, $path, $domain);
                 // return jsr::print([
-                //     'pesan' => 'Yehaa! Berhasil Login!', 
+                //     'pesan' => 'Yehaa! Berhasil Login!',
                 //     'success' => 1
                 // ], 'ok');
 
+                $user = Auth::user();
+                $token = fun::encrypt($user->createToken($request->email)->accessToken);
                 $response = new Response([
-                    'pesan' => 'Yehaa! Berhasil Login!', 
-                    'success' => 1
+                    'pesan' => 'Yehaa! Berhasil Login!',
+                    'success' => 1,
+                    'nama' => $data['data'][0]['name'],
+                    'token' => $token
                 ]);
-                // self::encrypt(self::enval($val))
-                // $response->withCookie(cookie('token', 'your_token_value', 60));
-                $response->withCookie(cookie('islogin', fun::encrypt(fun::enval(1)), 60));
-                $response->withCookie(cookie('email', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
-                // $response->withCookie(cookie('mcr_x_aswq_2', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
-                // return Auth::user();
+
+                $response->withCookie(cookie('islogin', true, 60));
+                // fun::setOneCookie('islogin', true, false, 1, 24, 60, 60, $path, $domain);
+                $response->withCookie(cookie('isadmin', true, 60));
+                // fun::setOneCookie('isadmin', true, false, 1, 24, 60, 60, $path, $domain);
+                $response->withCookie(cookie('__sysel__', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
                 return $response;
             }
         }
 
         return match($data->get('error')){
             1 => jsr::print([
-                'pesan' => 'Username / Email Salah!', 
+                'pesan' => 'Username / Email Salah!',
                 'error'=> 1], 'bad request'),
             2 => jsr::print([
-                'pesan' => 'Password Salah!', 
+                'pesan' => 'Password Salah!',
                 'error'=> 2],'bad request'),
             default => jsr::print([
-                'pesan' => 'Terjadi Kesalahan!', 
-                'error'=> -1])            
+                'pesan' => 'Terjadi Kesalahan!',
+                'error'=> -1])
         };
     }
 
@@ -82,7 +87,8 @@ class UserController extends Controller {
         Auth::logout();
         // fun::setCookieOff('token', true, $domain);
         fun::setCookieOff('islogin', true, $domain);
-        fun::setCookieOff('email', true, $domain);
+        fun::setCookieOff('isadmin', true, $domain);
+        fun::setCookieOff('__sysel__', true, $domain);
         // cookie(Hash::make('email'), null);
         return jsr::print([
             'success'   => 1,
@@ -96,7 +102,7 @@ class UserController extends Controller {
         $data = $this->service->dashboard();
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Dashboard!', 
+            'pesan'     => 'Dashboard!',
             'data'      => $data
         ], 'ok');
     }
