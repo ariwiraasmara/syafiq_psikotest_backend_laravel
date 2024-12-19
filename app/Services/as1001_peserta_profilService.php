@@ -24,7 +24,7 @@ class as1001_peserta_profilService {
     public function store(array $val) {
         $cek1 = $this->repo->get(['no_identitas' => $val['no_identitas']]);
         if($cek1) return collect(['error' => 1, 'pesan' => 'Gagal Menyimpan Data Peserta Tes! Data Peserta ini sudah ada!']);
-        
+
         $datenow = date('Y');
         $tgl_lahir = date('Y', strtotime($val['tgl_lahir']));
         $usia = $datenow - $tgl_lahir;
@@ -37,7 +37,7 @@ class as1001_peserta_profilService {
             'asal'          => $val['asal'],
         ]);
         if($res > 0) return $res;
-        return collect(['error' => 2, 'pesan' => 'Gagal Menyimpan Data Peserta Tes!']);
+        return 0; //collect(['error' => 2, 'pesan' => 'Gagal Menyimpan Data Peserta Tes!']);
     }
 
     public function update(int $id, array $val) {
@@ -51,7 +51,7 @@ class as1001_peserta_profilService {
             'asal'          => $val['asal'],
         ]);
         if($res > 0) return $res;
-        return collect(['error' => 1, 'pesan' => 'Gagal Memperbaharui Data Peserta Tes!']);
+        return 0; //collect(['error' => 1, 'pesan' => 'Gagal Memperbaharui Data Peserta Tes!']);
     }
 
     public function setUpPesertaTes(array $val) {
@@ -59,12 +59,12 @@ class as1001_peserta_profilService {
 
         if(!is_null($cek)) {
             $res = $this->update($cek[0]['id'], $val);
-            if($res > 0) return collect(['status' => 'Update', 'data' => $res]);
+            if($res > 0) return collect(['status' => 'Update', 'res' => $res]);
             return 'err2';
         }
 
         $res = $this->store($val);
-        if($res > 0) return collect(['status' => 'Insert', 'data' => $res]);
+        if($res > 0) return collect(['status' => 'Insert', 'res' => $res]);
         return $res;
     }
 
