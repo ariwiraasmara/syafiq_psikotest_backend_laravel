@@ -27,9 +27,9 @@ class As2002KecermatanSoaljawabanController extends Controller {
         return $data;
         return jsr::print([
             'success' => 1,
-            'pesan'   => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['pertanyaan'][0]['kolom_x'], 
+            'pesan'   => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['pertanyaan'][0]['kolom_x'],
             'data'    => $data,
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #GET
@@ -37,9 +37,9 @@ class As2002KecermatanSoaljawabanController extends Controller {
         $data = $this->service->get($kolom);
         return jsr::print([
             'success' => 1,
-            'pesan'   => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['pertanyaan'][0]['kolom_x'], 
+            'pesan'   => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['pertanyaan'][0]['kolom_x'],
             'data'    => $data,
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #POST
@@ -51,13 +51,13 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
         if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
             'data'    => $data['data']
         ], 'created');
 
         return jsr::print([
             'error'   => 1,
-            'pesan'   => 'Gagal Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan'   => 'Gagal Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
         ], 'bad request');
     }
 
@@ -69,13 +69,13 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
         if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
             'data'    => $data['data']
         ], 'ok');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan' => 'Gagal Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
             'data'  => $data['data']
         ], 'bad request');
     }
@@ -83,16 +83,16 @@ class As2002KecermatanSoaljawabanController extends Controller {
     #DELETE/POST
     public function delete(int $id1, int $id2) {
         $data = $this->service->delete($id1, $id2);
-        
+
         if($data->isNotEmpty()) return jsr::print([
             'success' => 1,
-            'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
             'data'    => $data['data']
         ], 'ok');
 
         return jsr::print([
             'error' => 1,
-            'pesan' => 'Gagal Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'], 
+            'pesan' => 'Gagal Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
             'data'  => $data['data']
         ], 'bad request');
     }
