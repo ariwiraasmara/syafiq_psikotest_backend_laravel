@@ -1,4 +1,4 @@
-<?php 
+<?php
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
@@ -15,6 +15,13 @@ class as2002_kecermatan_soaljawabanRepository {
     public function all(int $id) {
         // return $this->model->where(['id2001' => $id])->get();
         return $this->model->where(['id2001' => $id])->paginate(10);
+    }
+
+    public function all50(int $id) {
+        return $this->model->where(['id2001' => $id])
+                    ->orderBy('id', 'asc')
+                    ->limit(50)
+                    ->get();
     }
 
     public function get(int $id) {

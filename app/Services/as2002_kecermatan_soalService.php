@@ -7,6 +7,8 @@ namespace App\Services;
 use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
 use App\Repositories\as2002_kecermatan_soaljawabanRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+
 class as2002_kecermatan_soalService {
 
     protected as2001_kecermatan_kolompertanyaanRepository $repo1;
@@ -32,7 +34,7 @@ class as2002_kecermatan_soalService {
         $soal = array_map("serialize", $soal); // Serialisasi array untuk membandingkan array multidimensi
         $soal = array_unique($soal); // Menghapus duplikasi
         $soal = array_map("unserialize", $soal); // Mengembalikan ke bentuk semula
-        
+
         return $soal;
     }
 
@@ -48,18 +50,24 @@ class as2002_kecermatan_soalService {
 
     public function get(String|int $kolom) {
         $data1 = $this->repo1->get($kolom);
-        $data2 = $this->repo2->all($data1[0]['id']); // ambil semua data berdasarkan id2001 dimana idnya pada tabel 2001_kecermatan_kolompertanyaan
+        $data2 = $this->repo2->all50($data1[0]['id']); // ambil semua data berdasarkan id2001 dimana idnya pada tabel 2001_kecermatan_kolompertanyaan
         $soal = []; // inisialisasi untuk menampung data soal dari "soal_jawaban"
         $jawaban = []; // inisialisasi untuk menampung data jawaban dari "soal_jawaban"
         foreach ($data2 as $item) {
-            // Ambil soal dan jawaban untuk setiap data
-            $soal[] = $item->soal_jawaban['soal'][0]; // Mengambil soal yang ada di dalam array 'soal'
-            $jawaban[] = $item->soal_jawaban['jawaban']; // Mengambil jawaban
+            if (isset($item->soal_jawaban['soal'][0]) && isset($item->soal_jawaban['jawaban'])) {
+                $soal[] = $item->soal_jawaban['soal'][0];
+                $jawaban[] = $item->soal_jawaban['jawaban'];
+            } else {
+                // Bisa menambahkan log atau debugging untuk melihat data yang hilang
+                Log::info("Data soal/jawaban tidak lengkap: ", $item);
+            }
         }
 
-        $soal = array_map("serialize", $soal); // Serialisasi array untuk membandingkan array multidimensi
-        $soal = array_unique($soal); // Menghapus duplikasi
-        $soal = array_map("unserialize", $soal); // Mengembalikan ke bentuk semula
+        // $soal = array_map("serialize", $soal); // Serialisasi array untuk membandingkan array multidimensi
+        //dd($soal); // Periksa soal setelah serialisasi
+        // $soal = array_unique($soal); // Menghapus duplikasi
+        //dd($soal); // Periksa soal setelah duplikasi dihapus
+        // $soal = array_map("unserialize", $soal); // Mengembalikan ke bentuk semula
 
         return collect([
             'pertanyaan' => $this->repo1->get($kolom),
@@ -108,6 +116,7 @@ class as2002_kecermatan_soalService {
         if($res > 0) {
             $data = $this->repo1->get($id1);
             return collect([
+                'success' => 1,
                 'kolom_x' => $data[0]['kolom_x'],
                 'data'    => $res
             ]);
