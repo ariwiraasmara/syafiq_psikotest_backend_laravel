@@ -17,6 +17,10 @@ class as1001_peserta_profilService {
         return $this->repo->all();
     }
 
+    public function allLatest() {
+        return $this->repo->allLatest();
+    }
+
     public function get(String $id) {
         return $this->repo->get(['id' => $id]);
     }
