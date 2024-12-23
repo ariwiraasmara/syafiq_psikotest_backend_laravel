@@ -39,6 +39,14 @@ class As1001PesertaProfilController extends Controller {
         ], 'ok');
     }
 
+    public function allLatest() {
+        return jsr::print([
+            'success'   => 1,
+            'pesan'     => 'Semua Data Peserta Tes!',
+            'data'      => $this->service->allLatest()
+        ], 'ok');
+    }
+
     #GET
     public function get(string $id) {
         $data = $this->service->get($id);

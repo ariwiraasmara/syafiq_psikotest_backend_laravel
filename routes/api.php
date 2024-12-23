@@ -60,6 +60,7 @@ Route::get('/logout', myroute::API('UserController', 'logout'));
 
                 //? As1001PesertaProfilController
                 Route::get('/peserta', myroute::API('As1001PesertaProfilController', 'all'));
+                Route::get('/peserta/terbaru', myroute::API('As1001PesertaProfilController', 'allLatest'));
                 Route::get('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'get'));
                 Route::delete('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'delete'));
 

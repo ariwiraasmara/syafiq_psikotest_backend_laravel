@@ -1,4 +1,4 @@
-<?php 
+<?php
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
@@ -15,6 +15,16 @@ class as1001_peserta_profilRepository {
     public function all() {
         return $this->model
                     ->select('id', 'nama', 'no_identitas', 'email', 'asal')
+                    ->orderBy('nama', 'asc')
+                    ->get();
+    }
+
+    public function allLatest() {
+        return $this->model
+                    ->select('id', 'nama', 'no_identitas', 'email', 'asal', 'tgl_ujian')
+                    ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1001_peserta_profil.id', '=', 'as1002_peserta_hasilnilai_teskecermatan.id1001')
+                    ->orderBy('tgl_ujian', 'desc')
+                    ->limit(10)
                     ->get();
     }
 
