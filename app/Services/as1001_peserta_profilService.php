@@ -54,21 +54,24 @@ class as1001_peserta_profilService {
             'usia'          => $usia,
             'asal'          => $val['asal'],
         ]);
-        if($res > 0) return $res;
+        if($res > 0) return $id;
         return 0; //collect(['error' => 1, 'pesan' => 'Gagal Memperbaharui Data Peserta Tes!']);
     }
 
     public function setUpPesertaTes(array $val) {
         $cek = $this->repo->get(['no_identitas' => $val['no_identitas']]);
 
-        if(!is_null($cek)) {
-            $res = $this->update($cek[0]['id'], $val);
-            if($res > 0) return collect(['status' => 'Update', 'res' => $res]);
-            return 'err2';
+        if($cek) {
+            if($cek[0]['email'] != $val['email'] || $cek[0]['tgl_lahir'] != $val['tgl_lahir'] || $cek[0]['asal'] != $val['asal']) {
+                $res = $this->update($cek[0]['id'], $val);
+                if($res > 0) return collect(['success' => true, 'status' => 'Update', 'res' => $res]);
+                return 'err2';
+            }
+            return collect(['success' => true, 'status' => 'Tidak Perlu Update', 'res' => $cek[0]['id']]);
         }
 
         $res = $this->store($val);
-        if($res > 0) return collect(['status' => 'Insert', 'res' => $res]);
+        if($res > 0) return collect(['success' => true, 'status' => 'Insert', 'res' => $res]);
         return $res;
     }
 
