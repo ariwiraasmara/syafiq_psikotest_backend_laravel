@@ -29,8 +29,7 @@ class as1001_peserta_profilRepository {
     }
 
     public function get(array $where) {
-        $res = $this->model->where($where);
-        if($res->first()) return $res->get();
+        if($this->model->where($where)->first()) return $this->model->where($where)->get();
         return null;
     }
 

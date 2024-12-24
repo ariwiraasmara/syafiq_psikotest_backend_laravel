@@ -104,12 +104,13 @@ class As1001PesertaProfilController extends Controller {
             'tgl_lahir'     => $request->tgl_lahir,
             'asal'          => $request->asal,
         ]);
+        // return $data;
 
-        if($data['res'] > 0 || $data != 'err2') return jsr::print([
-            'success' => 1,
-            'pesan'   => 'Berhasil Setup Data Peserta Tes!',
-            'data'    => $data
-        ], 'ok');
+        if($data['success']) {
+            $data->put('success', 1);
+            $data->put('pesan', 'Berhasil Setup Data Peserta Tes!');
+            return $data->toJSON();
+        };
 
         return jsr::print([
             'error' => 1,
