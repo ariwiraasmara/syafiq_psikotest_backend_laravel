@@ -21,9 +21,10 @@ class as1001_peserta_profilRepository {
 
     public function allLatest() {
         return $this->model
-                    ->select('id', 'nama', 'no_identitas', 'email', 'asal', 'tgl_ujian')
-                    ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1001_peserta_profil.id', '=', 'as1002_peserta_hasilnilai_teskecermatan.id1001')
-                    ->orderBy('tgl_ujian', 'desc')
+                    ->distinct()
+                    ->select('as1001_peserta_profil.id', 'nama', 'no_identitas', 'email', 'asal', 'as1002_peserta_hasilnilai_teskecermatan.tgl_ujian')
+                    ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1002_peserta_hasilnilai_teskecermatan.id1001', '=', 'as1001_peserta_profil.id')
+                    ->orderBy('as1002_peserta_hasilnilai_teskecermatan.tgl_ujian', 'desc')
                     ->limit(10)
                     ->get();
     }

@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
 use App\Libraries\jsr;
 class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
@@ -16,16 +17,42 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
 
     #GET
     public function all($id) {
+        if(Cache::has('page-pesertahasilnilaipsikotestkecermatan-all-'.$id)) $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
+        else {
+            Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->all($id);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $latestData, 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
+        }
+
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Hasil Nilai Peserta Ujian!',
-            'data'      => $this->service->all($id)
+            'data'      => $data
         ], 'ok');
     }
 
     #GET
     public function get(int $id, String $tgl) {
-        $data = $this->service->get($id, $tgl);
+        // $data = $this->service->get($id, $tgl);
+        if(Cache::has('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl)) $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
+        else {
+            Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $this->service->get($id, $tgl), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->get($id, $tgl);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $latestData, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
+        }
+
         return jsr::print([
             'success' => 1,
             'pesan'   => 'Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'],
