@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use App\Services\as1001_peserta_profilService;
 use App\Libraries\myfunction as fun;
 use App\Libraries\jsr;
@@ -32,27 +33,63 @@ class As1001PesertaProfilController extends Controller {
 
     #GET
     public function all() {
+        if(Cache::has('page-pesertaprofil-all')) $data = Cache::get('page-pesertaprofil-all');
+        else {
+            Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-all');
+        }
+
+        $latestData = $this->service->allLatest();
+        if(!$data->diff($latestData)) {
+            Cache::put('page-pesertaprofil-all', $latestData, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-all');
+        }
+
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Peserta Tes!',
-            'data'      => $this->service->allProfil()
+            'data'      => $data
         ], 'ok');
     }
 
     public function allLatest() {
+        if(Cache::has('page-pesertaprofil-allLatest')) $data = Cache::get('page-pesertaprofil-allLatest');
+        else {
+            Cache::put('page-pesertaprofil-allLatest', $this->service->allLatest(), 1*6*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-allLatest');
+        }
+
+        $latestData = $this->service->allLatest();
+        if(!$data->diff($latestData)) {
+            Cache::put('page-pesertaprofil-allLatest', $latestData, 1*6*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-allLatest');
+        }
+
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Semua Data Peserta Tes!',
-            'data'      => $this->service->allLatest()
+            'data'      => $data
         ], 'ok');
     }
 
     #GET
     public function get(string $id) {
-        $data = $this->service->get($id);
+        if(Cache::has('page-pesertaprofil-get-'.$id)) $data = Cache::get('page-pesertaprofil-get-'.$id);
+        else {
+            Cache::put('page-pesertaprofil-get-'.$id, $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-get-'.$id);
+        };
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->get($id);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-pesertaprofil-get-'.$id, $latestData, 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-pesertaprofil-get-'.$id);
+        }
+
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Data Peserta '.$data[0]['nama'].' ('.$data[0]['no_identitas'].')',
+            'pesan'     => 'Data Detil Peserta',
             'data'      => $data
         ], 'ok');
     }
@@ -74,7 +111,10 @@ class As1001PesertaProfilController extends Controller {
             // $data
         ], 'created');
 
-        return jsr::print($data->toArray(), 'bad request');
+        return jsr::print([
+            'error' => 1,
+            'pesan' => 'Gagal Memperbaharui Data Peserta Tes!',
+        ], 'bad request');
     }
 
     #PUT/POST
@@ -91,7 +131,10 @@ class As1001PesertaProfilController extends Controller {
             // 'data'    => $data
         ], 'ok');
 
-        return jsr::print($data->toArray(), 'bad request');
+        return jsr::print([
+            'error' => 1,
+            'pesan' => 'Gagal Memperbaharui Data Peserta Tes!',
+        ], 'bad request');
     }
 
     #POST

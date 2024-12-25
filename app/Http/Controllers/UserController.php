@@ -4,7 +4,6 @@
 //! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Services\userService;
 use Illuminate\Http\Request;
 use App\Libraries\jsr;
@@ -36,18 +35,6 @@ class UserController extends Controller {
             if (Auth::attempt($credentials)) {
                 $path = '/';
                 $domain = 'localhost';
-                // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
-
-                // $request->session()->regenerate();
-                // return $data['data'];
-                // fun::setCookie([
-                //     'islogin' => true,
-                //     'isadmin' => true,
-                // ], false, 1, 24, 60, 60, $path, $domain);
-                // return jsr::print([
-                //     'pesan' => 'Yehaa! Berhasil Login!',
-                //     'success' => 1
-                // ], 'ok');
 
                 $user = Auth::user();
                 $token = fun::encrypt($user->createToken($request->email)->accessToken);
@@ -59,9 +46,7 @@ class UserController extends Controller {
                 ]);
 
                 $response->withCookie(cookie('islogin', true, 60));
-                // fun::setOneCookie('islogin', true, false, 1, 24, 60, 60, $path, $domain);
                 $response->withCookie(cookie('isadmin', true, 60));
-                // fun::setOneCookie('isadmin', true, false, 1, 24, 60, 60, $path, $domain);
                 $response->withCookie(cookie('__sysel__', fun::encrypt(fun::enval($data['data'][0]['email'])), 60));
                 return $response;
             }
@@ -85,11 +70,9 @@ class UserController extends Controller {
         // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
         $domain = 'localhost';
         Auth::logout();
-        // fun::setCookieOff('token', true, $domain);
         fun::setCookieOff('islogin', true, $domain);
         fun::setCookieOff('isadmin', true, $domain);
         fun::setCookieOff('__sysel__', true, $domain);
-        // cookie(Hash::make('email'), null);
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Akhirnya Logout!'
@@ -98,8 +81,19 @@ class UserController extends Controller {
 
     #GET
     public function dashboard() {
-        // return fun::getCookie('email');
-        $data = $this->service->dashboard();
+        if(Cache::has('page-dashboard')) $data = Cache::get('page-dashboard');
+        else {
+            Cache::put('page-dashboard', $this->service->dashboard(), 1*6*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-dashboard');
+        };
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->dashboard();
+        if(!$data->diff($latestData)) {
+            Cache::put('page-dashboard', $latestData, 1*6*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-dashboard');
+        }
+
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Dashboard!',

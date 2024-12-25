@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Services\as2001_kecermatan_kolompertanyaanService;
 use App\Libraries\jsr;
 class As2001KecermatanKolompertanyaanController extends Controller {
@@ -16,21 +17,46 @@ class As2001KecermatanKolompertanyaanController extends Controller {
 
     #GET
     public function all() {
+        if(Cache::has('page-psikotest_kecermatankolompertanyaan-all')) $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+        else {
+            Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->all();
+        if(!$data->diff($latestData)) {
+            Cache::put('page-psikotest_kecermatankolompertanyaan-all', $latestData, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+        }
+
         return jsr::print([
             'success'   => 1,
-            'pesan'     => 'Semua Data Soal Psikotest Kecermatan!', 
-            'data'      => $this->service->all()
-        ], 'ok'); 
+            'pesan'     => 'Semua Data Soal Psikotest Kecermatan!',
+            'data'      => $data
+        ], 'ok');
     }
 
     #GET
     public function get(String|int $val) {
-        $data = $this->service->get($val);
+        if(Cache::has('page-psikotest_kecermatanakolompertanyaan-get-'.$val)) $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+        else {
+            Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $this->service->get($val), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->get($val);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $latestData, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+        }
+
         return jsr::print([
             'success'   => 1,
             'pesan'     => 'Data Pertanyaan Psikotest Kecermatan '.$data[0]['kolom_x'], 
             'data'      => $data
-        ], 'ok'); 
+        ], 'ok');
     }
 
     #POST

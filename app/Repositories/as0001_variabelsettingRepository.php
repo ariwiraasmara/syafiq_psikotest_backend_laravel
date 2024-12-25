@@ -13,7 +13,10 @@ class as0001_variabelsettingRepository {
     }
 
     public function all() {
-        return $this->model->all();
+        return $this->model
+                    ->orderBy('variabel', 'asc')
+                    ->limit(10)
+                    ->get();
     }
 
     public function get(array $where) {

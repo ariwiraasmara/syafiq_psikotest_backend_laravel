@@ -5,6 +5,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Services\as2002_kecermatan_soalService;
 use App\Libraries\jsr;
 class As2002KecermatanSoaljawabanController extends Controller {
@@ -23,8 +24,19 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
     #GET
     public function allRaw(int $id) {
-        $data = $this->service->all($id);
-        return $data;
+        if(Cache::has('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id)) $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+        else {
+            Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->all($id);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $latestData, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+        }
+
         return jsr::print([
             'success' => 1,
             'pesan'   => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['pertanyaan'][0]['kolom_x'],
@@ -34,7 +46,19 @@ class As2002KecermatanSoaljawabanController extends Controller {
 
     #GET
     public function allCooked(String|int $kolom) {
-        $data = $this->service->get($kolom);
+        if(Cache::has('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom)) $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+        else {
+            Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $this->service->get($kolom), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+        }
+
+        // membandingkan 2 data, data yang tersimpan di cache dan data terbaru
+        $latestData = $this->service->get($kolom);
+        if(!$data->diff($latestData)) {
+            Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $latestData, 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+        }
+
         return jsr::print([
             'success' => 1,
             'pesan'   => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['pertanyaan'][0]['kolom_x'],
