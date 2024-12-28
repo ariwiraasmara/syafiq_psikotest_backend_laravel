@@ -4,15 +4,15 @@
 //! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
-use App\Models\User;
+use App\Models\PersonalAccessTokens;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Exception;
-class userRepository {
+class personalaccesstokensRepository {
 
-    protected User $model;
-    public function __construct(User $model) {
-        $this->model = $model;
+    protected PersonalAccessTokens $model;
+    public function __construct() {
+        $this->model = new PersonalAccessTokens();
     }
 
     public function get(array $where): array|Collection|String|int|null {
@@ -31,27 +31,10 @@ class userRepository {
         }
     }
 
-    public function store(array $values): array|Collection|String|int|null {
-        try {
-            $res = $this->model->create($values);
-            if($res->id > 0) return $res->id;
-            return 0;
-        }
-        catch(Exception $err) {
-            Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->store!', [
-                'message' => $err->getMessage(),
-                'file' => $err->getFile(),
-                'line' => $err->getLine(),
-                'trace' => $err->getTraceAsString(),
-            ]);
-            return -11;
-        }
-    }
-
     public function update(int $id, array $values): array|Collection|String|int|null {
         try {
             $res = $this->model->where(['id' => $id])->update($values);
-            if($res > 0) return $res->id;
+            if($res > 0) return $res;
             return 0;
         }
         catch(Exception $err) {

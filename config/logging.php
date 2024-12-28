@@ -124,7 +124,46 @@ return [
         ],
 
         'emergency' => [
-            'path' => storage_path('logs/laravel.log'),
+            // 'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('logs/emergency/emergency.log'),
+        ],
+
+        'error-repositories' => [
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/error/repositories/.log'), // Lokasi file log
+            'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
+        ],
+
+        'error-services' => [
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/error/services/.log'), // Lokasi file log
+            'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
+        ],
+
+        'error-controllers' => [
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/error/controller/.log'), // Lokasi file log
+            'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
+        ],
+
+        'debugging' => [
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/debug/.log'), // Lokasi file log
+            'level' => 'debug', // Mencatat semua log dengan level 'info' dan lebih tinggi
+        ],
+
+        'information' => [
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/info/.log'), // Lokasi file log
+            'level' => 'info', // Mencatat semua log dengan level 'info' dan lebih tinggi
+        ],
+
+        'header-request' => [
+            // 'driver' => 'single', // Menggunakan driver 'single' untuk satu file log
+            'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
+            'path' => storage_path('logs/header-request/.log'), // Lokasi file log
+            'level' => 'info', // Mencatat semua log dengan level 'info' dan lebih tinggi
+            'days' => 15, // Menyimpan log hanya selama 15 hari
         ],
 
     ],
