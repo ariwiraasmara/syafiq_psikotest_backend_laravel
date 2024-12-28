@@ -5,6 +5,9 @@
 namespace App\Repositories;
 
 use App\Models\as0001_variabelsetting;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+use Exception;
 class as0001_variabelsettingRepository {
 
     protected as0001_variabelsetting $model;
@@ -12,29 +15,91 @@ class as0001_variabelsettingRepository {
         $this->model = $model;
     }
 
-    public function all() {
-        return $this->model
-                    ->orderBy('variabel', 'asc')
-                    ->limit(10)
-                    ->get();
+    public function all(): array|Collection|String|int|null {
+        try {
+            if($this->model->first()) {
+                return $this->model->orderBy('variabel', 'asc')
+                                    ->limit(10)
+                                    ->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as0001_variabelsettingRepository->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
 
-    public function get(array $where) {
-        return $this->model->where($where)->get();
+    public function get(array $where): array|Collection|String|int|null {
+        try {
+            if($this->model->where($where)->first()) return $this->model->where($where)->get();
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as0001_variabelsettingRepository->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
 
-    public function store(array $values) {
-        $res = $this->model->create($values);
-        return $res->id;
+    public function store(array $values): array|Collection|String|int|null {
+        try {
+            $res = $this->model->create($values);
+            if($res->id > 0) return $res->id;
+            return 0;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as0001_variabelsettingRepository->store!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
 
-    public function update(int $id, array $values) {
-        return $this->model->where(['id' => $id])->update($values);
+    public function update(int $id, array $values): array|Collection|String|int|null {
+        try {
+            $res = $this->model->where(['id' => $id])->update($values);
+            if($res > 0) return $res;
+            return 0;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as0001_variabelsettingRepository->update!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
 
-    public function delete(int $id) {
-        return $this->model->where(['id' => $id])->delete();
+    public function delete(int $id): array|Collection|String|int|null {
+        try {
+            $res = $this->model->where(['id' => $id])->delete();
+            if($res > 0) return $res;
+            return 0;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as0001_variabelsettingRepository->delete!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
-
 }
 ?>

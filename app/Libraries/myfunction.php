@@ -403,12 +403,21 @@ class myfunction {
         }
     }
 
+    public static function daysLater(String $dayslater) {
+        try {
+            $today = date("Y-m-d");
+            return date("Y-m-d", strtotime($today . $dayslater));
+        }
+        catch(Exception $e) {
+            echo "function Notrifger() Error: ".$e;
+        }
+    }
+
     // NOTIFICATION
     public static function Notrifger($id, $idtrigger, $txt) {
         try { ?>
             <a href="<?php echo '#'.self::Enlink($idtrigger); ?>" id="<?php echo self::Enlink($id); ?>" class="modal-trigger hide"><?php echo 'to-'.$txt; ?></a>
-            <?php
-        }
+        <?php }
         catch(Exception $e) {
             echo "function Notrifger() Error: ".$e;
         }
@@ -444,7 +453,7 @@ class myfunction {
                 'numbwize' => str_split('123456789'),
                 'pass' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>?'),
                 'spec' => str_split('`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/'),
-                'combwisp' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'),
+                'combwisp' => str_split('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789'),
                 default => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/')
             };
 
