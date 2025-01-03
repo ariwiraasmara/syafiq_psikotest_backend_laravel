@@ -20,7 +20,8 @@ class as2002_kecermatan_soaljawabanRepository {
             if($this->model->where(['id2001' => $id])->first()) {
                 return $this->model->where(['id2001' => $id])
                                     ->orderBy('id', 'asc')
-                                    ->paginate(10);
+                                    ->paginate(10)
+                                    ->toArray();
             }
             return null;
         }
@@ -54,7 +55,24 @@ class as2002_kecermatan_soaljawabanRepository {
             ]);
             return -11;
         }
-        
+    }
+
+    public function allData(): array|Collection|String|int|null {
+        try {
+            if($this->model->first()) {
+                return $this->model->orderBy('id', 'asc')->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as2002_kecermatan_soaljawabanRepository->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
     }
 
     public function get(int $id): array|Collection|String|int|null {

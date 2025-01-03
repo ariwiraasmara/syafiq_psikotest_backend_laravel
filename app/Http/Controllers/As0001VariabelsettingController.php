@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use App\Services\as0001_variabelsettingService;
 use App\Libraries\jsr;
-use Illuminate\Support\Facades\Log;
+use App\Libraries\myfunction as fun;
 use Exception;
 class As0001VariabelsettingController extends Controller {
     //
@@ -22,9 +23,23 @@ class As0001VariabelsettingController extends Controller {
     #GET
     public function all(): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-variabelsetting-all')) $data = Cache::get('page-variabelsetting-all');
+            if(Cache::has('page-variabelsetting-all')) {
+                $data = Cache::get('page-variabelsetting-all');
+                /*
+                *Logicnya harus diubah dan improvisasi
+                *Untuk sementara begini dulu
+                *Logicnya cache dan database validasi apakah sama atau tidak
+                *Jika tidak maka cache terupdate
+                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+                */
+                $database = $this->service->all();
+                if(json_encode($data) !== json_encode($database)) {
+                    Cache::put('page-variabelsetting-all', $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    $data = Cache::get('page-variabelsetting-all');
+                }
+            }
             else {
-                Cache::put('page-variabelsetting-all', $data = $this->service->all(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                Cache::put('page-variabelsetting-all', $this->service->all(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 $data = Cache::get('page-variabelsetting-all');
             }
             return jsr::print([
@@ -50,9 +65,23 @@ class As0001VariabelsettingController extends Controller {
     #GET
     public function get(int $id): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-variabelsetting-get-'.$id)) $data = Cache::get('page-variabelsetting-get-'.$id);
+            if(Cache::has('page-variabelsetting-get-'.$id)) {
+                $data = Cache::get('page-variabelsetting-get-'.$id);
+                /*
+                *Logicnya harus diubah dan improvisasi
+                *Untuk sementara begini dulu
+                *Logicnya cache dan database validasi apakah sama atau tidak
+                *Jika tidak maka cache terupdate
+                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+                */
+                $database = $this->service->get($id);
+                if(json_encode($data) !== json_encode($database)) {
+                    Cache::put('page-variabelsetting-get-'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    $data = Cache::get('page-variabelsetting-get-'.$id);
+                }
+            }
             else {
-                Cache::put('page-variabelsetting-get-'.$id, $data = $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+                Cache::put('page-variabelsetting-get-'.$id, $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
                 $data = Cache::get('page-variabelsetting-get-'.$id);
             }
             return jsr::print([
@@ -78,20 +107,33 @@ class As0001VariabelsettingController extends Controller {
     #POST
     public function store(Request $request): Response|JsonResponse|String|int|null {
         try {
-            $data = $this->service->store([
-                'variabel' => $request->variabel,
-                'values'   => $request->values,
+            $credentials = $request->validate([
+                'variabel' => 'required|string|max:255',
+                'values'   => 'required',
             ]);
-            if($data > 0) return jsr::print([
-                'success'   => 1,
-                'pesan'     => 'Berhasil Menyimpan Data Setting Variabel',
-                'data'      => $data
-            ], 'created');
+            if($credentials) {
+                $data = $this->service->store([
+                    'variabel' => fun::readable($request->variabel),
+                    'values'   => fun::readable($request->values),
+                ]);
+                if($data > 0) {
+                    Cache::put('page-variabelsetting-all', $this->service->all(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    return jsr::print([
+                        'success'   => 1,
+                        'pesan'     => 'Berhasil Menyimpan Data Setting Variabel',
+                        'data'      => $data
+                    ], 'created');
+                }
+                return jsr::print([
+                    'error'  => 2,
+                    'pesan'  => 'Gagal Menyimpan Data Setting Variabel',
+                    'data'   => $data
+                ], 'bad request');
+            }
             return jsr::print([
-                'error'  => 1,
-                'pesan'  => 'Gagal Menyimpan Data Setting Variabel',
-                'data'   => $data
-            ], 'bad request');
+                'error'=> -13,
+                'pesan' => 'Is Not Valid!'
+            ]);
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->store!', [
@@ -110,20 +152,33 @@ class As0001VariabelsettingController extends Controller {
     #PUT/POST
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
-            $data = $this->service->update($id, [
-                'variabel'      => $request->variabel,
-                'values'        => $request->values,
+            $credentials = $request->validate([
+                'variabel' => 'required|string|max:255',
+                'values'   => 'required',
             ]);
-            if($data > 0) return jsr::print([
-                'success' => 1,
-                'pesan'   => 'Berhasil Memperbaharui Data Setting Variabel',
-                'data'    => $data
-            ], 'ok');
+            if($credentials) {
+                $data = $this->service->update($id, [
+                    'variabel' => fun::readable($request->variabel),
+                    'values'   => fun::readable($request->values),
+                ]);
+                if($data > 0) {
+                    Cache::put('page-variabelsetting-get-'.$id, $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+                    return jsr::print([
+                        'success' => 1,
+                        'pesan'   => 'Berhasil Memperbaharui Data Setting Variabel',
+                        'data'    => $data
+                    ], 'ok');
+                }
+                return jsr::print([
+                    'error'   => 2,
+                    'pesan'   => 'Gagal Memperbaharui Data Setting Variabel',
+                    'data'    => $data
+                ], 'bad request');
+            }
             return jsr::print([
-                'error'   => 1,
-                'pesan'   => 'Gagal Memperbaharui Data Setting Variabel',
-                'data'    => $data
-            ], 'bad request');
+                'error'  => 1,
+                'pesan'  => 'Is Not Valid!',
+            ], 'not acceptable');
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->update!', [
@@ -143,11 +198,15 @@ class As0001VariabelsettingController extends Controller {
     public function delete(int $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);
-            if($data > 0) return jsr::print([
-                'success' => 1,
-                'pesan'   => 'Berhasil Menghapus Data Setting Variabel',
-                'data'    => $data
-            ], 'ok');
+            if($data > 0) {
+                Cache::forget('page-variabelsetting-get-'.$id);
+                Cache::put('page-variabelsetting-all', $this->service->all(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                return jsr::print([
+                    'success' => 1,
+                    'pesan'   => 'Berhasil Menghapus Data Setting Variabel',
+                    'data'    => $data
+                ], 'ok');
+            }
             return jsr::print([
                 'error' => 1,
                 'pesan' => 'Gagal Menghapus Data Setting Variabel',

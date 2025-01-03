@@ -16,6 +16,24 @@ class as2001_kecermatan_kolompertanyaanRepository {
         $this->model = $model;
     }
 
+    public function allData(): array|Collection|String|int|null {
+        try {
+            if($this->model->first()) {
+                return $this->model->select('*')->orderBy('kolom_x', 'asc')->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as2001_kecermatan_kolompertanyaanRepository->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
     public function all(): array|Collection|String|int|null {
         try {
             if($this->model->first()) {

@@ -30,6 +30,21 @@ class as2001_kecermatan_kolompertanyaanService {
         }
     }
 
+    public function allData(): array|Collection|String|int|null {
+        try {
+            return $this->repo->allData();
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as2001_kecermatan_kolompertanyaanService->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
     public function get(String|int $val): array|Collection|String|int|null {
         try {
             return $this->repo->get($val);

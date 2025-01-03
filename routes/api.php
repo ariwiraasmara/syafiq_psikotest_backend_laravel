@@ -6,12 +6,12 @@ use App\Http\Middleware\BearerTokenCheck;
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;
 use App\Http\Middleware\CSRF_Check;
-use App\Http\Middleware\EnsureEmailIsVerified;
+use App\Http\Middleware\IndexedDB;
 use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
-use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +23,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
+    'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     CheckTokenLogin::class,
     MatchingUserData::class,
@@ -36,16 +37,12 @@ Route::middleware([
 
     //? As0001VariabelsettingController
     Route::get('/variabel-setting', myroute::API('As0001VariabelsettingController', 'all'));
-
-    Route::post('/variabel-setting', myroute::API('As0001VariabelsettingController', 'store'))
-        ->middleware([CheckTokenLogin::class, MatchingUserData::class, BearerTokenCheck::class]);
-
+    Route::post('/variabel-setting', myroute::API('As0001VariabelsettingController', 'store'));
     Route::put('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'update'));
     Route::delete('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'delete'));
 
     //? As1001PesertaProfilController
     Route::get('/peserta', myroute::API('As1001PesertaProfilController', 'all'));
-    Route::get('/peserta/terbaru', myroute::API('As1001PesertaProfilController', 'allLatest'));
     Route::get('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'get'));
     Route::delete('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'delete'));
 
@@ -68,13 +65,33 @@ Route::middleware([
 });
 
 Route::middleware([
+    'throttle:4,1', // 4 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     CacheControlMiddleware::class,
     CheckTokenLogin::class,
     LogRequest::class
 ])->group(function () {
     Route::post('/login', myroute::API('UserController', 'login'));
     Route::get('/logout', myroute::API('UserController', 'logout'));
+});
 
+Route::middleware([
+    'throttle:5,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    CacheControlMiddleware::class,
+    CheckTokenLogin::class,
+    IndexedDB::class,
+    LogRequest::class,
+    Pranker::class
+])->group(function () {
+    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan', myroute::API('As2001KecermatanKolompertanyaanController', 'allData'));
+    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban', myroute::API('As2002KecermatanSoaljawabanController', 'allData'));
+});
+
+Route::middleware([
+    'throttle:100,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    CacheControlMiddleware::class,
+    CheckTokenLogin::class,
+    LogRequest::class
+])->group(function () {
     Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'));
     Route::get('/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allCooked'));
     Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'));

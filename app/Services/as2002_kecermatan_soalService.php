@@ -40,16 +40,28 @@ class as2002_kecermatan_soalService {
 
     public function all(int $id): array|Collection|String|int|null {
         try {
-            $data2 = $this->repo2->all($id);
-            // return $data2;
-            $data1 = $this->repo1->get($data2[0]['id2001']);
             return collect([
-                'pertanyaan'  => $data1,
-                'soaljawaban' => $data2
+                'pertanyaan'  => $this->repo1->get($id),
+                'soaljawaban' => $this->repo2->all($id)
             ]);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as2002_kecermatan_soalService->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
+    public function allData(): array|Collection|String|int|null {
+        try {
+            return $this->repo2->allData();
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as2002_kecermatan_soalService->allData!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),
