@@ -12,13 +12,18 @@ class jsr {
 
     public static function print(array $array = null, String $status = null) {
         return response()->json($array, match($status){
-            'ok'            => 200,
-            'created'       => 201,
-            'accepted'      => 202,
-            'bad request'   => 400,
-            'unauthorized'  => 401,
-            'not found'     => 404,
-            default         => 500
+            'ok'                 => 200,
+            'created'            => 201,
+            'accepted'           => 202,
+            'bad request'        => 400,
+            'unauthorized'       => 401,
+            'forbidden'          => 403,
+            'not found'          => 404,
+            'method not allowed' => 405,
+            'not acceptable'     => 406,
+            'conflict'           => 409,
+            'gone'               => 410,
+            default              => 500
         });
     }
 

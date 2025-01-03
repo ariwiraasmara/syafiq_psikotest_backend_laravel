@@ -6,18 +6,16 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckTokenLogin
-{
+class IndexedDB {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next) {
-        if($request->hasHeader('tokenlogin')) {
-            if(!$request->header()['tokenlogin']) return response()->json(['message' => 'Token Login Not Found!'], 404);
+    public function handle(Request $request, Closure $next): Response {
+        if($request->hasHeader('indexeddb') && ($request->header()['indexeddb'][0] == 'syafiq_psikotest')) {
             return $next($request);
         }
-        return response()->json(['message' => 'Token Login Not Found!'], 404);
+        return response()->json(['message' => 'IndexedDB Not Found!'], 404);
     }
 }

@@ -63,7 +63,15 @@ class userService {
 
     public function dashboard(String $email): array|Collection|String|int|null {
         try {
-            if(fun::getRawCookie('__sysel__')) return $this->repo->get(['email' => fun::getCookie('__sysel__')]);
+            if(fun::getRawCookie('__sysel__')) {
+                Log::channel('debugging')->debug('ambil data dari cookie!', [
+                    'email' => fun::getCookie('__sysel__')
+                ]);
+                return $this->repo->get(['email' => fun::getCookie('__sysel__')]);
+            }
+            Log::channel('debugging')->debug('ambil data dari request parameter!', [
+                'email' => $email
+            ]);
             return $this->repo->get(['email' => $email]);
         }
         catch(Exception $err) {

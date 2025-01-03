@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Services\userService;
 use App\Services\personalaccesstokensService;
+use App\Services\as1001_peserta_profilService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
@@ -20,68 +21,84 @@ class UserController extends Controller {
     //
     protected userService $service;
     protected personalaccesstokensService $patService;
+    protected as1001_peserta_profilService $pesertaService;
     public function __construct(
         userService $service,
-        personalaccesstokensService $patService) {
+        personalaccesstokensService $patService,
+        as1001_peserta_profilService $pesertaService
+        ) {
             $this->service = $service;
             $this->patService = $patService;
+            $this->pesertaService = $pesertaService;
     }
 
     #POST
     public function login(Request $request): Response|JsonResponse|String|int|null {
         try {
-            $data = $this->service->login($request->email, $request->password);
-            if($data['success']) {
-                $credentials = $request->validate([
-                    'email'     => ['required'],
-                    'password'  => ['required'],
-                ]);
-                if (Auth::attempt($credentials)) {
-                    $path = '/';
-                    $domain = 'localhost';
-                    // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
-                    $pat = $this->patService->get(['name' => $request->email]);
-                    $tokenExpire = fun::daysLater('+7 days');
-                    $isTokenupdate = false;
-                    if($pat[0]['expires_at'] == date('Y-m-d 00:00:00')) {
-                        $this->patService->update($pat[0]['id'],[
-                            'abilities' => '["*"]',
-                            'expires_at' => $tokenExpire,
-                            'updated_at' => date('Y-m-d H:i:s')
+            $credentials = $request->validate([
+                'email'     => ['required'],
+                'password'  => ['required'],
+            ]);
+            if($credentials) {
+                $data = $this->service->login($request->email, $request->password);
+                if($data['success']) {
+                    if (Auth::attempt($credentials, true)) {
+                        $user = Auth::user();
+                        Auth::login($user, true);
+                        $path = '/';
+                        $domain = 'localhost';
+                        // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
+                        $pat = $this->patService->get(['name' => $request->email]);
+                        $tokenExpire = fun::daysLater('+7 days');
+                        $isTokenupdate = false;
+                        if($pat[0]['expires_at'] == date('Y-m-d 00:00:00')) {
+                            $this->patService->update($pat[0]['id'],[
+                                'abilities' => '["*"]',
+                                'expires_at' => $tokenExpire,
+                                'updated_at' => date('Y-m-d H:i:s')
+                            ]);
+                            $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 50));
+                            $isTokenupdate = true;
+                            return 1;
+                        }
+                        if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
+                        $response = new Response([
+                            'success' => 1,
+                            'pesan'   => 'Yehaa! Berhasil Login!',
+                            'data'    => [
+                                'nama'    => $data['data'][0]['name'],
+                                'email'   => $request->email,
+                                'token_1' => fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']),
+                                'token_2' => $data['data'][0]['remember_token'],
+                                'token_expire_at' => $tokenExpire
+                            ]
                         ]);
-                        $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 50));
-                        $isTokenupdate = true;
-                        return 1;
+                        $response->withCookie(cookie('islogin', true, 60));
+                        $response->withCookie(cookie('isadmin', true, 60));
+                        $response->withCookie(cookie('__sysel__', $request->email, 60));
+                        // $response->withCookie(cookie('__sysel__', $request->email, 360, '/pathku', 'domainku.com', true, true, false, 'Strict'));
+                        return $response;
                     }
-                    if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
-                    $response = new Response([
-                        'success' => 1,
-                        'pesan'   => 'Yehaa! Berhasil Login!',
-                        'data'    => [
-                            'nama'    => $data['data'][0]['name'],
-                            'email'   => $request->email,
-                            'token_1' => fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']),
-                            'token_2' => $data['data'][0]['remember_token'],
-                            'token_expire_at' => $tokenExpire
-                        ]
-                    ]);
-                    $response->withCookie(cookie('islogin', true, 60));
-                    $response->withCookie(cookie('isadmin', true, 60));
-                    $response->withCookie(cookie('__sysel__', $request->email, 60));
-                    return $response;
                 }
+                return match($data['error']){
+                    1 => jsr::print([
+                        'pesan' => 'Username / Email Salah!',
+                        'error'=> 1
+                    ], 'bad request'),
+                    2 => jsr::print([
+                        'pesan' => 'Password Salah!',
+                        'error'=> 2
+                    ],'bad request'),
+                    default => jsr::print([
+                        'pesan' => 'Terjadi Kesalahan!',
+                        'error'=> -1
+                    ])
+                };
             }
-            return match($data->get('error')){
-                1 => jsr::print([
-                    'pesan' => 'Username / Email Salah!',
-                    'error'=> 1], 'bad request'),
-                2 => jsr::print([
-                    'pesan' => 'Password Salah!',
-                    'error'=> 2],'bad request'),
-                default => jsr::print([
-                    'pesan' => 'Terjadi Kesalahan!',
-                    'error'=> -1])
-            };
+            return jsr::print([
+                'error'=> -13,
+                'pesan' => 'Is Not Valid!'
+            ]);
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada UserController->login!', [
@@ -126,17 +143,13 @@ class UserController extends Controller {
     }
 
     #GET
-    public function dashboard(Request $request) {
+    public function dashboard(Request $request): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-dashboard')) $data = Cache::get('page-dashboard');
-            else {
-                Cache::put('page-dashboard', $this->service->dashboard($request->header()['email'][0]), 1*6*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
-                $data = Cache::get('page-dashboard');
-            };
             return jsr::print([
-                'success'   => 1,
-                'pesan'     => 'Dashboard!',
-                'data'      => $data
+                'success' => 1,
+                'pesan'   => 'Dashboard!',
+                'profil'  => $request->header()['email'][0],
+                'data'    => $this->pesertaService->allLatest()
             ], 'ok');
         }
         catch(Exception $err) {

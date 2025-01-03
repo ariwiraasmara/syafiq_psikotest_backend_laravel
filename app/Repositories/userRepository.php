@@ -18,7 +18,7 @@ class userRepository {
     public function get(array $where): array|Collection|String|int|null {
         try {
             if($this->model->where($where)->first()) return $this->model->where($where)->get();
-            return 0;
+            return null;
         }
         catch(Exception $err) {
             Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->get!', [
