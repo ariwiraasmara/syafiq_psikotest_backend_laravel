@@ -26,4 +26,9 @@ class as1001_peserta_profil extends Model {
     public $timestamps = false;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+
+    //? Punya banyak data di table as1002_peserta_hasilnilai_teskecermatan
+    public function as1002_peserta_hasilnilai_teskecermatan() {
+        return $this->hasMany(as1002_peserta_hasilnilai_teskecermatan::class);
+    }
 }

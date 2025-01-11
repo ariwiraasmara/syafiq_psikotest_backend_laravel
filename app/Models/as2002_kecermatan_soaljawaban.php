@@ -27,4 +27,10 @@ class as2002_kecermatan_soaljawaban extends Model {
     public $timestamps = true;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+
+    //? Punya satu data di table as2001_kecermatan_kolompertanyaan yang mana parent tablenya
+    public function as2001_kecermatan_kolompertanyaan() {
+        return $this->belongsTo(as2001_kecermatan_kolompertanyaan::class);
+    }
+
 }

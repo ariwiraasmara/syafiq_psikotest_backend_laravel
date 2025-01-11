@@ -28,4 +28,9 @@ class as2001_kecermatan_kolompertanyaan extends Model {
     public $timestamps = true;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+
+    //? Punya banyak data di table as1002_peserta_hasilnilai_teskecermatan
+    public function as2002_kecermatan_soaljawaban() {
+        return $this->hasMany(as2002_kecermatan_soaljawaban::class);
+    }
 }

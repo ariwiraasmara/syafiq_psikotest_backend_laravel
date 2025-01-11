@@ -11,6 +11,7 @@ use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
+use App\Http\Middleware\VerifyFastApiKey;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -23,7 +24,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
-    'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    'throttle:25,1', // 25 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     CheckTokenLogin::class,
     MatchingUserData::class,
@@ -104,6 +105,7 @@ Route::middleware([
 //? PUBLIC API ROUTE TANPA MIDDLEWARE
 Route::get('/csrf_token', myroute::API('AnyController', 'csrf_token'));
 Route::get('/generate-token-first', myroute::API('AnyController', 'generate_token_first'));
+Route::get('/generate-api-key', myroute::API('AnyController', 'generate_api_key'));
 
 Route::post('/testAdminToken', myroute::API('AnyController', 'testAdminToken'))
     ->middleware([BearerTokenCheck::class, UserRememberTokenCheck::class]);
@@ -120,7 +122,7 @@ Route::get('/hello', function(Request $request) {
     // $k11 = collect(["soal" => ['0'=>2, '1'=>1, '2'=>9, '3'=>5], "jawaban" => 7]);
     $k11 = json_encode(['soal' => [7, 2, 5, 1], 'jawaban' => 9]);
     return 'hello '.$k11;
-});
+})->middleware([VerifyFastApiKey::class]);
 
 Route::post('/hello', function(){
     return 'hello';

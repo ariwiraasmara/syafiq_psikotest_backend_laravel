@@ -212,12 +212,17 @@ class As1001PesertaProfilController extends Controller {
                 'email'        => fun::readable($request->email),
                 'tgl_lahir'    => fun::readable($request->tgl_lahir),
                 'asal'         => fun::readable($request->asal),
+                'tgl_tes'      => fun::readable($request->tgl_tes),
             ]);
-            if($data['success']) {
+            if($data['success'] == 1) {
                 $data->put('success', 1);
                 $data->put('pesan', 'Berhasil Setup Data Peserta Tes!');
                 return $data->toJSON();
-            };
+            }
+            else if($data['success'] == 'datex') {
+                $data->put('pesan', 'Anda sudah mengambil tes hari ini! Cobalah Esok hari lagi!');
+                return $data->toJSON();
+            }
             return jsr::print([
                 'error' => 1,
                 'pesan' => 'Gagal Setup Data Peserta Tes!',
