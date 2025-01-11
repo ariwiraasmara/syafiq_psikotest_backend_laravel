@@ -51,6 +51,8 @@ class AnyController extends Controller {
 
     public function generate_token_first() {
         try {
+            $path   = '/pathku';
+            $domain = 'domainku.com';
             $token = fun::random('combwisp', 50);
             $unique = fun::random('combwisp', 50);
             $response = new Response([
@@ -63,10 +65,32 @@ class AnyController extends Controller {
             ]);
     
             $expirein = 6 * 60; // jam * menit
-            $response->withCookie(cookie('csrf-token', csrf_token(), $expirein));
-            $response->withCookie(cookie('__token__', $token, $expirein));
-            $response->withCookie(cookie('__unique__', $unique, $expirein));
+            $response->withCookie(cookie('csrf-token', csrf_token(), $expirein, 360, $path, $domain, true, true, false, 'Strict'));
+            $response->withCookie(cookie('__token__', $token, $expirein, 360, $path, $domain, true, true, false, 'Strict'));
+            $response->withCookie(cookie('__unique__', $unique, $expirein, 360, $path, $domain, true, true, false, 'Strict'));
             return $response;
+        }
+        catch(Exception $err) {
+            Log::channel('error-controllers')->error('Terjadi kesalahan pada AnyController->generate_token_first!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return new Response([
+                'error' => 1,
+                'pesan' => 'Generate Unique Token Gagal! Lihat Log!'
+            ]);
+        }
+    }
+
+    public function generate_api_key() {
+        try {
+            return new Response([
+                'success' => 1,
+                'pesan'   => 'Generate API Key Berhasil!',
+                'data'    => fun::random('combwisp', 100)
+            ]);
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada AnyController->generate_token_first!', [

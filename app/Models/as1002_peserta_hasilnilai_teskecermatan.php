@@ -27,4 +27,9 @@ class as1002_peserta_hasilnilai_teskecermatan extends Model {
     public $timestamps = false;
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+
+    //? Punya satu data di table as1001_peserta_profil yang mana parent tablenya
+    public function as1001_peserta_profil() {
+        return $this->belongsTo(as1001_peserta_profil::class);
+    }
 }

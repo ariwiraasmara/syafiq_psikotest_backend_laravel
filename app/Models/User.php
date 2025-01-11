@@ -47,4 +47,11 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
+
+    //? Punya satu data di table PersonalAccessTokens
+    public function PersonalAccessTokens() {
+        //? NamaModel::class, 'foreign_key', 'local_key'
+        //? contoh : return $this->hasOne(User::class, 'id', 'id_user');
+        return $this->hasOne(PersonalAccessTokens::class, 'name', 'email');
+    }
 }

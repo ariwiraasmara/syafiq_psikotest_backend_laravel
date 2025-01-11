@@ -47,6 +47,32 @@ class as1002_peserta_hasilnilai_teskecermatanRepository {
         }
     }
 
+    public function getCheckTesDate(int $id1001, String $date): array|Collection|String|int|null {
+        try {
+            $where1 = ['id1001' => $id1001];
+            $where2 = ['tgl_ujian' => $date];
+            if($this->model->where($where1)
+                        ->where($where2)
+                        ->orderBy('tgl_ujian', 'desc')
+                        ->first()) {
+                            return $this->model->where($where1)
+                                            ->where($where2)
+                                            ->orderBy('tgl_ujian', 'desc')
+                                            ->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as1002_peserta_hasilnilai_teskecermatanRepository->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
     public function store(array $values): array|Collection|String|int|null {
         try {
             $res = $this->model->create($values);
