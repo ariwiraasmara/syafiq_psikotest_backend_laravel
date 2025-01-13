@@ -34,7 +34,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 */
                 $database = $this->service->all($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
                 }
             }
@@ -76,7 +76,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 */
                 $database = $this->service->all($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
                 }
             }
