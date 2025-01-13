@@ -59,15 +59,17 @@ class AnyController extends Controller {
                 'success' => 1,
                 'pesan'   => 'Generate Unique Token Berhasil!',
                 'data'    => [
-                    'token' => $token,
-                    'unique' => $unique
+                    'csrfToken' => csrf_token(),
+                    'token'     => $token,
+                    'unique'    => $unique
                 ]
             ]);
-    
+
             $expirein = 6 * 60; // jam * menit
-            $response->withCookie(cookie('csrf-token', csrf_token(), $expirein, 360, $path, $domain, true, true, false, 'Strict'));
-            $response->withCookie(cookie('__token__', $token, $expirein, 360, $path, $domain, true, true, false, 'Strict'));
-            $response->withCookie(cookie('__unique__', $unique, $expirein, 360, $path, $domain, true, true, false, 'Strict'));
+            $response->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, true, false, 'Strict'))
+                    ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, true, false, 'Strict'))
+                    ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'));
+            
             return $response;
         }
         catch(Exception $err) {

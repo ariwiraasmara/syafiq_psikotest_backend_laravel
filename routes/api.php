@@ -5,13 +5,14 @@
 use App\Http\Middleware\BearerTokenCheck;
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;
-use App\Http\Middleware\CSRF_Check;
+use App\Http\Middleware\ContentSecurityPolicy;
 use App\Http\Middleware\IndexedDB;
 use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
 use App\Http\Middleware\VerifyFastApiKey;
+use App\Http\Middleware\XRobotTags;
 use Illuminate\Cache\RateLimiter;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -26,6 +27,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 Route::middleware([
     'throttle:25,1', // 25 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
+    // VerifyFastApiKey::class,
     CheckTokenLogin::class,
     MatchingUserData::class,
     CacheControlMiddleware::class,
@@ -67,8 +69,9 @@ Route::middleware([
 
 Route::middleware([
     'throttle:4,1', // 4 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    CacheControlMiddleware::class,
+    // VerifyFastApiKey::class,
     CheckTokenLogin::class,
+    CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
     Route::post('/login', myroute::API('UserController', 'login'));
@@ -77,20 +80,22 @@ Route::middleware([
 
 Route::middleware([
     'throttle:5,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    CacheControlMiddleware::class,
-    CheckTokenLogin::class,
     IndexedDB::class,
-    LogRequest::class,
-    Pranker::class
+    // VerifyFastApiKey::class,
+    CheckTokenLogin::class,
+    Pranker::class,
+    CacheControlMiddleware::class,
+    LogRequest::class
 ])->group(function () {
-    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan', myroute::API('As2001KecermatanKolompertanyaanController', 'allData'));
-    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban', myroute::API('As2002KecermatanSoaljawabanController', 'allData'));
+    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'));
+    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'));
 });
 
 Route::middleware([
     'throttle:100,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    CacheControlMiddleware::class,
+    // VerifyFastApiKey::class,
     CheckTokenLogin::class,
+    CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
     Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'));
@@ -98,8 +103,8 @@ Route::middleware([
     Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'));
     Route::post('/peserta', myroute::API('As1001PesertaProfilController', 'store'));
     Route::put('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'update'));
-    Route::get('/peserta/hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'));
     Route::post('/peserta/hasil-tes/{id}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'));
+    Route::get('/peserta/hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'));
 });
 
 //? PUBLIC API ROUTE TANPA MIDDLEWARE

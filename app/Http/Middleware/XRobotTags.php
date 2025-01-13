@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class VerifyFastApiKey
+class XRobotTags
 {
     /**
      * Handle an incoming request.
@@ -15,15 +15,12 @@ class VerifyFastApiKey
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $apiKey = config('app.fast_api_key');
+        $response = $next($request);
+        
+        // Menambahkan header X-Robots-Tag ke semua respon
+        $response->headers->set('X-Robots-Tag', 'index, follow, snippet, max-snippet:99, noarchive, notranslate');
 
-        $apiKeyIsValid = (
-            filled($apiKey)
-            && $request->header('X-API-KEY') === $apiKey
-        );
 
-        abort_if (! $apiKeyIsValid, 403, 'Access denied');
-
-        return $next($request);
+        return $response;
     }
 }

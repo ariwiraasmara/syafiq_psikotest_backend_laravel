@@ -73,10 +73,10 @@ class UserController extends Controller {
                                 'token_expire_at' => $tokenExpire
                             ]
                         ]);
-                        $response->withCookie(cookie('islogin', true, 60));
-                        $response->withCookie(cookie('isadmin', true, 60));
-                        $response->withCookie(cookie('__sysel__', $request->email, 60));
-                        // $response->withCookie(cookie('__sysel__', $request->email, 360, '/pathku', 'domainku.com', true, true, false, 'Strict'));
+                        $expirein = 6 * 60; // jam * menit
+                        // $response->withCookie(cookie('islogin', true, 60));
+                        // $response->withCookie(cookie('isadmin', true, 60));
+                        $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'));
                         return $response;
                     }
                 }
@@ -122,6 +122,7 @@ class UserController extends Controller {
             Auth::logout();
             fun::setCookieOff('islogin', true, $domain);
             fun::setCookieOff('isadmin', true, $domain);
+            fun::setCookieOff('isauth', true, $domain);
             fun::setCookieOff('__sysel__', true, $domain);
             return jsr::print([
                 'success'   => 1,

@@ -34,12 +34,12 @@ class As1001PesertaProfilController extends Controller {
                 */
                 $database = $this->service->allProfil();
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertaprofil-all', $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-all', $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertaprofil-all');
                 }
             }
             else {
-                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                 $data = Cache::get('page-pesertaprofil-all');
             }
             return jsr::print([
@@ -76,7 +76,7 @@ class As1001PesertaProfilController extends Controller {
                 */
                 $database = $this->service->get($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertaprofil-get'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-get'.$id, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertaprofil-get'.$id);
                 }
             }
@@ -123,7 +123,7 @@ class As1001PesertaProfilController extends Controller {
                     'asal'          => fun::readable($request->asal),
                 ]);
                 if($data > 0) {
-                    Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!',
@@ -249,7 +249,7 @@ class As1001PesertaProfilController extends Controller {
             $data = $this->service->delete($id);
             if($data > 0) {
                 Cache::forget('page-pesertaprofil-get-'.$id);
-                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Peserta Tes!',

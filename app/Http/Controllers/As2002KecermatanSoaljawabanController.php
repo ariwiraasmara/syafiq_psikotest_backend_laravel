@@ -26,7 +26,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
         return $data;
     }
 
-    public function allData(): Response|JsonResponse|String|int|null {
+    public function allForTes(): Response|JsonResponse|String|int|null {
         try {
             return $this->service->allData()->toJson();
         }
@@ -58,12 +58,12 @@ class As2002KecermatanSoaljawabanController extends Controller {
                 */
                 $database = $this->service->all($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
                 }
             }
             else {
-                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                 $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
             }
             return jsr::print([
@@ -100,7 +100,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
                 */
                 $database = $this->service->get($kolom);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
                 }
             }
@@ -141,7 +141,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
                     'soal_jawaban'  => $request->soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
@@ -183,7 +183,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
                     'soal_jawaban' => $request->soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
@@ -220,7 +220,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
         try {
             $data = $this->service->delete($id1, $id2);
             if($data->isNotEmpty()) {
-                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
