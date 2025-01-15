@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Crypt;
 use Symfony\Component\HttpFoundation\Response;
 use App\Libraries\myfunction as fun;
 use App\Services\personalaccesstokensService;
-
 class BearerTokenCheck {
     /**
      * Handle an incoming request.

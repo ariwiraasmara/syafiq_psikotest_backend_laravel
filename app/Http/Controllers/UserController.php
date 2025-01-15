@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Exception;
-
 class UserController extends Controller {
     //
     protected userService $service;
@@ -40,16 +39,16 @@ class UserController extends Controller {
                 'password'  => ['required'],
             ]);
             if($credentials) {
-                $data = $this->service->login($request->email, $request->password);
+                $data = $this->service->login(fun::readable($request->email), fun::readable($request->password));
                 if($data['success']) {
                     if (Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
-                        $path = '/';
-                        $domain = 'localhost';
+                        $path = '/pathku';
+                        $domain = 'domainku.com';
                         // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
                         $pat = $this->patService->get(['name' => $request->email]);
-                        $tokenExpire = fun::daysLater('+7 days');
+                        $tokenExpire = fun::daysLater('+1 day');
                         $isTokenupdate = false;
                         if($pat[0]['expires_at'] == date('Y-m-d 00:00:00')) {
                             $this->patService->update($pat[0]['id'],[
@@ -74,9 +73,15 @@ class UserController extends Controller {
                             ]
                         ]);
                         $expirein = 6 * 60; // jam * menit
+                        $token = fun::random('combwisp', 50);
+                        $unique = fun::random('combwisp', 50);
                         // $response->withCookie(cookie('islogin', true, 60));
                         // $response->withCookie(cookie('isadmin', true, 60));
-                        $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'));
+                        $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
+                                 ->withCookie(cookie('__sysauth__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
+                                 ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, true, false, 'Strict'))
+                                 ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
+                                 ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, true, false, 'Strict'));
                         return $response;
                     }
                 }
@@ -149,7 +154,7 @@ class UserController extends Controller {
             return jsr::print([
                 'success' => 1,
                 'pesan'   => 'Dashboard!',
-                'profil'  => $request->header()['email'][0],
+                'profil'  => fun::readable($request->header()['email'][0]),
                 'data'    => $this->pesertaService->allLatest()
             ], 'ok');
         }

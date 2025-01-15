@@ -1,5 +1,7 @@
 <?php
-
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers;
 
 use App\Services\userService;
@@ -12,7 +14,6 @@ use App\Libraries\myfunction as fun;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Exception;
-
 class AnyController extends Controller {
     //
 
