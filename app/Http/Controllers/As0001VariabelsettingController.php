@@ -113,7 +113,7 @@ class As0001VariabelsettingController extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->store([
-                    'variabel' => fun::readable($request->variabel),
+                    'variabel' => $request->variabel,
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {
@@ -158,7 +158,7 @@ class As0001VariabelsettingController extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->update($id, [
-                    'variabel' => fun::readable($request->variabel),
+                    'variabel' => $request->variabel,
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {

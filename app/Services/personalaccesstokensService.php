@@ -7,8 +7,8 @@ namespace App\Services;
 use App\Repositories\personalaccesstokensRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Exception;
 use App\Libraries\myfunction as fun;
+use Exception;
 class personalaccesstokensService {
 
     protected personalaccesstokensRepository $repo;

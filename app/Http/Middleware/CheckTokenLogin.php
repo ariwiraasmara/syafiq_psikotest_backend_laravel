@@ -1,11 +1,12 @@
 <?php
-
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 class CheckTokenLogin
 {
     /**

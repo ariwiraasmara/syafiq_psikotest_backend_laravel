@@ -1,5 +1,7 @@
 <?php
-
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Middleware;
 
 use Closure;
@@ -7,7 +9,6 @@ Use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Libraries\myfunction as fun;
-
 class UserRememberTokenCheck
 {
     /**
