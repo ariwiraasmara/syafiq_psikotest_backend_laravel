@@ -41,7 +41,25 @@ class as1002_peserta_hasilnilai_teskecermatanService {
             $data = $this->repo1->get(['no_identitas' => $id]);
             return collect([
                 'peserta'  => $data,
-                'hasiltes' => $this->repo2->get(['id' => $data[0]['id'], 'tgl_ujian' => $tgl])
+                'hasiltes' => $this->repo2->get($data[0]['id'], $tgl)
+            ]);
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as1002_peserta_hasilnilai_teskecermatanService->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
+    public function search(int $id, String $tgl_1, String $tgl_2): array|Collection|String|int|null {
+        try {
+            return collect([
+                'peserta'  => $this->repo1->get(['id' => $id]),
+                'hasiltes' => $this->repo2->search($id, $tgl_1, $tgl_2)
             ]);
         }
         catch(Exception $err) {

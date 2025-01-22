@@ -1,13 +1,12 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-class XRobotTags
+
+class XRobotUntags
 {
     /**
      * Handle an incoming request.
@@ -18,7 +17,7 @@ class XRobotTags
     {
         $response = $next($request);
         // Menambahkan header X-Robots-Tag ke semua respon
-        $response->headers->set('X-Robots-Tag', 'index, follow, snippet, max-snippet:99, noarchive, notranslate');
+        $response->headers->set('X-Robots-Tag', 'none, nosnippet, noarchive, notranslate, noimageindex');
         return $response;
     }
 }

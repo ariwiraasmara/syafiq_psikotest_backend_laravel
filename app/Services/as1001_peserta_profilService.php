@@ -21,9 +21,10 @@ class as1001_peserta_profilService {
         $this->repo2 = $repo2;
     }
 
-    public function allProfil(): array|Collection|String|int|null {
+    public function allProfil(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            return $this->repo1->all();
+            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
+            return $this->repo1->all($sort, $by, $search);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as1001_peserta_profilService->allProfil!', [

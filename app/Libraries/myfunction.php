@@ -405,8 +405,8 @@ class myfunction {
 
     public static function daysLater(String $dayslater) {
         try {
-            $today = date("Y-m-d");
-            return date("Y-m-d", strtotime($today . $dayslater));
+            $today = date("Y-m-d H:i:s");
+            return date("Y-m-d H:i:s", strtotime($today . $dayslater));
         }
         catch(Exception $e) {
             echo "function Notrifger() Error: ".$e;
@@ -448,11 +448,11 @@ class myfunction {
     public static function random(String $str = '', int $length = 10) {
         try {
             $seed = match($str) {
-                'char' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
-                'numb' => str_split('0123456789'),
-                'numbwize' => str_split('123456789'),
+                'char' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
+                'numb' => str_split('01234567890123456789012345678901234567890123456789'),
+                'numbat' => str_split('123456789123456789123456789123456789123456789'),
                 'pass' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>?'),
-                'spec' => str_split('`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/'),
+                'spec' => str_split('`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/'),
                 'combwisp' => str_split('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789'),
                 default => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/')
             };

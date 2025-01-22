@@ -40,7 +40,7 @@ class UserController extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->login(fun::readable($request->email), fun::readable($request->password));
-                if($data['success']) {
+                if($data['success'] > 0) {
                     if (Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
@@ -70,6 +70,9 @@ class UserController extends Controller {
                                 'token_1' => fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']),
                                 'token_2' => $data['data'][0]['remember_token'],
                                 'token_expire_at' => $tokenExpire
+                            ],
+                            'sesi'    => [
+                                'expire_at' => fun::daysLater('+12 hours')
                             ]
                         ]);
                         $expirein = 6 * 60; // jam * menit
@@ -130,8 +133,11 @@ class UserController extends Controller {
             fun::setCookieOff('isauth', true, $domain);
             fun::setCookieOff('__sysel__', true, $domain);
             return jsr::print([
-                'success'   => 1,
-                'pesan'     => 'Akhirnya Logout!'
+                'success' => 1,
+                'pesan'   => 'Akhirnya Logout!',
+                'sesi'    => [
+                    'expire_at' => fun::daysLater('+6 hours')
+                ]
             ], 'ok');
         }
         catch(Exception $err) {
