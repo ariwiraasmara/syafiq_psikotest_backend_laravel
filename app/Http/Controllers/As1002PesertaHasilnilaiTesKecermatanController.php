@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Log;
 use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
 use App\Libraries\jsr;
 use Exception;
+
+use App\Models\as1002_peserta_hasilnilai_teskecermatan;
+
 class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     //
     protected as1002_peserta_hasilnilai_teskecermatanService $service;
@@ -43,6 +46,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
             }
             return jsr::print([
                 'success'   => 1,
+                'for'       => 1,
                 'pesan'     => 'Semua Data Hasil Nilai Peserta Ujian!',
                 'data'      => $data
             ], 'ok');
@@ -64,29 +68,37 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     #GET
     public function get(int $id, String $tgl): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl)) {
-                $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
-                /*
-                *Logicnya harus diubah dan improvisasi
-                *Untuk sementara begini dulu
-                *Logicnya cache dan database validasi apakah sama atau tidak
-                *Jika tidak maka cache terupdate
-                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-                */
-                $database = $this->service->all($id);
-                if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
-                    $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
-                }
-            }
-            else {
-                Cache::put('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl, $this->service->get($id, $tgl), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
-                $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-get-'.$id.'-'.$tgl);
-            }
+            $data = $this->service->get($id, $tgl);
             return jsr::print([
                 'success' => 1,
+                'for'     => 2,
                 'pesan'   => 'Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'],
                 'data'    => $data
+            ], 'ok');
+        }
+        catch(Exception $err) {
+            Log::channel('error-controllers')->error('Terjadi kesalahan pada As1002PesertaHasilnilaiTesKecermatanController->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return jsr::print([
+                'error'=> -13,
+                'pesan' => 'Terjadi Kesalahan! Lihat Log!'
+            ]);
+        }
+    }
+
+     #GET
+     public function search(int $id, String $tgl_1, String $tgl_2): Response|JsonResponse|String|int|null {
+        try {
+            $data = $this->service->search($id, $tgl_1, $tgl_2);
+            return jsr::print([
+                'success' => 1,
+                'for'     => 3,
+                'pesan'   => 'Pencarian Data Hasil Nilai Peserta '.$data['peserta'][0]['nama'],
+                'data'    => $data['hasiltes']
             ], 'ok');
         }
         catch(Exception $err) {

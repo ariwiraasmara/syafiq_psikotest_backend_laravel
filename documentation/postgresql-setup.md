@@ -1,0 +1,13 @@
+- psql -U postgres;
+- CREATE ROLE [nama_pengguna] WITH LOGIN PASSWORD ['password_anda'];
+- CREATE DATABASE syafiq_psikotest;
+- GRANT ALL PRIVILEGES ON DATABASE [nama_database] TO [nama_pengguna];
+- Cek Pengguna : \du
+- Coba Koneksi Kembali dengan pengguna baru : psql -h 127.0.0.1 -U nama_pengguna nama_database
+- GRANT ALL PRIVILEGES ON DATABASE [nama_database] TO [nama_pengguna];
+- GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO [nama_pengguna];
+- Menambah Atribut :
+  - ALTER ROLE nama_pengguna CREATEDB;
+  - ALTER ROLE nama_pengguna CREATEROLE;
+  - ALTER ROLE nama_pengguna LOGIN;
+  - ALTER ROLE nama_pengguna SUPERUSER;

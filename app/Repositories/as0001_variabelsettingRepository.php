@@ -15,12 +15,15 @@ class as0001_variabelsettingRepository {
         $this->model = $model;
     }
 
-    public function all(): array|Collection|String|int|null {
+    public function all(String $sort = 'variabel', String $by = 'asc', String $search = null): array|Collection|String|int|null {
         try {
             if($this->model->first()) {
-                return $this->model->orderBy('variabel', 'asc')
+                return $this->model->orderBy($sort, $by)
+                                    ->where('variabel','LIKE',"%{$search}%")
                                     ->limit(10)
-                                    ->get();
+                                    ->paginate(10)
+                                    ->toArray();
+                                    // ->get();
             }
             return null;
         }

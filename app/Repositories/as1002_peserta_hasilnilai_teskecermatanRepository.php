@@ -31,10 +31,28 @@ class as1002_peserta_hasilnilai_teskecermatanRepository {
         }
     }
 
-    public function get(array $where): array|Collection|String|int|null {
+    public function get(int $id, String $tgl): array|Collection|String|int|null {
         try {
-            if($this->model->where($where)->first()) return $this->model->where($where)->get();
-            return null;
+            return $this->model->where(['id1001' => $id])
+                                ->where(['tgl_ujian' => $tgl])
+                                ->get();
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as1002_peserta_hasilnilai_teskecermatanRepository->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
+    public function search(int $id, String $tgl_1, String $tgl_2): array|Collection|String|int|null {
+        try {
+            return $this->model->where(['id1001' => $id])
+                            ->whereBetween('tgl_ujian', [$tgl_1, $tgl_2])
+                            ->get();
         }
         catch(Exception $err) {
             Log::channel('error-repositories')->error('Terjadi kesalahan pada as1002_peserta_hasilnilai_teskecermatanRepository->get!', [

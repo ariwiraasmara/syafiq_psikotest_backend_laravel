@@ -21,8 +21,9 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
-    public function all(): Response|JsonResponse|String|int|null {
+    public function all(String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
         try {
+            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
             if(Cache::has('page-pesertaprofil-all')) {
                 $data = Cache::get('page-pesertaprofil-all');
                 /*
@@ -32,14 +33,14 @@ class As1001PesertaProfilController extends Controller {
                 *Jika tidak maka cache terupdate
                 *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
                 */
-                $database = $this->service->allProfil();
+                $database = $this->service->allProfil($sort, $by, $search);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertaprofil-all', $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-all', $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertaprofil-all');
                 }
             }
             else {
-                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                Cache::put('page-pesertaprofil-all', $this->service->allProfil($sort, $by, $search), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 $data = Cache::get('page-pesertaprofil-all');
             }
             return jsr::print([
@@ -76,7 +77,7 @@ class As1001PesertaProfilController extends Controller {
                 */
                 $database = $this->service->get($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-pesertaprofil-get'.$id, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-get'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     $data = Cache::get('page-pesertaprofil-get'.$id);
                 }
             }
@@ -123,7 +124,7 @@ class As1001PesertaProfilController extends Controller {
                     'asal'          => fun::readable($request->asal),
                 ]);
                 if($data > 0) {
-                    Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-pesertaprofil-all', $this->service->allProfil('nama', 'asc'), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!',
@@ -158,8 +159,7 @@ class As1001PesertaProfilController extends Controller {
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
-                'nama'          => 'required|string',
-                'no_identitas'  => 'required|string',
+                'id'            => 'required|int',
                 'email'         => 'required|string',
                 'tgl_lahir'     => 'required|string',
                 'asal'          => 'required|string',
@@ -249,7 +249,7 @@ class As1001PesertaProfilController extends Controller {
             $data = $this->service->delete($id);
             if($data > 0) {
                 Cache::forget('page-pesertaprofil-get-'.$id);
-                Cache::put('page-pesertaprofil-all', $this->service->allProfil(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                Cache::put('page-pesertaprofil-all', $this->service->allProfil('nama', 'asc', null), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Peserta Tes!',

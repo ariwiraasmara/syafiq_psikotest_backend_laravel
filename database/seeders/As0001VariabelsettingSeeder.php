@@ -22,5 +22,16 @@ class As0001VariabelsettingSeeder extends Seeder {
                 'updated_at'    => now(),
             ]
         ]);
+
+        for($x=1; $x < 100; $x++) {
+            as0001_variabelsetting::insert([
+                [
+                    'variabel'      => 'variabel'.$x,
+                    'values'        => $x,
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
+                ]
+            ]);
+        }
     }
 }

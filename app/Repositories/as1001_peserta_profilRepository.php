@@ -15,12 +15,17 @@ class as1001_peserta_profilRepository {
         $this->model = $model;
     }
 
-    public function all(): array|Collection|String|int|null {
+    public function all(String $sort = 'nama', String $by = 'asc', String $search = null): array|Collection|String|int|null {
         try {
             if($this->model->first()) {
                 return $this->model->select('id', 'nama', 'no_identitas', 'email', 'asal')
-                                    ->orderBy('nama', 'asc')
-                                    ->get();
+                                    ->orderBy($sort, $by)
+                                    ->where('nama','LIKE',"%{$search}%")
+                                    ->orWhere('no_identitas', $search)
+                                    ->orWhere('asal','LIKE',"%{$search}%")
+                                    ->paginate(10)
+                                    ->toArray();
+                                    // ->get();
             }
             return null;
         }
@@ -40,11 +45,11 @@ class as1001_peserta_profilRepository {
             if($this->model->join('as1002_peserta_hasilnilai_teskecermatan', 'as1002_peserta_hasilnilai_teskecermatan.id1001', '=', 'as1001_peserta_profil.id')
                             ->first()) {
                 return $this->model->distinct()
-                                    ->select('as1001_peserta_profil.id', 'nama', 'no_identitas', 'email', 'asal', 'as1002_peserta_hasilnilai_teskecermatan.tgl_ujian')
-                                    ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1002_peserta_hasilnilai_teskecermatan.id1001', '=', 'as1001_peserta_profil.id')
-                                    ->orderBy('as1002_peserta_hasilnilai_teskecermatan.tgl_ujian', 'desc')
-                                    ->limit(10)
-                                    ->get();
+                                ->select('as1001_peserta_profil.id', 'nama', 'no_identitas', 'email', 'asal', 'as1002_peserta_hasilnilai_teskecermatan.tgl_ujian')
+                                ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1002_peserta_hasilnilai_teskecermatan.id1001', '=', 'as1001_peserta_profil.id')
+                                ->orderBy('as1002_peserta_hasilnilai_teskecermatan.tgl_ujian', 'desc')
+                                ->limit(10)
+                                ->get();
             }
             return null;
         }

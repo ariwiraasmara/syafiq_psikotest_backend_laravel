@@ -21,8 +21,9 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #GET
-    public function all(): Response|JsonResponse|String|int|null {
+    public function all(String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
         try {
+            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
             if(Cache::has('page-variabelsetting-all')) {
                 $data = Cache::get('page-variabelsetting-all');
                 /*
@@ -32,14 +33,14 @@ class As0001VariabelsettingController extends Controller {
                 *Jika tidak maka cache terupdate
                 *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
                 */
-                $database = $this->service->all();
+                $database = $this->service->all($sort, $by, $search);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-variabelsetting-all', $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-variabelsetting-all', $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     $data = Cache::get('page-variabelsetting-all');
                 }
             }
             else {
-                Cache::put('page-variabelsetting-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                Cache::put('page-variabelsetting-all', $this->service->all($sort, $by, $search), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 $data = Cache::get('page-variabelsetting-all');
             }
             return jsr::print([
@@ -76,7 +77,7 @@ class As0001VariabelsettingController extends Controller {
                 */
                 $database = $this->service->get($id);
                 if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-variabelsetting-get-'.$id, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-variabelsetting-get-'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     $data = Cache::get('page-variabelsetting-get-'.$id);
                 }
             }
@@ -117,7 +118,7 @@ class As0001VariabelsettingController extends Controller {
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {
-                    Cache::put('page-variabelsetting-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    Cache::put('page-variabelsetting-all', $this->service->all('variabel', 'asc', null), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success'   => 1,
                         'pesan'     => 'Berhasil Menyimpan Data Setting Variabel',
@@ -200,7 +201,7 @@ class As0001VariabelsettingController extends Controller {
             $data = $this->service->delete($id);
             if($data > 0) {
                 Cache::forget('page-variabelsetting-get-'.$id);
-                Cache::put('page-variabelsetting-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                Cache::put('page-variabelsetting-all', $this->service->all('variabel', 'asc', null), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Setting Variabel',

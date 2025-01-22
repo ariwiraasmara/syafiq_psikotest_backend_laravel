@@ -15,9 +15,10 @@ class as0001_variabelsettingService {
         $this->repo = $repo;
     }
 
-    public function all(): array|Collection|String|int|null {
+    public function all(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            return $this->repo->all();
+            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
+            return $this->repo->all($sort, $by, $search);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->all!', [
