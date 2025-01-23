@@ -62,9 +62,9 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         }
     }
 
-    public function allForTes(): Response|JsonResponse|String|int|null {
+    public function allForTes(int $id): Response|JsonResponse|String|int|null {
         try {
-            return $this->service->all()->toJson();
+            return $this->service->allForTes($id)->toJson();
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As2001KecermatanKolompertanyaanController->all!', [

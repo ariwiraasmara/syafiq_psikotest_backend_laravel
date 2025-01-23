@@ -71,6 +71,21 @@ class as2002_kecermatan_soalService {
         }
     }
 
+    public function allForTes(int $id): array|Collection|String|int|null {
+        try {
+            return $this->repo2->allForTes($id);
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as2002_kecermatan_soalService->allData!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
     public function get(String|int $kolom): array|Collection|String|int|null {
         try {
             $data1 = $this->repo1->get($kolom);
