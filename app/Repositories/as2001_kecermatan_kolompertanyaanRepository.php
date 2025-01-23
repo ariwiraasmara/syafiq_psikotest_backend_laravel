@@ -55,6 +55,24 @@ class as2001_kecermatan_kolompertanyaanRepository {
         }
     }
 
+    public function allForTes(int $id): array|Collection|String|int|null {
+        try {
+            if($this->model->where(['id' => $id])->first()) {
+                return $this->model->where(['id' => $id])->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as2001_kecermatan_kolompertanyaanRepository->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
     public function store(array $values): array|Collection|String|int|null {
         try {
             $res = $this->model->create($values);

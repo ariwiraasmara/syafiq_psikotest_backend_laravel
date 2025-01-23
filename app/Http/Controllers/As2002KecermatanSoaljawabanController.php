@@ -26,9 +26,9 @@ class As2002KecermatanSoaljawabanController extends Controller {
         return $data;
     }
 
-    public function allForTes(): Response|JsonResponse|String|int|null {
+    public function allForTes(int $id): Response|JsonResponse|String|int|null {
         try {
-            return $this->service->allData()->toJson();
+            return $this->service->allForTes($id)->toJson();
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As2002KecermatanSoaljawabanController->allData!', [

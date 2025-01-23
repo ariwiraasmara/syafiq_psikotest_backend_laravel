@@ -75,6 +75,25 @@ class as2002_kecermatan_soaljawabanRepository {
         }
     }
 
+    public function allForTes(int $id): array|Collection|String|int|null {
+        try {
+            $where = ['id2001' => $id];
+            if($this->model->where($where)->first()) {
+                return $this->model->where($where)->orderBy('id', 'asc')->get();
+            }
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as2002_kecermatan_soaljawabanRepository->all!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
     public function get(int $id): array|Collection|String|int|null {
         try {
             if($this->model->where(['id' => $id])->first()) return $this->model->where(['id' => $id])->get();

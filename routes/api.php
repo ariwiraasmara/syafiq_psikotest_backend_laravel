@@ -117,15 +117,15 @@ Route::middleware([
 
 Route::middleware([
     'throttle:5,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    IndexedDB::class,
+//     IndexedDB::class,
     // VerifyFastApiKey::class,
-    CheckTokenLogin::class,
-    Pranker::class,
+//     CheckTokenLogin::class,
+//     Pranker::class,
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'));
-    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'));
+    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'));
+    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'));
 });
 
 Route::middleware([
