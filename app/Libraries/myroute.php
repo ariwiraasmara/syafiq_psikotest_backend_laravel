@@ -9,5 +9,11 @@ class myroute {
         }
     // }
 
+    // Web View {
+        public static function view(string $controller, string $procname = null) {
+            return '\App\Http\Controllers\View\\'.$controller.'@'.$procname;
+        }
+    // }
+
 }
 ?>

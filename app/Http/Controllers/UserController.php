@@ -61,6 +61,9 @@ class UserController extends Controller {
                             return 1;
                         }
                         if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
+                        $expirein = 6 * 60; // jam * menit
+                        $token = fun::random('combwisp', 50);
+                        $unique = fun::random('combwisp', 50);
                         $response = new Response([
                             'success' => 1,
                             'pesan'   => 'Yehaa! Berhasil Login!',
@@ -72,12 +75,14 @@ class UserController extends Controller {
                                 'token_expire_at' => $tokenExpire
                             ],
                             'sesi'    => [
-                                'expire_at' => fun::daysLater('+12 hours')
-                            ]
+                                'expire_at'  => fun::daysLater('+12 hours'),
+                                'sysel'      => fun::encrypt($request->email),
+                                'sysauth'    => $unique,
+                                'token'      => $token,
+                                'unique'     => $unique,
+                                'xsrf_token' => csrf_token(),
+                            ],
                         ]);
-                        $expirein = 6 * 60; // jam * menit
-                        $token = fun::random('combwisp', 50);
-                        $unique = fun::random('combwisp', 50);
                         // $response->withCookie(cookie('islogin', true, 60));
                         // $response->withCookie(cookie('isadmin', true, 60));
                         $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
