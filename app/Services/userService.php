@@ -63,16 +63,22 @@ class userService {
 
     public function dashboard(String $email): array|Collection|String|int|null {
         try {
-            if(fun::getRawCookie('__sysel__')) {
-                Log::channel('debugging')->debug('ambil data dari cookie!', [
-                    'email' => fun::getCookie('__sysel__')
-                ]);
-                return $this->repo->get(['email' => fun::getCookie('__sysel__')]);
+            // if(fun::getRawCookie('__sysel__')) {
+            //     Log::channel('debugging')->debug('ambil data dari cookie!', [
+            //         'email' => fun::getCookie('__sysel__')
+            //     ]);
+            //     return $this->repo->get(['email' => fun::getCookie('__sysel__')]);
+            // }
+            // else if(fun::getRawCookie('email')) {
+            if(fun::getRawCookie('email')) {
+                return $this->repo->get(['email' => fun::getRawCookie('email')]);
             }
-            Log::channel('debugging')->debug('ambil data dari request parameter!', [
-                'email' => $email
-            ]);
-            return $this->repo->get(['email' => $email]);
+            else {
+                Log::channel('debugging')->debug('ambil data dari request parameter!', [
+                    'email' => $email
+                ]);
+                return $this->repo->get(['email' => $email]);
+            }
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada userService->dashboard!', [
