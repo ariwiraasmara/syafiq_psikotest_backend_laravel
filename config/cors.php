@@ -17,15 +17,38 @@ return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
+    // 'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
 
-    // 'allowed_origins' => ['*'],
-    'allowed_origins' => [
-        'http://localhost:3000',  // Pastikan ini sesuai dengan URL frontend Anda
-    ],
+    'allowed_origins' => ['*'],
+    // 'allowed_origins' => [ // Pastikan ini sesuai dengan URL frontend Anda
+    //     'http://localhost:8000',
+    //     'http://localhost:3000',
+    //     'http://localhost:5173'
+    // ],
 
     'allowed_origins_patterns' => [],
 
     'allowed_headers' => ['*'],
+    // 'allowed_headers' => [
+    //     'Content-Type',
+    //     'XSRF-TOKEN',
+    //     'Authorization',
+    //     'Accept',
+    //     'User-Agent',
+    //     'tokenlogin',
+    //     'remember-token',
+    //     'email',
+    //     'isadmin',
+    //     'islogin',
+    //     '--unique--',
+    //     'isvalid',
+    //     'key',
+    //     'values',
+    //     'isdumb',
+    //     'challenger',
+    //     'pranked',
+    //     'isallowed',
+    // ],
 
     'exposed_headers' => [],
 

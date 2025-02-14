@@ -21,6 +21,9 @@ import Footer from '@/components/Footer';
 //     saveDataToDB
 // } from '@/indexedDB/db';
 import { random } from '@/libraries/myfunction';
+import Cookies from 'js-cookie';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function Peserta(props) {
     const textColor = localStorage.getItem('text-color');
@@ -219,6 +222,21 @@ export default function Peserta(props) {
                 });
                 console.info('response', response);
                 if(parseInt(response.data.success) > 0) {
+                    const expires = 1;
+                    const path = '/';
+                    const domain = '';
+                    const secure = true;
+                    const sameSite = 'strict';
+                    
+                    const cookieRules = {
+                        path: path,
+                        domain: domain,
+                        expires : expires,
+                        sameSite : sameSite,
+                        secure : secure,
+                    };
+
+                    Cookies.set('ispeserta', true, cookieRules);
                     sessionStorage.setItem('id_peserta_psikotest', response.data.res);
                     sessionStorage.setItem('nama_peserta_psikotest', nama);
                     sessionStorage.setItem('no_identitas_peserta_psikotest', no_identitas);
@@ -228,7 +246,7 @@ export default function Peserta(props) {
                     sessionStorage.setItem('sesi_psikotest_kecermatan', 1);
                     localStorage.setItem('tgl_tes_peserta_psikotest', today);
                     // router.push(`/peserta/psikotest/kecermatan/`);
-                    window.location.href = '/peserta/psikotest/kecermatan/1';
+                    window.location.href = '/peserta/psikotest/kecermatan';
                 }
                 else if(response.data.success === 'datex') {
                     isDatex(true);

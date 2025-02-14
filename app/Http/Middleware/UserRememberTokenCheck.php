@@ -19,8 +19,9 @@ class UserRememberTokenCheck
     public function handle(Request $request, Closure $next): Response {
         if($request->hasHeader('islogin') && $request->hasHeader('isadmin')) {
             if($request->hasHeader('remember-token')) {
-                $cek = User::where(['remember_token' => $request->header()['remember-token']])->first();
-                if (!$cek) return response()->json(['message' => 'I cannot remember your token.'], 404);
+                $remember_token = $request->header()['remember-token'][0];
+                $cek = User::where(['remember_token' => $remember_token])->first();
+                if (!$cek) return response()->json(['message' => 'I cannot remember your token. '.$request->header()['remember-token'][0]], 404);
                 return $next($request);
             }
             return response()->json(['message' => 'Where is your Token!'], 404);

@@ -26,7 +26,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
         return $data;
     }
 
-    public function allForTes(int $id): Response|JsonResponse|String|int|null {
+    public function allForTes(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             return $this->service->allForTes($id)->toJson();
         }
@@ -45,7 +45,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #GET
-    public function allRaw(int $id): Response|JsonResponse|String|int|null {
+    public function allRaw(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id)) {
                 $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
@@ -87,7 +87,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #GET
-    public function allCooked(String|int $kolom): Response|JsonResponse|String|int|null {
+    public function allCooked(Request $request, String|int $kolom): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom)) {
                 $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);

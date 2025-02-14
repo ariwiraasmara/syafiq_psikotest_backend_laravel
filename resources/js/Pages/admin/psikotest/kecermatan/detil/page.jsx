@@ -28,15 +28,17 @@ import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
 import ComboPaging from '@/components/ComboPaging';
-import { readable, random } from '@/libraries/myfunction';
 
+import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 export default function DetilPsikotestKecermatan(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     // const [pkid, setPkid] = React.useState(0);
-    const pkid = sessionStorage.getItem('admin_psikotest_kecermatan_id')
+    const pkid = DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
     const [dataPertanyaan, setDataPertanyaan] = React.useState([]);
     const [dataSoalJawaban, setDataSoalJawaban] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
@@ -80,12 +82,12 @@ export default function DetilPsikotestKecermatan(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : localStorage.getItem('islogin'),
-                    'isadmin' : localStorage.getItem('isadmin'),
-                    'Authorization': `Bearer ${localStorage.getItem('pat')}`,
-                    'remember-token': localStorage.getItem('remember-token'),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : localStorage.getItem('email'),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -127,7 +129,7 @@ export default function DetilPsikotestKecermatan(props) {
         e.preventDefault();
         setLoading(true);
         try {
-            sessionStorage.setItem('admin_psikotest_kecermatan_tabellastpage', currentpage);
+            sessionStorage.setItem('admin_psikotest_kecermatan_tabellastpage', DOMPurify.sanitize(currentpage));
             // router.push(`/admin/psikotest/kecermatan/detil/baru`);
             window.location.href = '/admin/psikotest/kecermatan/detil-baru';
         }
@@ -139,12 +141,12 @@ export default function DetilPsikotestKecermatan(props) {
     const toEditPertanyaan = (e, id, kolom_x, nilai_a, nilai_b, nilai_c, nilai_d, jawaban) => {
         e.preventDefault()
         setLoading(true);
-        sessionStorage.setItem('admin_psikotest_kecermatan_id', id);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_A', nilai_a);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_B', nilai_b);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_C', nilai_c);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_D', nilai_d);
-        sessionStorage.setItem('admin_psikotest_kecermatan_jawaban', jawaban);
+        sessionStorage.setItem('admin_psikotest_kecermatan_id', DOMPurify.sanitize(id));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_A', DOMPurify.sanitize(nilai_a));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_B', DOMPurify.sanitize(nilai_b));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_C', DOMPurify.sanitize(nilai_c));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_D', DOMPurify.sanitize(nilai_d));
+        sessionStorage.setItem('admin_psikotest_kecermatan_jawaban', DOMPurify.sanitize(jawaban));
         // router.push(`/admin/psikotest/kecermatan/edit`);
         window.location.href = '/admin/psikotest/kecermatan-edit';
     }
@@ -153,14 +155,14 @@ export default function DetilPsikotestKecermatan(props) {
         e.preventDefault();
         setLoading(true);
         try {
-            sessionStorage.setItem('admin_psikotest_kecermatan_id', pkid);
-            sessionStorage.setItem('admin_psikotest_kecermatan_idsoal', id);
-            sessionStorage.setItem('admin_psikotest_kecermatan_soalA', soalA);
-            sessionStorage.setItem('admin_psikotest_kecermatan_soalB', soalB);
-            sessionStorage.setItem('admin_psikotest_kecermatan_soalC', soalC);
-            sessionStorage.setItem('admin_psikotest_kecermatan_soalD', soalD);
-            sessionStorage.setItem('admin_psikotest_kecermatan_jawaban', jawaban);
-            sessionStorage.setItem('admin_psikotest_kecermatan_tabellastpage', currentpage);
+            sessionStorage.setItem('admin_psikotest_kecermatan_id', DOMPurify.sanitize(pkid));
+            sessionStorage.setItem('admin_psikotest_kecermatan_idsoal', DOMPurify.sanitize(id));
+            sessionStorage.setItem('admin_psikotest_kecermatan_soalA', DOMPurify.sanitize(soalA));
+            sessionStorage.setItem('admin_psikotest_kecermatan_soalB', DOMPurify.sanitize(soalB));
+            sessionStorage.setItem('admin_psikotest_kecermatan_soalC', DOMPurify.sanitize(soalC));
+            sessionStorage.setItem('admin_psikotest_kecermatan_soalD', DOMPurify.sanitize(soalD));
+            sessionStorage.setItem('admin_psikotest_kecermatan_jawaban', DOMPurify.sanitize(jawaban));
+            sessionStorage.setItem('admin_psikotest_kecermatan_tabellastpage', DOMPurify.sanitize(currentpage));
             // router.push(`/admin/psikotest/kecermatan/detil/edit`);
             window.location.href = '/admin/psikotest/kecermatan/detil-edit';
         }
@@ -171,64 +173,68 @@ export default function DetilPsikotestKecermatan(props) {
 
     const fDelete = async (e, id, soalA, soalB, soalC, soalE, jawaban) => {
         e.preventDefault();
-        Swal.fire({
-            title: "Anda yakin ingin menghapus data soal dan jawaban ini?",
-            html: `Soal : ${soalA}, ${soalB}, ${soalC}, ${soalE}<br/>Jawaban : ${jawaban}`,
-            showConfirmButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Ya",
-            cancelButtonText: "Batalkan",
-            icon: "warning",
-            showLoaderOnConfirm: true,
-            preConfirm: async () => {
-                try {
-                    axios.defaults.withCredentials = true;
-                    axios.defaults.withXSRFToken = true;
-                    axios.defaults.withCredentials = true;
-                    axios.defaults.withXSRFToken = true;
-                    const csrfToken = await axios.get(`/sanctum/csrf-cookie`,  {
-                        withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                    });
-                    await axios.delete(`/api/kecermatan/soaljawaban/${pkid}/${id}`, {
-                        withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-API-KEY': process.env.APP_FAST_API_KEY,
-                            'XSRF-TOKEN': csrfToken,
-                            'islogin' : readable(localStorage.getItem('islogin')),
-                            'isadmin' : readable(localStorage.getItem('isadmin')),
-                            'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                            'remember-token': readable(localStorage.getItem('remember-token')),
-                            'tokenlogin': random('combwisp', 50),
-                            'email' : readable(localStorage.getItem('email')),
-                            '--unique--': 'I am unique!',
-                            'isvalid': 'VALID!',
-                            'isallowed': true,
-                            'key': 'key',
-                            'values': 'values',
-                            'isdumb': 'no',
-                            'challenger': 'of course',
-                            'pranked': 'absolutely'
+        if(validator.isInt(id.toString(), {min: 1, gt: 0})) {
+            Swal.fire({
+                title: "Anda yakin ingin menghapus data soal dan jawaban ini?",
+                html: `Soal : ${soalA}, ${soalB}, ${soalC}, ${soalE}<br/>Jawaban : ${jawaban}`,
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batalkan",
+                icon: "warning",
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    try {
+                        axios.defaults.withCredentials = true;
+                        axios.defaults.withXSRFToken = true;
+                        axios.defaults.withCredentials = true;
+                        axios.defaults.withXSRFToken = true;
+                        const csrfToken = await axios.get(`/sanctum/csrf-cookie`,  {
+                            withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                        });
+                        await axios.delete(`/api/kecermatan/soaljawaban/${DOMPurify.sanitize(pkid)}/${DOMPurify.sanitize(id)}`, {
+                            withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'XSRF-TOKEN': csrfToken,
+                                'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                                'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                                'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                                'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
+                                'tokenlogin': random('combwisp', 50),
+                                'email' : DOMPurify.sanitize(localStorage.getItem('email')),
+                                '--unique--': 'I am unique!',
+                                'isvalid': 'VALID!',
+                                'isallowed': true,
+                                'key': 'key',
+                                'values': 'values',
+                                'isdumb': 'no',
+                                'challenger': 'of course',
+                                'pranked': 'absolutely'
+                            }
+                        });
+                    } catch (error) {
+                        // Swal.showValidationMessage(`Request failed: ${error}`);
+                        console.info('Terjadi Error DetilPsikotestKecermatanDetil-fDelete', err);
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Terhapus!",
+                        text: "Data Telah Berhasil Dihapus",
+                        icon: "success"
+                    }).then((res2) => {
+                        if (res2.isConfirmed) {
+                            location.reload();
                         }
                     });
-                } catch (error) {
-                    // Swal.showValidationMessage(`Request failed: ${error}`);
-                    console.info('Terjadi Error DetilPsikotestKecermatanDetil-fDelete', err);
                 }
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Terhapus!",
-                    text: "Data Telah Berhasil Dihapus",
-                    icon: "success"
-                }).then((res2) => {
-                    if (res2.isConfirmed) {
-                        location.reload();
-                    }
-                });
-            }
-        });
+            });
+        }
+        else {
+            alert('Invalid Credentials!');
+        }
     }
 
     const MemoHelmet = React.memo(function Memo() {

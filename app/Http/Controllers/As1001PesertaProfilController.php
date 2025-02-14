@@ -21,7 +21,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
-    public function all(String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
+    public function all(Request $request, String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
         try {
             if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
             if(Cache::has('page-pesertaprofil-all')) {
@@ -64,7 +64,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
-    public function get(string $id): Response|JsonResponse|String|int|null {
+    public function get(Request $request, string $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-pesertaprofil-get-'.$id)) {
                 $data = Cache::get('page-pesertaprofil-get-'.$id);

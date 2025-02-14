@@ -23,8 +23,9 @@ import NavBreadcrumb from '@/components/NavBreadcrumb';
 import ListPeserta from '@/components/admin/ListPeserta';
 import Footer from '@/components/Footer';
 import ComboPaging from '@/components/ComboPaging';
-import { readable, random } from '@/libraries/myfunction';
 
+import { readable, random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 export default function AdminPeserta(props) {
     const textColor = localStorage.getItem('text-color');
     const textColorRGB = localStorage.getItem('text-color-rgb');
@@ -39,7 +40,7 @@ export default function AdminPeserta(props) {
     const [toSearch, setToSearch] = React.useState('null');
 
     // paging
-    let currentpage = props.page;
+    let currentpage = parseInt(props.page);
     const [lastpage, setLastpage] = React.useState(1);
 
     const styledTextField = {
@@ -77,12 +78,12 @@ export default function AdminPeserta(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -190,18 +191,18 @@ export default function AdminPeserta(props) {
                 setToSearch('null');
         }
         else {
-            setToSearch(e.target.value);
+            setToSearch(DOMPurify.sanitize(e.target.value));
         }
         currentpage = 1;
     };
 
     const handleChange_sort = (e) => {
-        setSort(e.target.value);
+        setSort(DOMPurify.sanitize(e.target.value));
         console.info('sort', sort);
     }
 
     const handleChange_by = (e) => {
-        setBy(e.target.value);
+        setBy(DOMPurify.sanitize(e.target.value));
         console.info('by', by);
     }
 

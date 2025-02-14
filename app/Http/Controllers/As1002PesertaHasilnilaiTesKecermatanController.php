@@ -23,7 +23,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #GET
-    public function all($id): Response|JsonResponse|String|int|null {
+    public function all(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-pesertahasilnilaipsikotestkecermatan-all-'.$id)) {
                 $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
@@ -66,7 +66,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #GET
-    public function get(int $id, String $tgl): Response|JsonResponse|String|int|null {
+    public function get(Request $request, int $id, String $tgl): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->get($id, $tgl);
             return jsr::print([
@@ -91,7 +91,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
      #GET
-     public function search(int $id, String $tgl_1, String $tgl_2): Response|JsonResponse|String|int|null {
+     public function search(Request $request, int $id, String $tgl_1, String $tgl_2): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->search($id, $tgl_1, $tgl_2);
             return jsr::print([

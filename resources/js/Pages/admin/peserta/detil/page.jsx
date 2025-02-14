@@ -25,12 +25,16 @@ import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
 import TabDataHasilPsikotestPesertaDetil from '@/components/admin/peserta/TabDataHasilPsikotestPesertaDetil';
-import { readable, random } from '@/libraries/myfunction';
 
+import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 export default function AdminPesertaDetil(props) {
-    const textColor = localStorage.getItem('text-color');
-    const borderColor = localStorage.getItem('border-color');
-    const [sessionID, setSessionID] = React.useState(sessionStorage.getItem('admin_id_peserta'));
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const [sessionID, setSessionID] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_id_peserta')));
     const safeID = readable(sessionID);
 
     const [data, setData] = React.useState({});
@@ -94,12 +98,12 @@ export default function AdminPesertaDetil(props) {
         e.preventDefault();
         setLoading(true);
         try {
-            sessionStorage.setItem('admin_id_peserta', id);
-            sessionStorage.setItem('admin_nama_peserta', nama);
-            sessionStorage.setItem('admin_noidentitas_peserta', no_indentitas);
-            sessionStorage.setItem('admin_email_peserta', email);
-            sessionStorage.setItem('admin_tgllahir_peserta', tgl);
-            sessionStorage.setItem('admin_asal_peserta', asal);
+            sessionStorage.setItem('admin_id_peserta', DOMPurify.sanitize(id));
+            sessionStorage.setItem('admin_nama_peserta', DOMPurify.sanitize(nama));
+            sessionStorage.setItem('admin_noidentitas_peserta', DOMPurify.sanitize(no_indentitas));
+            sessionStorage.setItem('admin_email_peserta', DOMPurify.sanitize(email));
+            sessionStorage.setItem('admin_tgllahir_peserta', DOMPurify.sanitize(tgl));
+            sessionStorage.setItem('admin_asal_peserta', DOMPurify.sanitize(asal));
             // router.push(`/admin/peserta/edit`);
             window.location.href = '/admin/peserta-edit';
         }
@@ -146,10 +150,12 @@ export default function AdminPesertaDetil(props) {
                 <div className="p-4">
                     <h1 className='hidden'>Halaman Detil Peserta | Admin</h1>
                     {loading ? (
-                        <h2 className={`text-center ${textColor}`}>
-                            <p><span className='font-bold text-2lg'>
-                                Sedang memuat data... Mohon Harap Tunggu...
-                            </span></p>
+                        <h2 className={`text-center text-${textColor}`}>
+                            <p>
+                                <span className='font-bold text-2lg'>
+                                    Sedang memuat data... Mohon Harap Tunggu...
+                                </span>
+                            </p>
                             <CircularProgress color="info" size={50} />
                         </h2>
                     ) : (
@@ -161,13 +167,13 @@ export default function AdminPesertaDetil(props) {
                                             <EditIcon />
                                         </Link>
                                     </span>
-                                    <span className="font-bold">Nama :</span> {data.nama}
+                                    <span className="font-bold">Nama :</span> {DOMPurify.sanitize(data.nama)}
                                 </p>
-                                <p><span className="font-bold">No. Identitas :</span> {data.no_identitas}</p>
-                                <p><span className="font-bold">Email :</span> {data.email}</p>
-                                <p><span className="font-bold">Tanggal Lahir :</span> {data.tgl_lahir}</p>
-                                <p><span className="font-bold">Usia :</span> {data.usia}</p>
-                                <p><span className="font-bold">Asal : </span> {data.asal}</p>
+                                <p><span className="font-bold">No. Identitas :</span> {DOMPurify.sanitize(data.no_identitas)}</p>
+                                <p><span className="font-bold">Email :</span> {DOMPurify.sanitize(data.email)}</p>
+                                <p><span className="font-bold">Tanggal Lahir :</span> {DOMPurify.sanitize(data.tgl_lahir)}</p>
+                                <p><span className="font-bold">Usia :</span> {DOMPurify.sanitize(data.usia)}</p>
+                                <p><span className="font-bold">Asal : </span> {DOMPurify.sanitize(data.asal)}</p>
                             </div>
 
                             <div className="mt-4">

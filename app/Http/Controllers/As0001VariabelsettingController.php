@@ -21,7 +21,7 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #GET
-    public function all(String $sort = null, String $by = null, String $search = null): Response|JsonResponse|String|int|null {
+    public function all(Request $request, String $sort = null, String $by = null, String $search = null): Response|JsonResponse|String|int|null {
         try {
             if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
             if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
@@ -66,7 +66,7 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #GET
-    public function get(int $id): Response|JsonResponse|String|int|null {
+    public function get(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-variabelsetting-get-'.$id)) {
                 $data = Cache::get('page-variabelsetting-get-'.$id);

@@ -15,11 +15,16 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function AdminPesertaEdit(props) {
-    const textColor = localStorage.getItem('text-color');
-    const borderColor = localStorage.getItem('border-color');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
     const [idpeserta, setIdpeserta] = React.useState(0);
     const [nama, setNama] = React.useState('');
@@ -53,12 +58,12 @@ export default function AdminPesertaEdit(props) {
     const getData = () => {
         setLoading(true);
         try {
-            setIdpeserta(sessionStorage.getItem('admin_id_peserta'));
-            setNama(sessionStorage.getItem('admin_nama_peserta'));
-            setNo_identitas(sessionStorage.getItem('admin_noidentitas_peserta'));
-            setEmail(sessionStorage.getItem('admin_email_peserta'));
-            setTgl_lahir(sessionStorage.getItem('admin_tgllahir_peserta'));
-            setAsal(sessionStorage.getItem('admin_asal_peserta'));
+            setIdpeserta(DOMPurify.sanitize(sessionStorage.getItem('admin_id_peserta')));
+            setNama(DOMPurify.sanitize(sessionStorage.getItem('admin_nama_peserta')));
+            setNo_identitas(DOMPurify.sanitize(sessionStorage.getItem('admin_noidentitas_peserta')));
+            setEmail(DOMPurify.sanitize(sessionStorage.getItem('admin_email_peserta')));
+            setTgl_lahir(DOMPurify.sanitize(sessionStorage.getItem('admin_tgllahir_peserta')));
+            setAsal(DOMPurify.sanitize(sessionStorage.getItem('admin_asal_peserta')));
         }
         catch(err) {
             console.info('Terjadi Error AdminPesertaEdit-getData:', err);
@@ -85,12 +90,13 @@ export default function AdminPesertaEdit(props) {
         e.preventDefault();
         setLoading(true);
         try {
+            if(validator.isEmail(email) && validator.isDate(tgl_lahir)) {
             axios.defaults.withCredentials = true;
             axios.defaults.withXSRFToken = true;
             const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
             });
-            const response = await axios.put(`/api/peserta/${idpeserta}`, {
+            const response = await axios.put(`/api/peserta/${DOMPurify.sanitize(idpeserta)}`, {
                 id: idpeserta,
                 email: email,
                 tgl_lahir: tgl_lahir,
@@ -100,12 +106,12 @@ export default function AdminPesertaEdit(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -128,6 +134,7 @@ export default function AdminPesertaEdit(props) {
             }
             else {
                 alert('Terjadi Kesalahan Variabel');
+            }
             }
         }
         catch(err) {
@@ -200,17 +207,17 @@ export default function AdminPesertaEdit(props) {
                     autoComplete="off">
                     <TextField  type="text" id="Email" variant="outlined" focused
                                 placeholder="Email..." label="Email..."
-                                onChange = {(event)=> setEmail(event.target.value)}
+                                onChange = {(event)=> setEmail(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={email}
                                 fullWidth sx={styledTextField} />
                     <TextField  type="date" id="tgl_lahir" variant="outlined" required focused
                                 placeholder="Tanggal Lahir..." label="Tanggal Lahir..."
-                                onChange = {(event)=> setTgl_lahir(event.target.value)}
+                                onChange = {(event)=> setTgl_lahir(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={tgl_lahir}
                                 fullWidth sx={styledTextField} />
                     <TextField  type="text" id="asal" variant="outlined" focused
                                 placeholder="Asal..." label="Asal..."
-                                onChange = {(event)=> setAsal(event.target.value)}
+                                onChange = {(event)=> setAsal(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={asal}
                                 fullWidth sx={styledTextField} />
                     <Box>

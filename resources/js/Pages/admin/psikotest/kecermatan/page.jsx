@@ -19,13 +19,15 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
-import { readable, random } from '@/libraries/myfunction';
 
+import { readable, random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
+import validator from 'validator';
 export default function PsikotestKecermatan(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState([]);
 
@@ -44,12 +46,12 @@ export default function PsikotestKecermatan(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -116,7 +118,7 @@ export default function PsikotestKecermatan(props) {
 
     const onDetil = (id) => {
         setLoading(true);
-        sessionStorage.setItem('admin_psikotest_kecermatan_id', id);
+        sessionStorage.setItem('admin_psikotest_kecermatan_id', DOMPurify.sanitize(id));
         // router.push(`/admin/psikotest/kecermatan/detil?page=1`);
         window.location.href = `/admin/psikotest/kecermatan/detil/1`;
     }
@@ -131,70 +133,75 @@ export default function PsikotestKecermatan(props) {
     const toEdit = (e, id, kolom_x, nilai_a, nilai_b, nilai_c, nilai_d, nilai_e) => {
         e.preventDefault()
         setLoading(true);
-        sessionStorage.setItem('admin_psikotest_kecermatan_id', id);
-        sessionStorage.setItem('admin_psikotest_kecermatan_kolom_x', kolom_x);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_A', nilai_a);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_B', nilai_b);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_C', nilai_c);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_D', nilai_d);
-        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_E', nilai_e);
+        sessionStorage.setItem('admin_psikotest_kecermatan_id', DOMPurify.sanitize(id));
+        sessionStorage.setItem('admin_psikotest_kecermatan_kolom_x', DOMPurify.sanitize(kolom_x));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_A', DOMPurify.sanitize(nilai_a));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_B', DOMPurify.sanitize(nilai_b));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_C', DOMPurify.sanitize(nilai_c));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_D', DOMPurify.sanitize(nilai_d));
+        sessionStorage.setItem('admin_psikotest_kecermatan_nilai_E', DOMPurify.sanitize(nilai_e));
         // router.push(`/admin/psikotest/kecermatan/edit`);
         window.location.href = `/admin/psikotest/kecermatan-edit`;
     }
 
     const fDelete = async (e, id, kolom_x) => {
         e.preventDefault();
-        Swal.fire({
-            title: "Anda yakin ingin menghapus data Psikotest Kecermatan ini?",
-            html: `Semua data <b>${kolom_x}</b> yang ada didalamnya juga akan terhapus!`,
-            showConfirmButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Ya",
-            cancelButtonText: "Batalkan",
-            icon: "warning",
-            showLoaderOnConfirm: true,
-            preConfirm: async () => {
-                try {
-                    axios.defaults.withCredentials = true;
-                    axios.defaults.withXSRFToken = true;
-                    const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                    await axios.delete(`/api/kecermatan/kolompertanyaan/${id}`, {
-                        withCredentials: true,
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'XSRF-TOKEN': csrfToken,
-                            'islogin' : readable(localStorage.getItem('islogin')),
-                            'isadmin' : readable(localStorage.getItem('isadmin')),
-                            'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                            'remember-token': readable(localStorage.getItem('remember-token')),
-                            'tokenlogin': random('combwisp', 50),
-                            'email' : readable(localStorage.getItem('email')),
-                            '--unique--': 'I am unique!',
-                            'isvalid': 'VALID!',
-                            'isallowed': true,
-                            'key': 'key',
-                            'values': 'values',
-                            'isdumb': 'no',
-                            'challenger': 'of course',
-                            'pranked': 'absolutely'
-                        }
-                    });
-                    // Hapus item dari state variabels setelah sukses
-                    setData((prev) => prev.filter((item) => item.id !== id));
-                } catch (error) {
-                    console.info('Terjadi Error AdminPsikotestKecermatan-fDelete', error);
-                    // Swal.showValidationMessage(`Terjadi Error AdminPsikotestKecermatan-fDelete: ${error}`);
+        if(validator.isInt(id.toString(), {min: 1, gt: 0})) {
+            Swal.fire({
+                title: "Anda yakin ingin menghapus data Psikotest Kecermatan ini?",
+                html: `Semua data <b>${kolom_x}</b> yang ada didalamnya juga akan terhapus!`,
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Ya",
+                cancelButtonText: "Batalkan",
+                icon: "warning",
+                showLoaderOnConfirm: true,
+                preConfirm: async () => {
+                    try {
+                        axios.defaults.withCredentials = true;
+                        axios.defaults.withXSRFToken = true;
+                        const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
+                        await axios.delete(`/api/kecermatan/kolompertanyaan/${DOMPurify.sanitize(id)}`, {
+                            withCredentials: true,
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'XSRF-TOKEN': csrfToken,
+                                'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                                'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                                'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                                'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
+                                'tokenlogin': random('combwisp', 50),
+                                'email' : DOMPurify.sanitize(localStorage.getItem('email')),
+                                '--unique--': 'I am unique!',
+                                'isvalid': 'VALID!',
+                                'isallowed': true,
+                                'key': 'key',
+                                'values': 'values',
+                                'isdumb': 'no',
+                                'challenger': 'of course',
+                                'pranked': 'absolutely'
+                            }
+                        });
+                        // Hapus item dari state variabels setelah sukses
+                        setData((prev) => prev.filter((item) => item.id !== id));
+                    } catch (error) {
+                        console.info('Terjadi Error AdminPsikotestKecermatan-fDelete', error);
+                        // Swal.showValidationMessage(`Terjadi Error AdminPsikotestKecermatan-fDelete: ${error}`);
+                    }
                 }
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                    title: "Terhapus!",
-                    text: "Data Telah Berhasil Dihapus",
-                    icon: "success"
-                });
-            }
-        });
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Terhapus!",
+                        text: "Data Telah Berhasil Dihapus",
+                        icon: "success"
+                    });
+                }
+            });
+        }
+        else {
+            alert('Invalid Credentials!');
+        }
     };
 
     return (
@@ -207,9 +214,11 @@ export default function PsikotestKecermatan(props) {
                 <h1 className='hidden'>Halaman Psikotest Kecermatan | Admin</h1>
                 {loading ? (
                     <h2 className='text-center'>
-                        <p><span className='font-bold text-2lg'>
-                            Sedang memuat data... Mohon Harap Tunggu...
-                        </span></p>
+                        <p>
+                            <span className='font-bold text-2lg'>
+                                Sedang memuat data... Mohon Harap Tunggu...
+                            </span>
+                        </p>
                         <CircularProgress color="info" size={50} />
                     </h2>
                 ) : (

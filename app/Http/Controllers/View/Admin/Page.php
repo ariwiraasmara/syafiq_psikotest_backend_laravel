@@ -16,6 +16,9 @@ use App\Libraries\myfunction as fun;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use Spatie\Sitemap\Sitemap;
+use Spatie\Sitemap\Tags\Url;
 use Exception;
 
 class Page extends Controller {
@@ -39,11 +42,6 @@ class Page extends Controller {
             'pathURL'         => url()->current(),
             'robots'          => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
             'onetime'         => true,
-            'theme'           => 'rgba(200, 200, 255, 0.9)',
-            'textColor'       => 'black',
-            'textColorRGB'    => '#000',
-            'borderColor'     => 'black',
-            'borderColorRGB'  => '#000',
         ]);
     }
 
@@ -60,8 +58,8 @@ class Page extends Controller {
                     if (Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
-                        $path = '/pathku';
-                        $domain = 'domainku.com';
+                        $path = '/';
+                        $domain = 'psikotestasyik.com';
                         // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
                         $pat = $this->patService->get(['name' => $request->email]);
                         $tokenExpire = fun::daysLater('+1 day');
@@ -72,11 +70,13 @@ class Page extends Controller {
                                 'expires_at' => $tokenExpire,
                                 'updated_at' => date('Y-m-d H:i:s')
                             ]);
-                            $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 50));
+                            $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 100));
                             $isTokenupdate = true;
                             return 1;
                         }
                         if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
+                        $token = fun::random('combwisp', 50);
+                        $unique = fun::random('combwisp', 50);
                         $response = new Response([
                             'success' => 1,
                             'pesan'   => 'Yehaa! Berhasil Login!',
@@ -88,19 +88,27 @@ class Page extends Controller {
                                 'token_expire_at' => $tokenExpire
                             ],
                             'sesi'    => [
-                                'expire_at' => fun::daysLater('+12 hours')
+                                'expire_at'  => fun::daysLater('+12 hours'),
+                                'sysel'      => fun::encrypt($request->email),
+                                'sysauth'    => $unique,
+                                'token'      => $token,
+                                'unique'     => $unique,
+                                'xsrf_token' => csrf_token(),
                             ]
                         ]);
                         $expirein = 6 * 60; // jam * menit
-                        $token = fun::random('combwisp', 50);
-                        $unique = fun::random('combwisp', 50);
-                        // $response->withCookie(cookie('islogin', true, 60));
-                        // $response->withCookie(cookie('isadmin', true, 60));
-                        $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__sysauth__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, true, false, 'Strict'));
+                        
+                        $response->withCookie(cookie('islogin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('isadmin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('isauth', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__sysauth__', fun::encrypt($unique), $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('email', $request->email, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('nama', $data['data'][0]['name'], $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']), $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('rtk', fun::encrypt($data['data'][0]['remember_token']), $expirein, $path, $domain, true, false, false, 'Strict'));
                         return $response;
                     }
                 }

@@ -17,7 +17,7 @@ class MatchingUserData {
     public function handle(Request $request, Closure $next): Response {
         if($request->hasHeader('islogin') && $request->hasHeader('isadmin')) {
             if($request->hasHeader('email')) {
-                $cek = User::where(['email' => $request->header()['email']])->first();
+                $cek = User::where(['email' => $request->header()['email'][0]])->first();
                 if (!$cek) return response()->json(['message' => 'Email not found in database.'], 404);
                 if(![$cek][0]->email_verified_at || is_null([$cek][0]->email_verified_at)) return response()->json(['message' => 'Email not verified.'], 404);
                 return $next($request);
