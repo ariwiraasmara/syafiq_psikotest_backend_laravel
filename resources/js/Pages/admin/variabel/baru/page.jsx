@@ -14,19 +14,19 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function VariabelBaru(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
     const [nvariabel, setNvariabel] = React.useState('');
-    const handleChange_Nvariable = (event) => {
-        event.preventDefault();
-        setNvariabel(event.target.value);
-    };
+    const [nvalues, setNvalues] = React.useState();
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
@@ -53,10 +53,14 @@ export default function VariabelBaru(props) {
         },
     }
 
-    const [nvalues, setNvalues] = React.useState();
+    const handleChange_Nvariable = (event) => {
+        event.preventDefault();
+        setNvariabel(DOMPurify.sanitize(event.target.value));
+    };
+
     const handleChange_Nvalues = (event) => {
         event.preventDefault();
-        setNvalues(event.target.value);
+        setNvalues(DOMPurify.sanitize(event.target.value));
     };
 
     if(loading) {
@@ -87,12 +91,12 @@ export default function VariabelBaru(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,

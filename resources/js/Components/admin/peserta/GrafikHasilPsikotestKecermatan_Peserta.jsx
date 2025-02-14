@@ -17,6 +17,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend);
 
 import { random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 
 GrafikHasilPsikotestKecermatan_Peserta.propTypes = {
     peserta_id: PropTypes.number,
@@ -68,12 +69,12 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : localStorage.getItem('islogin'),
-                    'isadmin' : localStorage.getItem('isadmin'),
-                    'Authorization': `Bearer ${localStorage.getItem('pat')}`,
-                    'remember-token': localStorage.getItem('remember-token'),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : localStorage.getItem('email'),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -186,7 +187,7 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props) {
                 setTglSearch_1('null');
         }
         else {
-            setTglSearch_1(e.target.value);
+            setTglSearch_1(DOMPurify.sanitize(e.target.value));
         }
     };
 
@@ -196,7 +197,7 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props) {
                 setTglSearch_2('null');
         }
         else {
-            setTglSearch_2(e.target.value);
+            setTglSearch_2(DOMPurify.sanitize(e.target.value));
         }
     };
 
@@ -206,7 +207,7 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props) {
             alert('Tanggal Pencari 1 dan 2 Tidak Boleh Sama!');
         }
         else {
-            setApiURL(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/peserta/hasil/psikotest/kecermatan/${props.peserta_id}/${tglSearch_1}/${tglSearch_2}`);
+            setApiURL(`/api/peserta/hasil/psikotest/kecermatan/${props.peserta_id}/${tglSearch_1}/${tglSearch_2}`);
             getDataHasilPsikotesKecermatan();
         }
     }

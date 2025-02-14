@@ -31,6 +31,20 @@ export default function RootLayout({ children }) {
         color: textColor
     }
 
+    const expires = 1;
+    const path = '/';
+    const domain = '';
+    const secure = true;
+    const sameSite = 'strict';
+
+    const cookieRules = {
+        path: path,
+        domain: domain,
+        expires : expires,
+        sameSite : sameSite,
+        secure : secure,
+    };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
         localStorage.setItem('theme', 'rgba(200, 200, 255, 0.9)');
@@ -44,12 +58,11 @@ export default function RootLayout({ children }) {
         setBorderColor(localStorage.getItem('border-color'));
         setBorderColorRGB(localStorage.getItem('border-color-rgb'));
 
-        const pathDomain = 'syafiq.psikotest';
-        Cookies.set('theme', 'rgba(200, 200, 255, 0.9)', { expires: 24, path: pathDomain, secure: false, sameSite: 'lax' });
-        Cookies.set('textColor', 'black', { expires: 24, path: pathDomain, secure: false, sameSite: 'lax' });
-        Cookies.set('textColorRGB', '#000', { expires: 24, path: pathDomain, secure: false, sameSite: 'lax' });
-        Cookies.set('borderColor', 'black', { expires: 24, path: pathDomain, secure: false, sameSite: 'lax' });
-        Cookies.set('borderColorRGB', '#000', { expires: 24, path: pathDomain, secure: false, sameSite: 'lax' });
+        Cookies.set('theme', 'rgba(200, 200, 255, 0.9)', cookieRules);
+        Cookies.set('textColor', 'black', cookieRules);
+        Cookies.set('textColorRGB', '#000', cookieRules);
+        Cookies.set('borderColor', 'black', cookieRules);
+        Cookies.set('borderColorRGB', '#000', cookieRules);
     }, []);
 
     return (

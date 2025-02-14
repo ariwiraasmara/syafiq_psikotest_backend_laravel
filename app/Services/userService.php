@@ -47,7 +47,7 @@ class userService {
     public function updateRemembertoken(int $id, String $token): String {
         try {
             $res = $this->repo->update($id, ['remember_token' => $token]);
-            if($res > 0) return $$token;
+            if($res > 0) return $token;
             return 0;
         }
         catch(Exception $err) {
@@ -63,13 +63,6 @@ class userService {
 
     public function dashboard(String $email): array|Collection|String|int|null {
         try {
-            // if(fun::getRawCookie('__sysel__')) {
-            //     Log::channel('debugging')->debug('ambil data dari cookie!', [
-            //         'email' => fun::getCookie('__sysel__')
-            //     ]);
-            //     return $this->repo->get(['email' => fun::getCookie('__sysel__')]);
-            // }
-            // else if(fun::getRawCookie('email')) {
             if(fun::getRawCookie('email')) {
                 return $this->repo->get(['email' => fun::getRawCookie('email')]);
             }

@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import { readable, random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 
 TabelHasilPsikotestPesertaDetil.propTypes = {
     peserta_id: PropTypes.number,
@@ -82,12 +83,12 @@ export default function TabelHasilPsikotestPesertaDetil(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : localStorage.getItem('islogin'),
-                    'isadmin' : localStorage.getItem('isadmin'),
-                    'Authorization': `Bearer ${localStorage.getItem('pat')}`,
-                    'remember-token': localStorage.getItem('remember-token'),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : localStorage.getItem('email'),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -121,7 +122,7 @@ export default function TabelHasilPsikotestPesertaDetil(props) {
                 setTglSearch_1('null');
         }
         else {
-            setTglSearch_1(e.target.value);
+            setTglSearch_1(DOMPurify.sanitize(e.target.value));
         }
     };
 
@@ -131,14 +132,14 @@ export default function TabelHasilPsikotestPesertaDetil(props) {
                 setTglSearch_2('null');
         }
         else {
-            setTglSearch_2(e.target.value);
+            setTglSearch_2(DOMPurify.sanitize(e.target.value));
         }
     };
 
     const submitSearch = (e) => {
         e.preventDefault();
         console.info('submit search triggered!');
-        setApiURL(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/peserta/hasil/psikotest/kecermatan/${props.peserta_id}/${tglSearch_1}/${tglSearch_2}`);
+        setApiURL(`/api/peserta/hasil/psikotest/kecermatan/${props.peserta_id}/${tglSearch_1}/${tglSearch_2}`);
         getDataHasilPsikotesKecermatan();
         console.info('submit search finish!');
     }
@@ -224,12 +225,12 @@ export default function TabelHasilPsikotestPesertaDetil(props) {
                                     dataHasilPsikotesKecermatan.map((data, index) => (
                                         <TableRow key={index}>
                                             <TableCell sx={{ textAlign: 'right' }}>{parseInt(index) + 1}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.tgl_ujian}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.hasilnilai_kolom_1}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.hasilnilai_kolom_2}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.hasilnilai_kolom_3}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.hasilnilai_kolom_4}</TableCell>
-                                            <TableCell sx={{ textAlign: 'center' }}>{data.hasilnilai_kolom_5}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.tgl_ujian)}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.hasilnilai_kolom_1)}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.hasilnilai_kolom_2)}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.hasilnilai_kolom_3)}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.hasilnilai_kolom_4)}</TableCell>
+                                            <TableCell sx={{ textAlign: 'center' }}>{DOMPurify.sanitize(data.hasilnilai_kolom_5)}</TableCell>
                                         </TableRow>
                                     ))
                                 ) : (

@@ -167,7 +167,7 @@ class myfunction {
             }
             return $decrypted;
         }
-        return Crypt::decryptString($val, false, base64_decode('<--{[@12iW3721195S0f!@]}-->'));
+        return Crypt::decryptString($val);
     }
 
     public static function enval($str, bool $isencrypt = false) {
@@ -296,10 +296,10 @@ class myfunction {
         else cookie($name, $val, time() + ($hari * $jam * $menit * $detik), $path);
     }
 
-    public static function setCookie($array, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $path = '/', $domain = null) {
+    public static function setCookie($array, $isencrypt = false, $expire=1*24*60*60, $path = '/', $domain = null) {
         foreach($array as $arr => $val) {
-            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), $path, $domain, true, true); // 86400 = 1 day
-            else cookie($arr, $val, time() + ($hari * $jam * $menit * $detik), $path); // 86400 = 1 day
+            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($expire), $path, $domain, true, true); // 86400 = 1 day
+            else cookie($arr, $val, time() + ($expire), $path, $domain, true, true); // 86400 = 1 day
         }
     }
 

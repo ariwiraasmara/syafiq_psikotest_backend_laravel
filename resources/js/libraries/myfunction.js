@@ -1,4 +1,16 @@
-'use client';
+function setCookie(vname, vvalue, vexpire, vpath, vdomain) {
+    const d = new Date();
+    d.setTime(d.getTime() + vexpire);
+    const expires = `expires=${d.toUTCString()};`;
+    const path = `path=${vpath};`;
+    const domain = `domain=${vdomain};`;
+    const secure = `Secure;`;
+    const sameSite = `SameSite=Strict;`;
+    const httpOnly = `HttpOnly;`;
+    const partitioned = 'Partitioned;';
+    document.cookie = vname + "=" + vvalue + ";" + expires + path + domain + secure + sameSite + httpOnly + partitioned;
+}
+
 const readable = (str) => {
     if (str === null) return null;
 
@@ -74,7 +86,7 @@ const decrypt = async (cipher, key) => {
 };
 
 const generateKey = async () => {
-    const key = await window.crypto.subtle.generateKey(
+    return await window.crypto.subtle.generateKey(
         {
             name: "AES-GCM",
             length: 256,
@@ -82,7 +94,6 @@ const generateKey = async () => {
         true,
         ["encrypt", "decrypt"]
     );
-    return key;
 };
 
 const enval = (str, isencrypt = false) => {
@@ -150,6 +161,7 @@ const random = (str, length = 10) => {
 };
 
 export {
+    setCookie,
     readable,
     readableDate,
     currentDate,

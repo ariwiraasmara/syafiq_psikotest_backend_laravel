@@ -14,15 +14,20 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function AdminVariabelEdit(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
-    const [nid, setNid] = React.useState(readable(sessionStorage.getItem('admin_variabel_id')));
+    const [nid, setNid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_variabel_id')));
+    const [nvariabel, setNvariabel] = React.useState('');
+    const [nvalues, setNvalues] = React.useState();
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
@@ -45,25 +50,23 @@ export default function AdminVariabelEdit(props) {
             color: textColorRGB, // warna hover
         },
     }
-    
-    const [nvariabel, setNvariabel] = React.useState('');
+
     const handleChange_Nvariable = (event) => {
         event.preventDefault();
-        setNvariabel(event.target.value);
+        setNvariabel(DOMPurify.sanitize(event.target.value));
     };
 
-    const [nvalues, setNvalues] = React.useState();
     const handleChange_Nvalues = (event) => {
         event.preventDefault();
-        setNvalues(event.target.value);
+        setNvalues(DOMPurify.sanitize(event.target.value));
     };
 
     const getData = () => {
         setLoading(true);
         try {
             // setNid(readable(sessionStorage.getItem('admin_variabel_id')));
-            setNvariabel(readable(sessionStorage.getItem('admin_variabel_variabel')));
-            setNvalues(readable(sessionStorage.getItem('admin_variabel_values')));
+            setNvariabel(DOMPurify.sanitize(sessionStorage.getItem('admin_variabel_variabel')));
+            setNvalues(DOMPurify.sanitize(sessionStorage.getItem('admin_variabel_values')));
         } catch (err) {
             console.error('Eror getData Edit Variabel', err);
         }
@@ -92,10 +95,10 @@ export default function AdminVariabelEdit(props) {
         try {
             axios.defaults.withCredentials = true;
             axios.defaults.withXSRFToken = true;
-            const csrfToken = await axios.get(`${process.env.NEXT_PUBLIC_API_BACKEND}/sanctum/csrf-cookie`, {
+            const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
             });
-            const response = await axios.put(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/variabel-setting/${nid}`, {
+            const response = await axios.put(`/api/variabel-setting/${nid}`, {
                 variabel: nvariabel,
                 values: nvalues
             }, {
@@ -103,12 +106,12 @@ export default function AdminVariabelEdit(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,

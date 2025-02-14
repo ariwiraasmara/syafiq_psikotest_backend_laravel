@@ -23,6 +23,7 @@ class As0001VariabelsettingSeeder extends Seeder {
             ]
         ]);
 
+        /*
         for($x=1; $x < 100; $x++) {
             as0001_variabelsetting::insert([
                 [
@@ -33,5 +34,6 @@ class As0001VariabelsettingSeeder extends Seeder {
                 ]
             ]);
         }
+        */
     }
 }

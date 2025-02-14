@@ -13,16 +13,19 @@ import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
 import TabelHasilPsikotestKecermatan from '@/components/peserta/TabelHasilPsikotestKecermatan';
 import GrafikHasilPsikotestKecermatan from '@/components/peserta/GrafikHasilPsikotestKecermatan';
-import { random } from '@/libraries/myfunction';
 
+import { random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 export default function PesertaPsikotestKecermatanHasil(props) {
     // const [paramIdentitas, setParamIdentitas] = React.useState(0);
     let paramIdentitas = 0;
     // const [paramTgl_tes, setParamTgl_tes] = React.useState();
     let paramTgl_tes = '';
 
-    const textColor = localStorage.getItem('text-color');
-    const borderColor = localStorage.getItem('border-color');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [dataPeserta, setDataPeserta] = React.useState({});
     const [dataHasiltes, setDataHasiltes] = React.useState({});
     const [loading, setLoading] = React.useState(true);
@@ -45,7 +48,6 @@ export default function PesertaPsikotestKecermatanHasil(props) {
                     'tokenlogin': random('combwisp', 50),
                 }
             });
-            const data = response.data.data;
             console.log('response data peserta dan hasil', response);
             // Menyimpan data ke state
             setDataPeserta(response.data.data.peserta[0]);
@@ -65,7 +67,7 @@ export default function PesertaPsikotestKecermatanHasil(props) {
     }, []);
 
     // console.table('Data Peserta', dataPeserta);
-    // console.table('Data Hasil Psikotest Kecermatan Peserta', filteredMemo_dataHasiltes.type);
+    console.table('Data Hasil Psikotest Kecermatan Peserta', filteredMemo_dataHasiltes.type);
 
     const MemoHelmet = React.memo(function Memo() {
         return(
@@ -125,19 +127,19 @@ export default function PesertaPsikotestKecermatanHasil(props) {
                     <div className={`mt-4 p-2 rounded-lg bg-white border-2 border-${borderColor}`}>
                         <h3 className='hidden'>Peserta : {dataPeserta.nama}</h3>
                         <TabelHasilPsikotestKecermatan
-                            hasilnilai_kolom_1={dataHasiltes.hasilnilai_kolom_1}
-                            hasilnilai_kolom_2={dataHasiltes.hasilnilai_kolom_2}
-                            hasilnilai_kolom_3={dataHasiltes.hasilnilai_kolom_3}
-                            hasilnilai_kolom_4={dataHasiltes.hasilnilai_kolom_4}
-                            hasilnilai_kolom_5={dataHasiltes.hasilnilai_kolom_5}
+                            hasilnilai_kolom_1={filteredMemo_dataHasiltes.type.hasilnilai_kolom_1}
+                            hasilnilai_kolom_2={filteredMemo_dataHasiltes.type.hasilnilai_kolom_2}
+                            hasilnilai_kolom_3={filteredMemo_dataHasiltes.type.hasilnilai_kolom_3}
+                            hasilnilai_kolom_4={filteredMemo_dataHasiltes.type.hasilnilai_kolom_4}
+                            hasilnilai_kolom_5={filteredMemo_dataHasiltes.type.hasilnilai_kolom_5}
                         />
                         <GrafikHasilPsikotestKecermatan
                             tgl_tes={paramTgl_tes}
-                            hasilnilai_kolom_1={dataHasiltes.hasilnilai_kolom_1}
-                            hasilnilai_kolom_2={dataHasiltes.hasilnilai_kolom_2}
-                            hasilnilai_kolom_3={dataHasiltes.hasilnilai_kolom_3}
-                            hasilnilai_kolom_4={dataHasiltes.hasilnilai_kolom_4}
-                            hasilnilai_kolom_5={dataHasiltes.hasilnilai_kolom_5}
+                            hasilnilai_kolom_1={filteredMemo_dataHasiltes.type.hasilnilai_kolom_1}
+                            hasilnilai_kolom_2={filteredMemo_dataHasiltes.type.hasilnilai_kolom_2}
+                            hasilnilai_kolom_3={filteredMemo_dataHasiltes.type.hasilnilai_kolom_3}
+                            hasilnilai_kolom_4={filteredMemo_dataHasiltes.type.hasilnilai_kolom_4}
+                            hasilnilai_kolom_5={filteredMemo_dataHasiltes.type.hasilnilai_kolom_5}
                             textColor={textColor}
                         />
                     </div>

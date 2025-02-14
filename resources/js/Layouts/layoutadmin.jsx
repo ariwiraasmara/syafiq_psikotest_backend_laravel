@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import NavigasiBawah from '@/components/admin/NavigasiBawah';
+import Cookies from 'js-cookie';;
 
 Layoutadmin.propTypes = {
     children: PropTypes.any,
@@ -22,13 +23,13 @@ export default function Layoutadmin({ children }) {
     const getData = () => {
         setLoading(true);
         try {
-            if(localStorage.getItem('islogin') === 'true') setIslogin(true);
+            if(Cookies.get('islogin')) setIslogin(true);
             else setIslogin(false);
 
-            if(localStorage.getItem('isadmin') === 'true') setIsadmin(true);
+            if(Cookies.get('isadmin')) setIsadmin(true);
             else setIsadmin(false);
 
-            if(localStorage.getItem('ispeserta') === 'false') setIspeserta(false);
+            if(Cookies.get('ispeserta')) setIspeserta(true);
             else setIspeserta(false);
         }
         catch(err) {
@@ -73,7 +74,7 @@ export default function Layoutadmin({ children }) {
                     <p className='mt-4 uppercase font-bold'>Tidak diperkenankan untuk mengakses halaman ini!</p>
                     <div className='mt-6'>
                         <Box sx={{ '& button': {width: '100%' } }}>
-                            <Button variant="contained" size="large" onClick={() => router.push('/admin')}>
+                            <Button variant="contained" size="large" onClick={() => window.location.href = '/admin'}>
                                 Kembali
                             </Button>
                         </Box>

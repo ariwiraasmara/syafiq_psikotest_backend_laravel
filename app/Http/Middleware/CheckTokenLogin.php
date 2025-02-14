@@ -16,7 +16,7 @@ class CheckTokenLogin
      */
     public function handle(Request $request, Closure $next) {
         if($request->hasHeader('tokenlogin')) {
-            if(!$request->header()['tokenlogin']) return response()->json(['message' => 'Token Login Not Found!'], 404);
+            if(!$request->header()['tokenlogin'][0]) return response()->json(['message' => 'Token Login Not Found!'], 404);
             return $next($request);
         }
         return response()->json(['message' => 'Token Login Not Found!'], 404);

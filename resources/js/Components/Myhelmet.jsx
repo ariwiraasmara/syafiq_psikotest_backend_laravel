@@ -12,9 +12,8 @@ Myhelmet.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     pathURL: PropTypes.string,
-    onetime: PropTypes.boolean,
-    robots: PropTypes.string,
-    onetime: PropTypes.boolean
+    onetime: PropTypes.bool,
+    robots: PropTypes.string
 };
 
 export default function Myhelmet(props) {

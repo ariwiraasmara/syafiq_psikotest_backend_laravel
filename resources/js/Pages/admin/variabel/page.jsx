@@ -29,13 +29,15 @@ import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import ComboPaging from '@/components/ComboPaging';
 import Footer from '@/components/Footer';
-import { readable, random } from '@/libraries/myfunction';
+import { readable, random, } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function AdminVariabel(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
     const [loadingData, setLoadingData] = React.useState(false);
     const [searchHidden, setSearchHidden] = React.useState('hidden');
@@ -45,7 +47,7 @@ export default function AdminVariabel(props) {
     const [toSearch, setToSearch] = React.useState('null');
 
     // paging
-    let currentpage = props.page;
+    let currentpage = parseInt(props.page);
     const [lastpage, setLastpage] = React.useState(1);
 
     const styledTextField = {
@@ -87,12 +89,12 @@ export default function AdminVariabel(props) {
                 headers: {
                     'Content-Type': 'application/json',
                     'XSRF-TOKEN': csrfToken,
-                    'islogin' : localStorage.getItem('islogin'),
-                    'isadmin' : localStorage.getItem('isadmin'),
-                    'Authorization': `Bearer ${localStorage.getItem('pat')}`,
-                    'remember-token': localStorage.getItem('remember-token'),
+                    'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                    'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                    'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                    'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                     'tokenlogin': random('combwisp', 50),
-                    'email' : localStorage.getItem('email'),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -103,6 +105,7 @@ export default function AdminVariabel(props) {
                     'pranked': 'absolutely'
                 }
             });
+            console.info('response', response);
             setData(response.data.data.data);
             setLastpage(response.data.data.last_page);
             // console.log('response', response);
@@ -225,15 +228,16 @@ export default function AdminVariabel(props) {
     const toEdit = (e, id, nvariabel, nvalue) => {
         e.preventDefault();
         setLoading(true);
-        sessionStorage.setItem('admin_variabel_id', id);
-        sessionStorage.setItem('admin_variabel_variabel', nvariabel);
-        sessionStorage.setItem('admin_variabel_values', nvalue);
+        sessionStorage.setItem('admin_variabel_id', DOMPurify.sanitize(id));
+        sessionStorage.setItem('admin_variabel_variabel', DOMPurify.sanitize(nvariabel));
+        sessionStorage.setItem('admin_variabel_values', DOMPurify.sanitize(nvalue));
         // router.push('/admin/variabel/edit');
         window.location.href = '/admin/variabel-edit';
     };
 
     const fDelete = async (e, id, nvariabel, nvalues) => {
         e.preventDefault();
+        if(validator.isInt(id.toString(), {min: 1, gt: 0})) {
         Swal.fire({
             title: "Anda yakin ingin menghapus data variabel ini?",
             html: `<b>${nvariabel}</b> = <b>${nvalues}</b>`,
@@ -247,18 +251,18 @@ export default function AdminVariabel(props) {
                 try {
                     axios.defaults.withCredentials = true;
                     axios.defaults.withXSRFToken = true;
-                    const csrfToken = await axios.get(`${process.env.NEXT_PUBLIC_API_BACKEND}/sanctum/csrf-cookie`);
-                    await axios.delete(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/variabel-setting/${id}`, {
+                    const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
+                    await axios.delete(`/api/variabel-setting/${id}`, {
                         withCredentials: true,
                         headers: {
                             'Content-Type': 'application/json',
                             'XSRF-TOKEN': csrfToken,
-                            'islogin' : readable(localStorage.getItem('islogin')),
-                            'isadmin' : readable(localStorage.getItem('isadmin')),
-                            'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                            'remember-token': readable(localStorage.getItem('remember-token')),
+                            'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                            'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                            'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                            'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
                             'tokenlogin': random('combwisp', 50),
-                            'email' : readable(localStorage.getItem('email')),
+                            'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                             '--unique--': 'I am unique!',
                             'isvalid': 'VALID!',
                             'isallowed': true,
@@ -273,7 +277,7 @@ export default function AdminVariabel(props) {
                     setData((prev) => prev.filter((item) => item.id !== id));
                 } catch (error) {
                     // Swal.showValidationMessage(`Request failed: ${error}`);
-                    console.info('Terjadi Error AdminVariabel-fDelte:', err)
+                    console.info('Terjadi Error AdminVariabel-fDelte:', error)
                 }
             }
         }).then((result) => {
@@ -285,6 +289,10 @@ export default function AdminVariabel(props) {
                 });
             }
         });
+        }
+        else {
+            alert('Invalid Credentials!');
+        }
     };
 
     return (

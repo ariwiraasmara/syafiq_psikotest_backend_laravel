@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
-    'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    'throttle:100,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     // VerifyFastApiKey::class,
     CheckTokenLogin::class,
@@ -116,16 +116,13 @@ Route::middleware([
 });
 
 Route::middleware([
-    'throttle:5,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-//     IndexedDB::class,
-    // VerifyFastApiKey::class,
-//     CheckTokenLogin::class,
-//     Pranker::class,
+    CheckTokenLogin::class,
+    Pranker::class,
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-    Route::get('/indexedDB/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'));
-    Route::get('/indexedDB/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'));
+    Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'));
+    Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'));
 });
 
 Route::middleware([

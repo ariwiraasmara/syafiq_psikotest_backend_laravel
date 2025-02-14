@@ -21,7 +21,7 @@ class BearerTokenCheck {
             if($request->hasHeader('authorization')) {
                 if(!$request->bearerToken()) return response()->json(['message' => 'Bearer Token Not Found!'], 404);
                 $service = new personalaccesstokensService();
-                $data = fun::decrypt($request->bearerToken());
+                $data = Crypt::decryptString($request->bearerToken());
                 $cek = $service->get(['id' => (int)$data[0]]);
                 if(!$cek) return response()->json(['message' => 'Bearer Token Not Found!'], 404);
                 return $next($request);

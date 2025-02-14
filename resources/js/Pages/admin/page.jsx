@@ -6,6 +6,8 @@ import Layout from '@/Layouts/layout';
 import * as React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -84,11 +86,6 @@ export default function Admin(props) {
                 pathURL={props.pathURL}
                 robots={props.robots}
                 onetime={null}
-                theme={props.theme}
-                textColor={props.textColor}
-                textColorRGB={props.textColorRGB}
-                borderColor={props.borderColor}
-                borderColorRGB={props.borderColorRGB}
             />
         );
     });
@@ -107,60 +104,69 @@ export default function Admin(props) {
 
     const sendDataLogin = async () => {
         try {
-            axios.defaults.withCredentials = true;
-            axios.defaults.withXSRFToken = true;
-            const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-            });
-            const response = await axios.post(`/admin/login`, {
-                email: emaillogin,
-                password: passlogin
-            }, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-API-KEY': 'lBvYGhtKWqbQ6ZspV8txNRTcINTHEJSg24q5lpUjPF2dYkKIG3evFCniewMbwPuLzrmcJzkAXOf1HUEj767Q9onCmdR30s9XWLig',
-                    'XSRF-TOKEN': csrfToken,
-                    'tokenlogin': random('combwisp', 50)
-                }
-            });
-            console.info('response', response.data);
-            if(response.data.success) {
-                const pathDomain = 'syafiq.psikotest';
-                Cookies.set('islogin', true, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('isadmin', true, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('isauth', true, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('expire_at', response.data.sesi.expire_at, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('__sysel__', response.data.sesi.sysel, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('__sysauth__', response.data.sesi.sysauth, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('__token__', response.data.sesi.token, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('__unique__', response.data.sesi.unique, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('XSRF-TOKEN', response.data.sesi.xsrf_token, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('nama', response.data.data.nama, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('email', emaillogin, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('pat', response.data.data.token_1, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
-                Cookies.set('rtk', response.data.data.token_2, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
+            if(validator.isEmail(emaillogin) && validator.equals(passlogin, 'admin')) {
+                axios.defaults.withCredentials = true;
+                axios.defaults.withXSRFToken = true;
+                const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                });
+                const response = await axios.post(`/api/login`, {
+                    email: DOMPurify.sanitize(emaillogin),
+                    password: DOMPurify.sanitize(passlogin)
+                }, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'XSRF-TOKEN': csrfToken,
+                        'tokenlogin': random('combwisp', 50)
+                    }
+                });
+                console.info('response', response.data);
+                if(response.data.success) {
+                    const expires = 1;
+                    const path = '/';
+                    const domain = '';
+                    const secure = true;
+                    const sameSite = 'strict';
 
-                localStorage.setItem('islogin', true);
-                localStorage.setItem('isadmin', true);
-                localStorage.setItem('ispeserta', false);
-                localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
-                // localStorage.setItem('authUser', JSON.stringify({
-                //     nama: response.data.data.nama,
-                //     email: emaillogin,
-                //     pat: response.data.data.token_1,
-                //     rememberToken: response.data.data.token_2
-                // }));
-                localStorage.setItem('nama', response.data.data.nama);
-                localStorage.setItem('email', emaillogin);
-                localStorage.setItem('pat', response.data.data.token_1);
-                localStorage.setItem('remember-token', response.data.data.token_2);
-                localStorage.setItem('csrfToken', csrfToken);
-                // route('admin/dashboard');
-                window.location.href = '/admin/dashboard';
+                    const cookieRules = {
+                        path: path,
+                        domain: domain,
+                        expires : expires,
+                        sameSite : sameSite,
+                        secure : secure,
+                    };
+
+                    Cookies.set('islogin', true, cookieRules);
+                    Cookies.set('isadmin', true, cookieRules);
+                    Cookies.set('isauth', true, cookieRules);
+                    Cookies.set('expire_at', response.data.sesi.expire_at, cookieRules);
+                    Cookies.set('__token-x-1__', response.data.sesi.token, cookieRules);
+                    Cookies.set('__unique__', response.data.sesi.unique, cookieRules);
+                    // Cookies.set('nama', response.data.data.nama, cookieRules);
+                    // Cookies.set('email', emaillogin, cookieRules);
+                    // Cookies.set('pat', response.data.data.token_1, cookieRules);
+                    // Cookies.set('rtk', response.data.data.token_2, cookieRules);
+
+                    localStorage.setItem('islogin', true);
+                    localStorage.setItem('isadmin', true);
+                    localStorage.setItem('isauth', true);
+                    localStorage.setItem('ispeserta', false);
+                    localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
+                    localStorage.setItem('nama', response.data.data.nama);
+                    localStorage.setItem('email', emaillogin);
+                    localStorage.setItem('pat', response.data.data.token_1);
+                    localStorage.setItem('remember-token', response.data.data.token_2);
+                    localStorage.setItem('csrfToken', csrfToken);
+                    // route('admin/dashboard');
+                    window.location.href = '/admin/dashboard';
+                }
+                else {
+                    alert('Email / Password Salah!');
+                }
             }
             else {
-                alert('Email / Password Salah!');
+                alert('Invalid Credentials!');
             }
         }
         catch(err) {

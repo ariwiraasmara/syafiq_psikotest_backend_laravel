@@ -14,6 +14,7 @@ use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Exception;
 class UserController extends Controller {
@@ -44,9 +45,9 @@ class UserController extends Controller {
                     if (Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
-                        $path = '/pathku';
-                        $domain = 'domainku.com';
-                        // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
+                        $path = '/';
+                        $domain = 'psikotestasyik.com';
+                        // $token = Crypt::encryptString($user->createToken($request->email, ['server:update'])->plainTextToken);
                         $pat = $this->patService->get(['name' => $request->email]);
                         $tokenExpire = fun::daysLater('+1 day');
                         $isTokenupdate = false;
@@ -56,12 +57,11 @@ class UserController extends Controller {
                                 'expires_at' => $tokenExpire,
                                 'updated_at' => date('Y-m-d H:i:s')
                             ]);
-                            $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 50));
+                            $this->service->updateRemembertoken($data['data'][0]['id'], fun::random('combwisp', 100));
                             $isTokenupdate = true;
                             return 1;
                         }
                         if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
-                        $expirein = 6 * 60; // jam * menit
                         $token = fun::random('combwisp', 50);
                         $unique = fun::random('combwisp', 50);
                         $response = new Response([
@@ -70,26 +70,32 @@ class UserController extends Controller {
                             'data'    => [
                                 'nama'    => $data['data'][0]['name'],
                                 'email'   => $request->email,
-                                'token_1' => fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']),
+                                'token_1' => Crypt::encryptString($pat[0]['id'].'|'.$pat[0]['token']),
                                 'token_2' => $data['data'][0]['remember_token'],
                                 'token_expire_at' => $tokenExpire
                             ],
                             'sesi'    => [
                                 'expire_at'  => fun::daysLater('+12 hours'),
-                                'sysel'      => fun::encrypt($request->email),
+                                'sysel'      => Crypt::encryptString($request->email),
                                 'sysauth'    => $unique,
                                 'token'      => $token,
                                 'unique'     => $unique,
                                 'xsrf_token' => csrf_token(),
-                            ],
+                            ]
                         ]);
-                        // $response->withCookie(cookie('islogin', true, 60));
-                        // $response->withCookie(cookie('isadmin', true, 60));
-                        $response->withCookie(cookie('__sysel__', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__sysauth__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                 ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, true, false, 'Strict'));
+                        $expirein = 6 * 60; // jam * menit
+                        
+                        $response->withCookie(cookie('islogin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('isadmin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('isauth', true, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__sysauth__', Crypt::encryptString($unique), $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('email', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
+                                ->withCookie(cookie('nama', $data['data'][0]['name'], $expirein, $path, $domain, true, false, false, 'Strict'))
+                                ->withCookie(cookie('personal_access_token', Crypt::encryptString($pat[0]['id'].'|'.$pat[0]['token']), $expirein, $path, $domain, true, true, false, 'Strict'))
+                                ->withCookie(cookie('remember_token', Crypt::encryptString($data['data'][0]['remember_token']), $expirein, $path, $domain, true, true, false, 'Strict'));
                         return $response;
                     }
                 }
@@ -128,7 +134,7 @@ class UserController extends Controller {
     }
 
     #GET
-    public function logout(): Response|JsonResponse|String|int|null {
+    public function logout(Request $request): Response|JsonResponse|String|int|null {
         try {
             // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
             $domain = 'localhost';

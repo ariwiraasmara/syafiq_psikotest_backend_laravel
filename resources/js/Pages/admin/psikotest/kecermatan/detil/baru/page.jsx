@@ -1,7 +1,7 @@
 // ! Copyright @
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
-'use client'
+'use client';
 import Layoutadmindetil from '@/Layouts/Layoutadmindetil';
 import axios from 'axios';
 import * as React from 'react';
@@ -15,16 +15,19 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function PsikotestKecermatanDetilBaru(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
-    const [pkid, setPkid] = React.useState(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
-    const [lastpage, setLastpage] = React.useState(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage'));
+    const [pkid, setPkid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
+    const [lastpage, setLastpage] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage')));
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
@@ -50,39 +53,34 @@ export default function PsikotestKecermatanDetilBaru(props) {
 
     const [soalA, setSoalA] = React.useState(0);
     const handleChange_soalA = (event) => {
-        setSoalA(event.target.value);
-        console.log('soalA', soalA);
+        setSoalA(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalB, setSoalB] = React.useState(0);
     const handleChange_soalB = (event) => {
-        setSoalB(event.target.value);
-        console.log('soalB', soalB);
+        setSoalB(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalC, setSoalC] = React.useState(0);
     const handleChange_soalC = (event) => {
-        setSoalC(event.target.value);
-        console.log('soalC', soalC);
+        setSoalC(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalD, setSoalD] = React.useState(0);
     const handleChange_soalD = (event) => {
-        setSoalD(event.target.value);
-        console.log('soalD', soalD);
+        setSoalD(DOMPurify.sanitize(event.target.value));
     };
 
     const [jawaban, setJawaban] = React.useState(0);
     const handleChange_jawaban = (event) => {
-        setJawaban(event.target.value);
-        console.log('jawaban', jawaban);
+        setJawaban(DOMPurify.sanitize(event.target.value));
     };
 
     const getData = () => {
         setLoading(true);
         try {
-            setPkid(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
-            setLastpage(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage'));
+            setPkid(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
+            setLastpage(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage')));
         }
         catch(err) {
             console.info('Terjadi Error PsikotestKecermatanDetilBaru-getData:', err);
@@ -109,45 +107,63 @@ export default function PsikotestKecermatanDetilBaru(props) {
         e.preventDefault();
         setLoading(true);
         try {
-            const soaljawaban = {
-                soal: [[parseInt(soalA), parseInt(soalB), parseInt(soalC), parseInt(soalD)]],
-                jawaban: parseInt(jawaban)
+            const validNumberRange = {
+                min : 1,
+                max : 9
             };
-            axios.defaults.withCredentials = true;
-            axios.defaults.withXSRFToken = true;
-            const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-            });
-            const response = await axios.post(`/api/kecermatan/soaljawaban/${pkid}`, {
-                soal_jawaban: soaljawaban,
-            }, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                headers: {
-                    'Content-Type': 'application/json',
-                    'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
-                    'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
-                    '--unique--': 'I am unique!',
-                    'isvalid': 'VALID!',
-                    'isallowed': true,
-                    'key': 'key',
-                    'values': 'values',
-                    'isdumb': 'no',
-                    'challenger': 'of course',
-                    'pranked': 'absolutely'
+            if( validator.isInt(soalA, validNumberRange) &&
+                validator.isInt(soalB, validNumberRange) &&
+                validator.isInt(soalC, validNumberRange) &&
+                validator.isInt(soalD, validNumberRange)
+            ) {
+                const soaljawaban = {
+                    soal: [[
+                        parseInt(soalA),
+                        parseInt(soalB),
+                        parseInt(soalC),
+                        parseInt(soalD)
+                    ]],
+                    jawaban: parseInt(jawaban)
+                };
+                axios.defaults.withCredentials = true;
+                axios.defaults.withXSRFToken = true;
+                const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                });
+                const response = await axios.post(`/api/kecermatan/soaljawaban/${DOMPurify.sanitize(pkid)}`, {
+                    soal_jawaban: soaljawaban,
+                }, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'XSRF-TOKEN': csrfToken,
+                        'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                        'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                        'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                        'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
+                        'tokenlogin': random('combwisp', 50),
+                        'email' : DOMPurify.sanitize(localStorage.getItem('email')),
+                        '--unique--': 'I am unique!',
+                        'isvalid': 'VALID!',
+                        'isallowed': true,
+                        'key': 'key',
+                        'values': 'values',
+                        'isdumb': 'no',
+                        'challenger': 'of course',
+                        'pranked': 'absolutely'
+                    }
+                });
+                // console.log('response', response);
+                if(response.data.success) {
+                    // router.push(`/admin/psikotest/kecermatan/detil/?page=${lastpage}`);
+                    window.location.href = `/admin/psikotest/kecermatan/detil/${lastpage}`;
                 }
-            });
-            // console.log('response', response);
-            if(response.data.success) {
-                // router.push(`/admin/psikotest/kecermatan/detil/?page=${lastpage}`);
-                window.location.href = `/admin/psikotest/kecermatan/detil/${lastpage}`;
+                else {
+                    alert('Terjadi Error : Tidak Dapat Menyimpan Data!');
+                }
             }
             else {
-                alert('Terjadi Error : Tidak Dapat Menyimpan Data!');
+                alert('Invalid Credentials!');
             }
         }
         catch(err) {

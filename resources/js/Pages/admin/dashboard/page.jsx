@@ -12,20 +12,22 @@ import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import ListPeserta from '@/components/admin/ListPeserta';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 
 export default function AdminDashboard(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [nama, setNama] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
-        setNama(localStorage.getItem('nama'));
+        setNama(DOMPurify.sanitize(localStorage.getItem('nama')));
     }, [nama]);
     // console.log(data);
     console.table('Data Peserta Terbaru', props.data);

@@ -14,46 +14,44 @@ import Myhelmet from '@/components/Myhelmet';
 import Appbarku from '@/components/Appbarku';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import validator from 'validator';
+import DOMPurify from 'dompurify';
 
 export default function PsikotestKecermatanDetilEdit(props) {
-    const textColor = localStorage.getItem('text-color');
-    const textColorRGB = localStorage.getItem('text-color-rgb');
-    const borderColor = localStorage.getItem('border-color');
-    const borderColorRGB = localStorage.getItem('border-color-rgb');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [loading, setLoading] = React.useState(false);
-    const [pkid, setPkid] = React.useState(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
-    const [lastpage, setLastpage] = React.useState(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage'));
+    const [pkid, setPkid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
+    const [lastpage, setLastpage] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage')));
 
     const [idsoal, setIdsoal] = React.useState(0);
     const [soalA, setSoalA] = React.useState(0);
     const handleChange_soalA = (event) => {
-        setSoalA(event.target.value);
-        console.log('soalA', soalA);
+        setSoalA(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalB, setSoalB] = React.useState(0);
     const handleChange_soalB = (event) => {
-        setSoalB(event.target.value);
-        console.log('soalB', soalB);
+        setSoalB(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalC, setSoalC] = React.useState(0);
     const handleChange_soalC = (event) => {
-        setSoalC(event.target.value);
-        console.log('soalC', soalC);
+        setSoalC(DOMPurify.sanitize(event.target.value));
     };
 
     const [soalD, setSoalD] = React.useState(0);
     const handleChange_soalD = (event) => {
-        setSoalD(event.target.value);
-        console.log('soalD', soalD);
+        setSoalD(DOMPurify.sanitize(event.target.value));
     };
 
     const [jawaban, setJawaban] = React.useState(0);
     const handleChange_jawaban = (event) => {
-        setJawaban(event.target.value);
-        console.log('jawaban', jawaban);
+        setJawaban(DOMPurify.sanitize(event.target.value));
     };
 
     const styledTextField = {
@@ -83,12 +81,12 @@ export default function PsikotestKecermatanDetilEdit(props) {
         try {
             // setPkid(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
             // setLastpage(sessionStorage.getItem('admin_psikotest_kecermatan_tabellastpage'));
-            setIdsoal(sessionStorage.getItem('admin_psikotest_kecermatan_idsoal'));
-            setSoalA(sessionStorage.getItem('admin_psikotest_kecermatan_soalA'));
-            setSoalB(sessionStorage.getItem('admin_psikotest_kecermatan_soalB'));
-            setSoalC(sessionStorage.getItem('admin_psikotest_kecermatan_soalC'));
-            setSoalD(sessionStorage.getItem('admin_psikotest_kecermatan_soalD'));
-            setJawaban(sessionStorage.getItem('admin_psikotest_kecermatan_jawaban'));
+            setIdsoal(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_idsoal')));
+            setSoalA(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_soalA')));
+            setSoalB(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_soalB')));
+            setSoalC(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_soalC')));
+            setSoalD(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_soalD')));
+            setJawaban(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_jawaban')));
         }
         catch(err) {
             console.info('Terjadi Error PsikotestKecermatanDetilEdit-getData:', err);
@@ -100,51 +98,69 @@ export default function PsikotestKecermatanDetilEdit(props) {
         e.preventDefault();
         setLoading(true);
         try {
-            const soaljawaban = {
-                soal: [[parseInt(soalA), parseInt(soalB), parseInt(soalC), parseInt(soalD)]],
-                jawaban: parseInt(jawaban)
+            const validNumberRange = {
+                min : 1,
+                max : 9
             };
-            axios.defaults.withCredentials = true;
-            axios.defaults.withXSRFToken = true;
-            const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-            });
-            const response = await axios.put(`/api/kecermatan/soaljawaban/${pkid}/${idsoal}`, {
-                soal_jawaban: soaljawaban,
-            }, {
-                withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                headers: {
-                    'Content-Type': 'application/json',
-                    'XSRF-TOKEN': csrfToken,
-                    'islogin' : readable(localStorage.getItem('islogin')),
-                    'isadmin' : readable(localStorage.getItem('isadmin')),
-                    'Authorization': `Bearer ${readable(localStorage.getItem('pat'))}`,
-                    'remember-token': readable(localStorage.getItem('remember-token')),
-                    'tokenlogin': random('combwisp', 50),
-                    'email' : readable(localStorage.getItem('email')),
-                    '--unique--': 'I am unique!',
-                    'isvalid': 'VALID!',
-                    'isallowed': true,
-                    'key': 'key',
-                    'values': 'values',
-                    'isdumb': 'no',
-                    'challenger': 'of course',
-                    'pranked': 'absolutely'
+            if( validator.isInt(soalA, validNumberRange) &&
+                validator.isInt(soalB, validNumberRange) &&
+                validator.isInt(soalC, validNumberRange) &&
+                validator.isInt(soalD, validNumberRange)
+            ) {
+                const soaljawaban = {
+                    soal: [[
+                        parseInt(soalA),
+                        parseInt(soalB),
+                        parseInt(soalC),
+                        parseInt(soalD)
+                    ]],
+                    jawaban: parseInt(jawaban)
+                };
+                axios.defaults.withCredentials = true;
+                axios.defaults.withXSRFToken = true;
+                const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                });
+                const response = await axios.put(`/api/kecermatan/soaljawaban/${pkid}/${idsoal}`, {
+                    soal_jawaban: soaljawaban,
+                }, {
+                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'XSRF-TOKEN': csrfToken,
+                        'islogin' : DOMPurify.sanitize(localStorage.getItem('islogin')),
+                        'isadmin' : DOMPurify.sanitize(localStorage.getItem('isadmin')),
+                        'Authorization': `Bearer ${DOMPurify.sanitize(localStorage.getItem('pat'))}`,
+                        'remember-token': DOMPurify.sanitize(localStorage.getItem('remember-token')),
+                        'tokenlogin': random('combwisp', 50),
+                        'email' : DOMPurify.sanitize(localStorage.getItem('email')),
+                        '--unique--': 'I am unique!',
+                        'isvalid': 'VALID!',
+                        'isallowed': true,
+                        'key': 'key',
+                        'values': 'values',
+                        'isdumb': 'no',
+                        'challenger': 'of course',
+                        'pranked': 'absolutely'
+                    }
+                });
+                console.info('response', response);
+                if(response.data.success) {
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_idsoal');
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_soalA');
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_soalB');
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_soalC');
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_soalD');
+                    sessionStorage.removeItem('admin_psikotest_kecermatan_jawaban');
+                    // return router.push(`/admin/psikotest/kecermatan/detil?page=${lastpage}`);
+                    window.location.href = `/admin/psikotest/kecermatan/detil/${lastpage}`;
                 }
-            });
-            // console.info('response', response);
-            if(response.data.success) {
-                sessionStorage.removeItem('admin_psikotest_kecermatan_idsoal');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalA');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalB');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalC');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalD');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_jawaban');
-                // return router.push(`/admin/psikotest/kecermatan/detil?page=${lastpage}`);
-                window.location.href = `/admin/psikotest/kecermatan/detil/${pkid}/${lastpage}`;
+                else {
+                    alert('Terjadi Error: Tidak Dapat Menyimpan Data!');
+                }
             }
             else {
-                alert('Terjadi Error: Tidak Dapat Menyimpan Data!');
+                alert('Invalid Credentials!');
             }
         }
         catch(err) {

@@ -29,14 +29,18 @@ import Appbarpeserta from '@/components/peserta/Appbarpeserta';
 import Myhelmet from '@/components/Myhelmet';
 import NavBreadcrumb from '@/components/NavBreadcrumb';
 import Footer from '@/components/Footer';
+
 import { readable, random } from '@/libraries/myfunction';
+import DOMPurify from 'dompurify';
 
 export default function PesertaPsikotestKecermatan(props) {
-    const textColor = localStorage.getItem('text-color');
-    const borderColor = localStorage.getItem('border-color');
+    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
     const [sessionID, setSessionID] = React.useState(parseInt(sessionStorage.getItem('sesi_psikotest_kecermatan')) || 1); // Session ID dimulai dari 1
     // const [safeID, setSafeID] = React.useState(sessionID);
-    // const safeID = readable(sessionID);
+    // const safeID = DOMPurify.sanitize(sessionID);
     const [dataPertanyaan, setDataPertanyaan] = React.useState([]);
     const [dataSoal, setDataSoal] = React.useState([]);
     const [dataJawaban, setDataJawaban] = React.useState([]);
@@ -134,19 +138,18 @@ export default function PesertaPsikotestKecermatan(props) {
         setLoading(true);
         try {
             setLoadingTimer(true);
-
             axios.defaults.withCredentials = true;
             axios.defaults.withXSRFToken = true;
             const csrfToken1 = await axios.get(`/sanctum/csrf-cookie`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
             });
-            const response_pertanyaan = await axios.get(`/api/indexedDB/psikotest/kecermatan/pertanyaan/${sessionID}`, {
+            const response_pertanyaan = await axios.get(`/api/psikotest/kecermatan/pertanyaan/${sessionID}`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                 headers: {
                     'XSRF-TOKEN': csrfToken1,
                     'Content-Type': 'application/json',
-                    'indexeddb' : 'syafiq_psikotest',
                     'tokenlogin': random('combwisp', 50),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -156,17 +159,19 @@ export default function PesertaPsikotestKecermatan(props) {
                     'challenger': 'of course',
                     'pranked': 'absolutely'
                 }
+            }).catch(function (err1) {
+                console.log('error response_pertanyaan', err1);
             });
             const csrfToken2 = await axios.get(`/sanctum/csrf-cookie`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
             });
-            const response_soaljawaban = await axios.get(`/api/indexedDB/psikotest/kecermatan/soaljawaban/${sessionID}`, {
+            const response_soaljawaban = await axios.get(`/api/psikotest/kecermatan/soaljawaban/${sessionID}`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                 headers: {
                     'XSRF-TOKEN': csrfToken2,
                     'Content-Type': 'application/json',
-                    'indexeddb' : 'syafiq_psikotest',
                     'tokenlogin': random('combwisp', 50),
+                    'email' : DOMPurify.sanitize(localStorage.getItem('email')),
                     '--unique--': 'I am unique!',
                     'isvalid': 'VALID!',
                     'isallowed': true,
@@ -176,12 +181,14 @@ export default function PesertaPsikotestKecermatan(props) {
                     'challenger': 'of course',
                     'pranked': 'absolutely'
                 }
+            }).catch(function (err2) {
+                console.log('error response_soaljawaban', err2);
             });
 
-            console.info('resresponse_pertanyaan', response_pertanyaan);
+            console.info('response_pertanyaan', response_pertanyaan);
             setDataPertanyaan(response_pertanyaan.data[0]);
 
-            console.info('resresponse_soaljawaban', response_soaljawaban);
+            console.info('response_soaljawaban', response_soaljawaban);
             setDataSoalJawaban(response_soaljawaban.data);
 
             setJawabanUser({});
@@ -189,12 +196,13 @@ export default function PesertaPsikotestKecermatan(props) {
             sessionStorage.setItem(`nilai_total_psikotest_kecermatan_kolom${sessionID}`, 0);
             sessionStorage.setItem(`sisawaktu_pengerjaan_peserta_psikotest_kecermatan_sesi${sessionID}`, 0);
 
+            console.info('dataVariabel', props.dataVariabel);
             setVariabel(props.dataVariabel[0].values);
             setTimeLeft(props.dataVariabel[0].values);
             setLoadingTimer(false);
         }
         catch (error) {
-            console.error('Terjadi kesalahan saat memeriksa cache:', error);
+            console.error('getData-error:', error);
         }
         setLoading(false);
         setIsDoTest(true);
@@ -245,6 +253,16 @@ export default function PesertaPsikotestKecermatan(props) {
                 return () => clearInterval(interval);
             }
         }
+        const handleKeydown = (e) => {
+            if ((e.key === 'F5') || (e.ctrlKey && e.key === 'r')) {
+                e.preventDefault();
+                alert('Refresh telah dinonaktifkan!');
+            }
+        };
+        window.addEventListener('keydown', handleKeydown);
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        };
     }, [sessionID, isDoTest, nilaiTotalRef]);
 
     const MemoSoal = React.memo(({ soal1, soal2, soal3, soal4 }) => {
@@ -306,12 +324,12 @@ export default function PesertaPsikotestKecermatan(props) {
             const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
             });
-            const response = await axios.post(`/api/peserta-hasil-tes/${parseInt(readable(sessionStorage.getItem(`id_peserta_psikotest`)))}`, {
-                hasilnilai_kolom_1: parseInt(readable(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom1`))),
-                hasilnilai_kolom_2: parseInt(readable(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom2`))),
-                hasilnilai_kolom_3: parseInt(readable(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom3`))),
-                hasilnilai_kolom_4: parseInt(readable(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom4`))),
-                hasilnilai_kolom_5: parseInt(readable(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom5`)))
+            const response = await axios.post(`/api/peserta-hasil-tes/${parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)))}`, {
+                hasilnilai_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom1`))),
+                hasilnilai_kolom_2: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom2`))),
+                hasilnilai_kolom_3: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom3`))),
+                hasilnilai_kolom_4: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom4`))),
+                hasilnilai_kolom_5: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom5`)))
             }, {
                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                 headers: {

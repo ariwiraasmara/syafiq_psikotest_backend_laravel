@@ -30,63 +30,14 @@ export default function Logout() {
             });
             console.info('response', response);
             if(response.data.success > 0) {
-                localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
-                
-                //? Sesi Cookies
                 Cookies.remove('islogin');
                 Cookies.remove('isadmin');
                 Cookies.remove('isauth');
-                Cookies.remove('expire_at');
-                Cookies.remove('__sysel__');
-                Cookies.remove('__sysauth__');
-                Cookies.remove('__token__');
-                Cookies.remove('__unique__');
-                Cookies.remove('XSRF-TOKEN');
-                Cookies.remove('nama');
-                Cookies.remove('email');
-                Cookies.remove('pat');
-                Cookies.remove('rtk');
+                Cookies.remove('__token-x-1__');
 
-                //? Sesi Local Storage Data Admin
-                localStorage.removeItem('islogin');
-                localStorage.removeItem('isadmin');
-                localStorage.removeItem('ispeserta');
-                localStorage.removeItem('email');
-                localStorage.removeItem('nama');
-                localStorage.removeItem('pat');
-                localStorage.removeItem('csrfToken');
-                localStorage.removeItem('remember-token');
-                sessionStorage.removeItem('nav_id');
+                localStorage.clear();
+                sessionStorage.clear();
                 localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
-
-                //? Sesi Data Halaman Peserta
-                sessionStorage.removeItem('admin_id_peserta');
-                sessionStorage.removeItem('admin_nama_peserta');
-                sessionStorage.removeItem('admin_noidentitas_peserta');
-                sessionStorage.removeItem('admin_email_peserta');
-                sessionStorage.removeItem('admin_tgllahir_peserta');
-                sessionStorage.removeItem('admin_asal_peserta');
-
-                //? Sesi Data Halaman Psikotest Kecermatan
-                sessionStorage.removeItem('admin_psikotest_kecermatan_id');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_kolom_x');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_nilai_A');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_nilai_B');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_nilai_C');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_nilai_D');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_nilai_E');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_idsoal');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalA');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalB');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalC');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_soalD');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_jawaban');
-                sessionStorage.removeItem('admin_psikotest_kecermatan_tabellastpage');
-
-                //? Sesi Data Halaman Variabel
-                sessionStorage.removeItem('admin_variabel_id');
-                sessionStorage.removeItem('admin_variabel_variabel');
-                sessionStorage.removeItem('admin_variabel_values');
                 // return router.push('/');
                 window.location.href = '/';
             }
