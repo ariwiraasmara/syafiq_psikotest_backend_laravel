@@ -16,29 +16,6 @@ class Home extends Controller {
 
 
     public function index() {
-        // Sitemap::create('https://psikotesasyik.com')
-        //     ->add(Url::create('/')
-        //             ->setLastModificationDate(Carbon::yesterday())
-        //             ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-        //             ->setPriority(0.8)
-        //     )
-        //     ->add(Url::create('/admin')
-        //             ->setLastModificationDate(Carbon::yesterday())
-        //             ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-        //             ->setPriority(0.5)
-        //     )
-        //     ->add(Url::create('/peserta')
-        //             ->setLastModificationDate(Carbon::yesterday())
-        //             ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-        //             ->setPriority(1)
-        //     )
-        //     ->add(Url::create('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}')
-        //             ->setLastModificationDate(Carbon::yesterday())
-        //             ->setChangeFrequency(Url::CHANGE_FREQUENCY_MONTHLY)
-        //             ->setPriority(1)
-        //     )
-        //     ->writeToFile(base_path('sitemap.xml'));
-
         return Inertia::render('Home', [
             'title'     => 'Psikotest Online App',
             'pathURL'   => url()->current(),
