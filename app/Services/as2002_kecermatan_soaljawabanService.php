@@ -9,7 +9,7 @@ use App\Repositories\as2002_kecermatan_soaljawabanRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Exception;
-class as2002_kecermatan_soalService {
+class as2002_kecermatan_soaljawabanService {
 
     protected as2001_kecermatan_kolompertanyaanRepository $repo1;
     protected as2002_kecermatan_soaljawabanRepository $repo2;

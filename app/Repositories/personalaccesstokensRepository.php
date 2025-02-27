@@ -35,7 +35,7 @@ class personalaccesstokensRepository {
         try {
             $res = $this->model->where(['id' => $id])->update($values);
             if($res > 0) return $res;
-            return 0;
+            else return 0;
         }
         catch(Exception $err) {
             Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->update!', [

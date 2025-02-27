@@ -33,6 +33,7 @@ class UserController extends Controller {
     }
 
     #POST
+    #url = '/api/login/';
     public function login(Request $request): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -134,6 +135,7 @@ class UserController extends Controller {
     }
 
     #GET
+    #url = '/api/logout/'
     public function logout(Request $request): Response|JsonResponse|String|int|null {
         try {
             // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
@@ -166,6 +168,7 @@ class UserController extends Controller {
     }
 
     #GET
+    #url = '/api/dashboard_admin/'
     public function dashboard(Request $request): Response|JsonResponse|String|int|null {
         try {
             return jsr::print([

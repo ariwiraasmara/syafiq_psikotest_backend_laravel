@@ -6,9 +6,12 @@ use App\Repositories\userRepository;
 use App\Services\userService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection;
-use PHPUnit\Framework\MockObject\MockObject;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    $this->seed();
     // Membuat mock untuk userRepository
     $this->repo = $this->createMock(userRepository::class);
 
@@ -16,13 +19,7 @@ beforeEach(function () {
     $this->userService = new userService($this->repo);
 });
 
-test('example', function () {
-    $response = $this->get('/');
-
-    $response->assertStatus(200);
-});
-
-it('berhasil login dengan kredensial yang benar', function () {
+test('login() => Success and Valid!', function () {
     // Menyiapkan data uji
     $email = 'ariwiraasmara.sc37@gmail.com';
     $pass = 'admin';
@@ -37,7 +34,7 @@ it('berhasil login dengan kredensial yang benar', function () {
     expect($result->get('pesan'))->toBe('Yehaa! Berhasil Login!');
 });
 
-it('gagal login dengan email yang salah', function () {
+test('login() => Fail and Invalid! Dengan Email yang salah!', function () {
     // Menyiapkan data uji
     $email = 'wrong@example.com';
     $pass = 'admin';
@@ -51,7 +48,7 @@ it('gagal login dengan email yang salah', function () {
     expect($result->get('pesan'))->toBe('Email Salah!');
 });
 
-it('gagal login dengan password yang salah', function () {
+test('login() => Fail and Invalid! Dengan password yang salah', function () {
     // Menyiapkan data uji
     $email = 'ariwiraasmara.sc37@gmail.com';
     $pass = 'wrongpassword';
@@ -66,7 +63,7 @@ it('gagal login dengan password yang salah', function () {
     expect($result->get('pesan'))->toBe('Password Salah! Silahkan Coba Lagi!');
 });
 
-it('berhasil update remember token', function() {
+test('updateRemembertoken() => Success and Valid!', function() {
     // Menyiapkan data uji
     $id = 1;
     $token = 'newRememberToken';

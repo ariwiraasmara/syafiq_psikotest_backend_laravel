@@ -13,8 +13,6 @@ use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
 use App\Libraries\jsr;
 use Exception;
 
-use App\Models\as1002_peserta_hasilnilai_teskecermatan;
-
 class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     //
     protected as1002_peserta_hasilnilai_teskecermatanService $service;
@@ -23,6 +21,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #GET
+    #url = '/api/peserta/hasil/psikotest/kecermatan/semua/{id}'
     public function all(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-pesertahasilnilaipsikotestkecermatan-all-'.$id)) {
@@ -66,6 +65,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #GET
+    #url = '/api/peserta-hasil-tes/{id}/{tgl}'
     public function get(Request $request, int $id, String $tgl): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->get($id, $tgl);
@@ -91,6 +91,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
      #GET
+     #url = '/api/peserta/hasil/psikotest/kecermatan/{id}/{tgl_1}/{tgl_2}'
      public function search(Request $request, int $id, String $tgl_1, String $tgl_2): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->search($id, $tgl_1, $tgl_2);
@@ -116,6 +117,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     }
 
     #POST
+    #url = '/api/peserta-hasil-tes/{id}'
     public function store(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -166,7 +168,8 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
         }
     }
 
-    #PUT/POST
+    #PUT
+    #url = '/api/peserta-hasil-tes/{id}'
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -216,7 +219,8 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
         }
     }
 
-    #DELETE/POST
+    #DELETE
+    #url = '/api/peserta/hasil/psikotest/kecermatan/{id}'
     public function delete(int $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);

@@ -9,14 +9,14 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use App\Services\as2002_kecermatan_soalService;
+use App\Services\as2002_kecermatan_soaljawabanService;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Exception;
 class As2002KecermatanSoaljawabanController extends Controller {
     //
-    protected as2002_kecermatan_soalService $service;
-    public function __construct(as2002_kecermatan_soalService $service) {
+    protected as2002_kecermatan_soaljawabanService $service;
+    public function __construct(as2002_kecermatan_soaljawabanService $service) {
         $this->service = $service;
     }
 
@@ -26,6 +26,8 @@ class As2002KecermatanSoaljawabanController extends Controller {
         return $data;
     }
 
+    #GET
+    #url = '/api/psikotest/kecermatan/soaljawaban/{id}'
     public function allForTes(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             return $this->service->allForTes($id)->toJson();
@@ -45,6 +47,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #GET
+    #url = '/api/kecermatan/soaljawaban/all/{id}'
     public function allRaw(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id)) {
@@ -87,6 +90,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #GET
+    #url = '/api/kecermatan/soaljawaban/{id}'
     public function allCooked(Request $request, String|int $kolom): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom)) {
@@ -130,6 +134,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
     }
 
     #POST
+    #url = '/api/kecermatan/soaljawaban/{id}'
     public function store(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -172,7 +177,8 @@ class As2002KecermatanSoaljawabanController extends Controller {
         }
     }
 
-    #PUT/POST
+    #PUT
+    #url = '/api/kecermatan/soaljawaban/{id1}/{id2}'
     public function update(Request $request, int $id1, int $id2): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -215,8 +221,9 @@ class As2002KecermatanSoaljawabanController extends Controller {
         }
     }
 
-    #DELETE/POST
-    public function delete(int $id1, int $id2): Response|JsonResponse|String|int|null {
+    #DELETE
+    #url = '/api/kecermatan/soaljawaban/{id1}/{id2}'
+    public function delete(Request $request, int $id1, int $id2): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id1, $id2);
             if($data->isNotEmpty()) {

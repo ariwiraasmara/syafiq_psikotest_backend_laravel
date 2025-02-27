@@ -21,6 +21,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     }
 
     #GET
+    #url = '/api/kecermatan-kolompertanyaan'
     public function all(Request $request): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatankolompertanyaan-all')) {
@@ -62,6 +63,8 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         }
     }
 
+    #GET
+    #url = '/api/psikotest/kecermatan/pertanyaan/{id}'
     public function allForTes(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             return $this->service->allForTes($id)->toJson();
@@ -81,6 +84,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     }
 
     #GET
+    #url = '/api/kecermatan/pertanyaan/{val}'
     public function get(Request $request, String|int $val): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-psikotest_kecermatanakolompertanyaan-get-'.$val)) {
@@ -123,6 +127,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     }
 
     #POST
+    #url = '/api/kecermatan/kolompertanyaan'
     public function store(Request $request): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -174,7 +179,8 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         }
     }
 
-    #PUT/POST
+    #PUT
+    #url = '/api/kecermatan/kolompertanyaan/{id}'
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -224,8 +230,9 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         }
     }
 
-    #DELETE/POST
-    public function delete(int $id): Response|JsonResponse|String|int|null {
+    #DELETE
+    #url = '/api/kecermatan/kolompertanyaan/{id}'
+    public function delete(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {

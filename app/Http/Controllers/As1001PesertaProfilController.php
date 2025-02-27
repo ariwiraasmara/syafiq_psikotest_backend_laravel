@@ -21,6 +21,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
+    #url = '/api/peserta/{sort}/{by}/{search}'
     public function all(Request $request, String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
         try {
             if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
@@ -64,6 +65,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #GET
+    #url '/api/peserta/{id}'
     public function get(Request $request, string $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-pesertaprofil-get-'.$id)) {
@@ -106,6 +108,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #POST
+    #url = '#url '/api/peserta'
     public function store(Request $request): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -155,7 +158,8 @@ class As1001PesertaProfilController extends Controller {
         }
     }
 
-    #PUT/POST
+    #PUT
+    #url '/api/peserta/{id}'
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -203,6 +207,7 @@ class As1001PesertaProfilController extends Controller {
     }
 
     #POST
+    #url = '/api/peserta/setup/'
     public function setUpPesertaTes(Request $request): Response|JsonResponse|String|int|null {
         try {
             // return $request->no_identitas;
@@ -243,8 +248,9 @@ class As1001PesertaProfilController extends Controller {
         }
     }
 
-    #DELETE/POST
-    public function delete(int $id): Response|JsonResponse|String|int|null {
+    #DELETE
+    #url '/api/peserta/{id}'
+    public function delete(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {

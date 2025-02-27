@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,5 +22,12 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        $this->call(UserSeeder::class);
+        $this->call(PersonalAccessTokenSeeder::class);
+        $this->call(As0001VariabelsettingSeeder::class);
+        $this->call(As1001PesertaProfilSeeder::class);
+        $this->call(As1002PesertaHasilnilaiTesKecermatanSeeder::class);
+        $this->call(As2001KecermatanKolompertanyaanSeeder::class);
+        $this->call(As2002KecermatanSoaljawabanSeeder::class);
     }
 }

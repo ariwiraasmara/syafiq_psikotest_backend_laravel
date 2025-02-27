@@ -131,4 +131,3 @@ class as1001_peserta_profilRepository {
         }
     }
 }
-?>

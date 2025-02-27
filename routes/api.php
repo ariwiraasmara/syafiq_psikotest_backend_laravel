@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use App\Libraries\myroute;
+use App\Models\PersonalAccessTokens;
+use App\Models\User;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
@@ -108,11 +110,11 @@ Route::middleware([
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-    Route::post('/login', myroute::API('UserController', 'login'))
-            ->middleware([XRobotUntags::class]);
+        Route::post('/login', myroute::API('UserController', 'login'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::get('/logout', myroute::API('UserController', 'logout'))
-            ->middleware([XRobotUntags::class]);
+        Route::get('/logout', myroute::API('UserController', 'logout'))
+                ->middleware([XRobotUntags::class]);
 });
 
 Route::middleware([
@@ -132,54 +134,51 @@ Route::middleware([
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-    Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'))
-            ->middleware([XRobotUntags::class]);
+        Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::get('/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allCooked'))
-            ->middleware([XRobotUntags::class]);
+        Route::get('/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allCooked'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'))
-            ->middleware([XRobotUntags::class]);
+        Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::post('/peserta', myroute::API('As1001PesertaProfilController', 'store'))
-            ->middleware([XRobotUntags::class]);
+        Route::post('/peserta', myroute::API('As1001PesertaProfilController', 'store'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::put('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'update'))
-            ->middleware([XRobotUntags::class]);
+        Route::put('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'update'))
+                ->middleware([XRobotUntags::class]);
 
-    Route::post('/peserta-hasil-tes/{id}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
-            ->middleware([XRobotUntags::class]);
+        Route::get('/peserta-hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'))
+                ->middleware([XRobotTags::class]);
 
-    Route::get('/peserta-hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'))
-            ->middleware([XRobotTags::class]);
+        Route::post('/peserta-hasil-tes/{id}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
+                ->middleware([XRobotUntags::class]);
 });
 
 //? PUBLIC API ROUTE TANPA MIDDLEWARE
 Route::get('/csrf_token', myroute::API('AnyController', 'csrf_token'))
-            ->middleware([XRobotUntags::class]);
+        ->middleware([XRobotUntags::class]);
 
 Route::get('/generate-token-first', myroute::API('AnyController', 'generate_token_first'))
-            ->middleware([XRobotUntags::class]);
+        ->middleware([XRobotUntags::class]);
 
 Route::get('/generate-api-key', myroute::API('AnyController', 'generate_api_key'))
-            ->middleware([XRobotUntags::class]);
+        ->middleware([XRobotUntags::class]);
 
 Route::post('/testAdminToken', myroute::API('AnyController', 'testAdminToken'))
-    ->middleware([BearerTokenCheck::class, UserRememberTokenCheck::class]);
+        ->middleware([BearerTokenCheck::class, UserRememberTokenCheck::class]);
 
 Route::get('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwithAnyMiddleware'))
-    ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class]);
+        ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class]);
 
 Route::post('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwithAnyMiddleware'))
-    ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
+        ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
 
 //? PUBLIC API ROUTE PERCOBAAN
 Route::get('/hello', function(Request $request) {
-    // ['id2001' => 1, 'soal_jawaban' => '{"0":2, "1":1, "2":9, "3":5, "4":7}'],
-    // $k11 = collect(["soal" => ['0'=>2, '1'=>1, '2'=>9, '3'=>5], "jawaban" => 7]);
-    $k11 = json_encode(['soal' => [7, 2, 5, 1], 'jawaban' => 9]);
-    return 'hello '.$k11;
-})->middleware([VerifyFastApiKey::class]);
+    return 'hello';
+});
 
 Route::post('/hello', function(){
     return 'hello';

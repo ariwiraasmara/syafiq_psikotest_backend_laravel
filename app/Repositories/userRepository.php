@@ -51,7 +51,7 @@ class userRepository {
     public function update(int $id, array $values): array|Collection|String|int|null {
         try {
             $res = $this->model->where(['id' => $id])->update($values);
-            if($res > 0) return $res->id;
+            if($res > 0) return $res;
             return 0;
         }
         catch(Exception $err) {

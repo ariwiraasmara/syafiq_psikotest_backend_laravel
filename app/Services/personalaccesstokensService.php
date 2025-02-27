@@ -48,7 +48,9 @@ class personalaccesstokensService {
                 ]);
                 return (String)$id.'|'.$data[0]['token'];
             }
-            return 0;
+            else {
+                return 0;
+            }
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada personalaccesstokensService->update!', [

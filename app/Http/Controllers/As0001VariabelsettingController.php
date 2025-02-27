@@ -21,6 +21,7 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #GET
+    #url = '/api/variabel-setting/{sort}/{by}/{search}/'
     public function all(Request $request, String $sort = null, String $by = null, String $search = null): Response|JsonResponse|String|int|null {
         try {
             if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
@@ -66,6 +67,7 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #GET
+    #url = '/api/variabel-setting/{id}'
     public function get(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             if(Cache::has('page-variabelsetting-get-'.$id)) {
@@ -108,6 +110,7 @@ class As0001VariabelsettingController extends Controller {
     }
 
     #POST
+    #url = '/api/variabel-setting/'
     public function store(Request $request): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -152,7 +155,8 @@ class As0001VariabelsettingController extends Controller {
         }
     }
 
-    #PUT/POST
+    #PUT
+    #url = '/api/variabel-setting/{id}'
     public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
@@ -197,8 +201,9 @@ class As0001VariabelsettingController extends Controller {
         }
     }
 
-    #POST/DELETE
-    public function delete(int $id): Response|JsonResponse|String|int|null {
+    #DELETE
+    #url = '/api/variabel-setting/{id}'
+    public function delete(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {
