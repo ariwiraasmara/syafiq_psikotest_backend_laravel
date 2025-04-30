@@ -18,14 +18,23 @@ class as1001_peserta_profilRepository {
     public function all(String $sort = 'nama', String $by = 'asc', String $search = null): array|Collection|String|int|null {
         try {
             if($this->model->first()) {
-                return $this->model->select('id', 'nama', 'no_identitas', 'email', 'asal')
-                                    ->orderBy($sort, $by)
-                                    ->where('nama','LIKE',"%{$search}%")
-                                    ->orWhere('no_identitas', $search)
-                                    ->orWhere('asal','LIKE',"%{$search}%")
-                                    ->paginate(10)
-                                    ->toArray();
-                                    // ->get();
+                if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null || empty($search) || is_null($search)) {
+                    return $this->model->select('id', 'nama', 'no_identitas', 'email', 'asal')
+                            ->orderBy($sort, $by)
+                            ->limit(10)
+                            ->paginate(10)
+                            ->toArray();
+                }
+                else {
+                    return $this->model->select('id', 'nama', 'no_identitas', 'email', 'asal')
+                            ->where('nama','LIKE',"%{$search}%")
+                            ->orWhere('no_identitas', $search)
+                            ->orWhere('asal','LIKE',"%{$search}%")
+                            ->orderBy($sort, $by)
+                            ->limit(10)
+                            ->paginate(10)
+                            ->toArray();
+                }
             }
             return null;
         }
@@ -55,6 +64,25 @@ class as1001_peserta_profilRepository {
         }
         catch(Exception $err) {
             Log::channel('error-repositories')->error('Terjadi kesalahan pada as1001_peserta_profilRepository->allLatest!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
+    public function allReport_forSitemap(): array|Collection|String|int|null {
+        try {
+            return $this->model->select('as1001_peserta_profil.id', 'as1001_peserta_profil.nama', 'as1001_peserta_profil.no_identitas', 'as1002_peserta_hasilnilai_teskecermatan.tgl_ujian')
+                        ->join('as1002_peserta_hasilnilai_teskecermatan', 'as1002_peserta_hasilnilai_teskecermatan.id1001', '=', 'as1001_peserta_profil.id')
+                        ->orderBy('as1001_peserta_profil.no_identitas', 'asc')
+                        ->orderBy('as1002_peserta_hasilnilai_teskecermatan.tgl_ujian', 'desc')
+                        ->get();
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as1001_peserta_profilRepository->allReport!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),

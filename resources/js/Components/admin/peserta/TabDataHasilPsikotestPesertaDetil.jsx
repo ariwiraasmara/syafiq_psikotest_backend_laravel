@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara
 import * as React from 'react';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';

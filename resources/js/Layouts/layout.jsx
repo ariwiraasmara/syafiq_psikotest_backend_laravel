@@ -7,6 +7,8 @@ import "../../css/animate.css";
 import * as React from 'react';
 import axios from 'axios';
 import { Head } from '@inertiajs/react'
+import store from '../store.js';
+import { Provider } from 'react-redux';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -66,14 +68,14 @@ export default function RootLayout({ children }) {
     }, []);
 
     return (
-        <html lang="id">
-            <body
-                className={`antialiased`}
-            >
-                <React.StrictMode>
+        <React.StrictMode>
+            <Provider store={store}>
+            <html lang="id">
+                <body className={`antialiased`} >
                     {children}
-                </React.StrictMode>
-            </body>
-        </html>
+                </body>
+            </html>
+            </Provider>
+        </React.StrictMode>
     );
 }

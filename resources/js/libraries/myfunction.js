@@ -1,3 +1,6 @@
+// ! Copyright @
+// ! Syafiq
+// ! Syahri Ramadhan Wiraasmara (ARI)
 function setCookie(vname, vvalue, vexpire, vpath, vdomain) {
     const d = new Date();
     d.setTime(d.getTime() + vexpire);

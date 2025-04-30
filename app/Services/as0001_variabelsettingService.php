@@ -17,7 +17,7 @@ class as0001_variabelsettingService {
 
     public function all(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
+            // if($search == 'null' || $search == '-' ||$search == '' || $search == ' ' || $search == null) $search = null;
             return $this->repo->all($sort, $by, $search);
         }
         catch(Exception $err) {
@@ -30,7 +30,6 @@ class as0001_variabelsettingService {
             return -12;
         }
     }
-
 
     public function get(int $id): array|Collection|String|int|null {
         try {

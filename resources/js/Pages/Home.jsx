@@ -61,7 +61,7 @@ export default function Home(props) {
                 title={props.title}
                 robots={props.robots}
                 pathURL={props.pathURL}
-                onetime={1}
+                onetime={true}
             />
         );
     });

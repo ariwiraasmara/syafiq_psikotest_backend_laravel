@@ -123,6 +123,21 @@ class as2002_kecermatan_soaljawabanService {
         }
     }
 
+    public function getOne(int $id) {
+        try {
+            return $this->repo2->get($id);
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
     public function store(int $id, array $val): array|Collection|String|int|null {
         try {
             $res = $this->repo2->store([

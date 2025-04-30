@@ -1,4 +1,4 @@
-import PrimaryButton from '@/Components/native/PrimaryButton';
+import PrimaryButton from '@/Components/PrimaryButton';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 

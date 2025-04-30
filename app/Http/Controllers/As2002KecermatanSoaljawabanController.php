@@ -50,29 +50,30 @@ class As2002KecermatanSoaljawabanController extends Controller {
     #url = '/api/kecermatan/soaljawaban/all/{id}'
     public function allRaw(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id)) {
-                $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
-                /*
-                *Logicnya harus diubah dan improvisasi
-                *Untuk sementara begini dulu
-                *Logicnya cache dan database validasi apakah sama atau tidak
-                *Jika tidak maka cache terupdate
-                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-                */
-                $database = $this->service->all($id);
-                if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
-                    $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
-                }
-            }
-            else {
-                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
-                $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
-            }
+            // if(Cache::has('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id)) {
+            //     $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+            //     /*
+            //     *Logicnya harus diubah dan improvisasi
+            //     *Untuk sementara begini dulu
+            //     *Logicnya cache dan database validasi apakah sama atau tidak
+            //     *Jika tidak maka cache terupdate
+            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+            //     */
+            //     $database = $this->service->all($id);
+            //     if(json_encode($data) !== json_encode($database)) {
+            //         Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+            //         $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+            //     }
+            // }
+            // else {
+            //     Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+            //     $data = Cache::get('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id);
+            // }
+            $data = $this->service->all($id);
             return jsr::print([
                 'success' => 1,
                 'pesan'   => 'Semua Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan '.$data['pertanyaan'][0]['kolom_x'],
-                'data'    => $data,
+                'data'    => $data
             ], 'ok');
         }
         catch(Exception $err) {
@@ -93,30 +94,30 @@ class As2002KecermatanSoaljawabanController extends Controller {
     #url = '/api/kecermatan/soaljawaban/{id}'
     public function allCooked(Request $request, String|int $kolom): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom)) {
-                $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
-                /*
-                *Logicnya harus diubah dan improvisasi
-                *Untuk sementara begini dulu
-                *Logicnya cache dan database validasi apakah sama atau tidak
-                *Jika tidak maka cache terupdate
-                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-                */
-                $database = $this->service->get($kolom);
-                if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
-                    $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
-                }
-            }
-            else {
-                Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $this->service->get($kolom), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
-                $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
-            }
-    
+            // if(Cache::has('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom)) {
+            //     $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+            //     /*
+            //     *Logicnya harus diubah dan improvisasi
+            //     *Untuk sementara begini dulu
+            //     *Logicnya cache dan database validasi apakah sama atau tidak
+            //     *Jika tidak maka cache terupdate
+            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+            //     */
+            //     $database = $this->service->get($kolom);
+            //     if(json_encode($data) !== json_encode($database)) {
+            //         Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $database, 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+            //         $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+            //     }
+            // }
+            // else {
+            //     Cache::put('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom, $this->service->get($kolom), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
+            //     $data = Cache::get('page-psikotest_kecermatansoaljawaban-allCooked-'.$kolom);
+            // }
+            $data = $this->service->get($kolom);
             return jsr::print([
                 'success' => 1,
                 'pesan'   => 'Data Pertanyaan, Soal dan Jawaban Psikotest Kecermatan : '.$data['pertanyaan'][0]['kolom_x'],
-                'data'    => $data,
+                'data'    => $data
             ], 'ok');
         }
         catch(Exception $err) {
@@ -146,7 +147,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
                     'soal_jawaban'  => $request->soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+                    // Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id, $this->service->all($id), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
@@ -189,7 +190,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
                     'soal_jawaban' => $request->soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
-                    Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+                    // Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],
@@ -227,7 +228,7 @@ class As2002KecermatanSoaljawabanController extends Controller {
         try {
             $data = $this->service->delete($id1, $id2);
             if($data->isNotEmpty()) {
-                Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
+                // Cache::put('page-psikotest_kecermatanasoaljawaban-allRaw-'.$id1, $this->service->all($id1), 1*3*60*60); // 1 hari x 3 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Soal dan Jawaban Psikotest Kecermatan '.$data['kolom_x'],

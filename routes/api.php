@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
-    'throttle:100,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    'throttle:150,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     // VerifyFastApiKey::class,
     CheckTokenLogin::class,
@@ -104,7 +104,7 @@ Route::middleware([
 });
 
 Route::middleware([
-    'throttle:5,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     // VerifyFastApiKey::class,
     CheckTokenLogin::class,
     CacheControlMiddleware::class,

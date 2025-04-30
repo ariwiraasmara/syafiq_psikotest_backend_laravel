@@ -1,4 +1,5 @@
-use Illuminate\Cache\RateLimiter;
+<?php
+// use Illuminate\Cache\RateLimiter;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
@@ -6,6 +7,7 @@ class RouteServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        
         parent::boot();
 
         // Definisikan rate limiter untuk 'login'
@@ -17,5 +19,6 @@ class RouteServiceProvider extends ServiceProvider
         // RateLimiter::for('api', function (Request $request) {
         //     return Limit::perMinute(60);
         // });
+        
     }
 }

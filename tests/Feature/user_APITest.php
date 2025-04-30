@@ -1,0 +1,130 @@
+<?php
+//! Copyright @
+//! Syafiq
+//! Syahri Ramadhan Wiraasmara (ARI)
+use App\Models\User;
+use App\Models\PersonalAccessTokens;
+use App\Libraries\myfunction as fun;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+uses(RefreshDatabase::class);
+
+beforeEach(function() {
+    $this->seed();
+});
+
+test('api login: sukses - dengan email dan password yang benar', function() {
+    $response = $this->withHeaders([
+        'X-Header'   => 'Value',
+        'tokenlogin' => fun::random('combwisp', 50)
+    ])->post('/api/login', [
+        'email' => 'ariwiraasmara.sc37@gmail.com',
+        'password' => 'admin'
+    ]);
+    $response->assertStatus(200);
+});
+
+test('api login: gagal - dengan email yang benar dan password yang salah', function() {
+    $response = $this->withHeaders([
+        'X-Header'   => 'Value',
+        'tokenlogin' => fun::random('combwisp', 50)
+    ])->post('/api/login', [
+        'email' => 'ariwiraasmara.sc37@gmail.com',
+        'password' => 'admn'
+    ]);
+    $response->assertStatus(500);
+});
+
+test('api login: gagal - dengan email yang salah dan password yang salah', function() {
+    $response = $this->withHeaders([
+        'X-Header'   => 'Value',
+        'tokenlogin' => fun::random('combwisp', 50)
+    ])->post('/api/login', [
+        'email' => 'ariwirmara.sc37@gmail.com',
+        'password' => 'admn'
+    ]);
+    $response->assertStatus(500);
+});
+
+test('api dashboard: sukses', function() {
+    $emailuser = 'ariwiraasmara.sc37@gmail.com';
+    $user = User::where(['email' => $emailuser])->first();
+    $pat = PersonalAccessTokens::where(['name' => $emailuser])->first();
+    $response = $this->withHeaders([
+        'tokenlogin'     => fun::random('combwisp', 50),
+        'email'          => $emailuser,
+        'remember-token' => $user['remember_token'],
+        'Authorization'  => 'Bearer '.fun::encrypt($pat),
+        'islogin'        => true,
+        'isadmin'        => true,
+        '--unique--'     => 'I am unique!',
+        'isvalid'        => 'VALID!',
+        'isallowed'      => true,
+        'key'            => 'key',
+        'values'         => 'values',
+        'isdumb'         => 'no',
+        'challenger'     => 'of course',
+        'pranked'        => 'absolutely'
+    ])->get('/api/dashboard_admin');
+    $response->assertStatus(200);
+});
+
+test('api dashboard: gagal - header tokenlogin tidak disertakan', function() {
+    $emailuser = 'ariwiraasmara.sc37@gmail.com';
+    $user = User::where(['email' => $emailuser])->first();
+    $pat = PersonalAccessTokens::where(['name' => $emailuser])->first();
+    $response = $this->withHeaders([
+        'email'          => $emailuser,
+        'remember-token' => $user['remember_token'],
+        'Authorization'  => 'Bearer '.fun::encrypt($pat),
+        'islogin'        => true,
+        'isadmin'        => true,
+        '--unique--'     => 'I am unique!',
+        'isvalid'        => 'VALID!',
+        'isallowed'      => true,
+        'key'            => 'key',
+        'values'         => 'values',
+        'isdumb'         => 'no',
+        'challenger'     => 'of course',
+        'pranked'        => 'absolutely'
+    ])->get('/api/dashboard_admin');
+    $response->assertStatus(500);
+});
+
+test('api dashboard: gagal - invalid email', function() {
+    $emailuser = 'ariwiraasmara.sc37@gmail';
+    $user = User::where(['email' => $emailuser])->first();
+    $pat = PersonalAccessTokens::where(['name' => $emailuser])->first();
+    $response = $this->withHeaders([
+        'tokenlogin'     => fun::random('combwisp', 50),
+        'email'          => $emailuser,
+        'remember-token' => $user['remember_token'],
+        'Authorization'  => 'Bearer '.fun::encrypt($pat),
+        'islogin'        => true,
+        'isadmin'        => true,
+        '--unique--'     => 'I am unique!',
+        'isvalid'        => 'VALID!',
+        'isallowed'      => true,
+        'key'            => 'key',
+        'values'         => 'values',
+        'isdumb'         => 'no',
+        'challenger'     => 'of course',
+        'pranked'        => 'absolutely'
+    ])->get('/api/dashboard_admin');
+    $response->assertStatus(500);
+});
+
+test('api logout: sukses', function() {
+    $response = $this->withHeaders([
+        'X-Header'   => 'Value',
+        'tokenlogin' => fun::random('combwisp', 50),
+    ])->get('/api/logout');
+    $response->assertStatus(200);
+});
+
+test('api logout: gagal', function() {
+    $response = $this->withHeaders([
+        'X-Header'   => 'Value',
+    ])->get('/api/logout');
+    $response->assertStatus(200);
+});

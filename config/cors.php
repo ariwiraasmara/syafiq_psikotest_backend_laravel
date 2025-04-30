@@ -21,9 +21,11 @@ return [
 
     'allowed_origins' => ['*'],
     // 'allowed_origins' => [ // Pastikan ini sesuai dengan URL frontend Anda
+    //     'http://localhost',
     //     'http://localhost:8000',
     //     'http://localhost:3000',
-    //     'http://localhost:5173'
+    //     'http://localhost:5173',
+    //      env('FRONTEND_URL', 'http://localhost:3000'),
     // ],
 
     'allowed_origins_patterns' => [],

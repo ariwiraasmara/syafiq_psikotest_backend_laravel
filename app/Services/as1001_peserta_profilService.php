@@ -8,6 +8,7 @@ use App\Repositories\as1001_peserta_profilRepository;
 use App\Repositories\as1002_peserta_hasilnilai_teskecermatanRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use App\Libraries\myfunction as fun;
 use Exception;
 
 class as1001_peserta_profilService {
@@ -24,7 +25,7 @@ class as1001_peserta_profilService {
 
     public function allProfil(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
+            // if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
             return $this->repo1->all($sort, $by, $search);
         }
         catch(Exception $err) {
@@ -53,7 +54,22 @@ class as1001_peserta_profilService {
         }
     }
 
-    public function get(String $id): array|Collection|String|int|null {
+    public function allReport_forSitemap(): array|Collection|String|int|null {
+        try {
+            return $this->repo1->allReport_forSitemap();
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as1001_peserta_profilService->allLatest!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
+    public function get(int $id): array|Collection|String|int|null {
         try {
             return $this->repo1->get(['id' => $id]);
         }
@@ -125,27 +141,52 @@ class as1001_peserta_profilService {
     public function setUpPesertaTes(array $val): array|Collection|String|int|null {
         try {
             $cek1 = $this->repo1->get(['no_identitas' => $val['no_identitas']]);
-            if($cek1) { 
+            $encrypted_user_data = [
+                'nama'         => fun::enval($val['nama'], true),
+                'no_identitas' => fun::enval($val['no_identitas'], true),
+                'email'        => fun::enval($val['email'], true),
+                'tgl_lahir'    => fun::enval($val['tgl_lahir'], true),
+                'asal'         => fun::enval($val['asal'], true),
+            ];
+            if($cek1) {
                 //? Apakah peserta sudah terdaftar
                 $cek2 = $this->repo2->getCheckTesDate($cek1[0]['id'], $val['tgl_tes']);
-                if($cek2) { 
+                if($cek2) {
                     //? Apakah peserta sudah mengambil tes hari ini
-                    return collect(['success' => 'datex', 'status' => 'Exist!']);
+                    return collect([
+                        'success'             => 'datex',
+                        'status'              => 'Exist!',
+                        'encrypted_user_data' => $encrypted_user_data
+                    ]);
                 }
                 else {
                     if($cek1[0]['email'] != $val['email'] || $cek1[0]['tgl_lahir'] != $val['tgl_lahir'] || $cek1[0]['asal'] != $val['asal']) {
                         //? Apakah data peserta antara database dan inputan adalah sama?
                         $res = $this->update($cek1[0]['id'], $val);
-                        if($res > 0) return collect(['success' => 1, 'status' => 'Update', 'res' => $res]);
+                        if($res > 0) {
+                            return collect([
+                                'success'             => 1,
+                                'status'              => 'Update',
+                                'res'                 => $res,
+                                'encrypted_user_data' => $encrypted_user_data
+                            ]);
+                        }
                         return 'err2';
                     }
                     //? Jika tidak maka tak perlu update
-                    return collect(['success' => 1, 'status' => 'Unnecessary Update', 'res' => $cek1[0]['id']]);
+                    return collect([
+                        'success'             => 1,
+                        'status'              => 'Unnecessary Update',
+                        'res'                 => $cek1[0]['id'],
+                        'encrypted_user_data' => $encrypted_user_data
+                    ]);
                 }
             }
             //? Jika peserta belum terdaftar
             $res = $this->store($val);
-            if($res > 0) return collect(['success' => 1, 'status' => 'Insert', 'res' => $res]);
+            if($res > 0) {
+                return collect(['success' => 1, 'status' => 'Insert', 'res' => $res]);
+            }
             return $res;
         }
         catch(Exception $err) {

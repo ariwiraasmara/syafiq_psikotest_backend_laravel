@@ -24,29 +24,29 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     #url = '/api/kecermatan-kolompertanyaan'
     public function all(Request $request): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-psikotest_kecermatankolompertanyaan-all')) {
-                $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
-                /*
-                *Logicnya harus diubah dan improvisasi
-                *Untuk sementara begini dulu
-                *Logicnya cache dan database validasi apakah sama atau tidak
-                *Jika tidak maka cache terupdate
-                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-                */
-                $database = $this->service->all();
-                if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatankolompertanyaan-all', $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
-                    $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
-                }
-            }
-            else {
-                Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
-                $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
-            }
+            // if(Cache::has('page-psikotest_kecermatankolompertanyaan-all')) {
+            //     $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+            //     /*
+            //     *Logicnya harus diubah dan improvisasi
+            //     *Untuk sementara begini dulu
+            //     *Logicnya cache dan database validasi apakah sama atau tidak
+            //     *Jika tidak maka cache terupdate
+            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+            //     */
+            //     $database = $this->service->all();
+            //     if(json_encode($data) !== json_encode($database)) {
+            //         Cache::put('page-psikotest_kecermatankolompertanyaan-all', $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+            //         $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+            //     }
+            // }
+            // else {
+            //     Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+            //     $data = Cache::get('page-psikotest_kecermatankolompertanyaan-all');
+            // }
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Semua Data Soal Psikotest Kecermatan!!!',
-                'data'      => $data
+                'data'      => $this->service->all()
             ], 'ok');
         }
         catch(Exception $err) {
@@ -87,25 +87,26 @@ class As2001KecermatanKolompertanyaanController extends Controller {
     #url = '/api/kecermatan/pertanyaan/{val}'
     public function get(Request $request, String|int $val): Response|JsonResponse|String|int|null {
         try {
-            if(Cache::has('page-psikotest_kecermatanakolompertanyaan-get-'.$val)) {
-                $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
-                /*
-                *Logicnya harus diubah dan improvisasi
-                *Untuk sementara begini dulu
-                *Logicnya cache dan database validasi apakah sama atau tidak
-                *Jika tidak maka cache terupdate
-                *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-                */
-                $database = $this->service->get($val);
-                if(json_encode($data) !== json_encode($database)) {
-                    Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
-                    $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
-                }
-            }
-            else {
-                Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $this->service->get($val), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
-                $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
-            }
+            // if(Cache::has('page-psikotest_kecermatanakolompertanyaan-get-'.$val)) {
+            //     $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+            //     /*
+            //     *Logicnya harus diubah dan improvisasi
+            //     *Untuk sementara begini dulu
+            //     *Logicnya cache dan database validasi apakah sama atau tidak
+            //     *Jika tidak maka cache terupdate
+            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
+            //     */
+            //     $database = $this->service->get($val);
+            //     if(json_encode($data) !== json_encode($database)) {
+            //         Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $database, 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+            //         $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+            //     }
+            // }
+            // else {
+            //     Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$val, $this->service->get($val), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+            //     $data = Cache::get('page-psikotest_kecermatanakolompertanyaan-get-'.$val);
+            // }
+            $data = $this->service->get($val);
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Data Pertanyaan Psikotest Kecermatan '.$data[0]['kolom_x'],
@@ -148,7 +149,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
                     'nilai_E' => $request->nilai_E,
                 ]);
                 if($data > 0) {
-                    Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    // Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Pertanyaan Psikotest Kecermatan!',
@@ -199,7 +200,7 @@ class As2001KecermatanKolompertanyaanController extends Controller {
                     'nilai_E' => $request->nilai_E,
                 ]);
                 if($data > 0) {
-                    Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$id, $this->service->get($id), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                    // Cache::put('page-psikotest_kecermatanakolompertanyaan-get-'.$id, $this->service->get($id), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Pertanyaan Psikotest Kecermatan!',
@@ -236,8 +237,8 @@ class As2001KecermatanKolompertanyaanController extends Controller {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {
-                Cache::forget('page-psikotest_kecermatanakolompertanyaan-get-'.$id); // 1 hari x 6 jam x 60 menit x 60 detik
-                Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
+                // Cache::forget('page-psikotest_kecermatanakolompertanyaan-get-'.$id); // 1 hari x 6 jam x 60 menit x 60 detik
+                // Cache::put('page-psikotest_kecermatankolompertanyaan-all', $this->service->all(), 1*1*60*60); // 1 hari x 1 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Soal Pertanyaan Kecermatan!',

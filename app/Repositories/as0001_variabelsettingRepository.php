@@ -15,15 +15,24 @@ class as0001_variabelsettingRepository {
         $this->model = $model;
     }
 
-    public function all(String $sort = 'variabel', String $by = 'asc', String $search = null): array|Collection|String|int|null {
+    public function all(String $sort = 'variabel', String $by = 'asc', String $search): array|Collection|String|int|null {
         try {
             if($this->model->first()) {
-                return $this->model->orderBy($sort, $by)
-                                    ->where('variabel','LIKE',"%{$search}%")
-                                    ->limit(10)
-                                    ->paginate(10)
-                                    ->toArray();
-                                    // ->get();
+                if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null || empty($search) || is_null($search)) {
+                    return $this->model
+                            ->orderBy($sort, $by)
+                            ->limit(10)
+                            ->paginate(10)
+                            ->toArray();
+                }
+                else {
+                    return $this->model
+                            ->where('variabel', 'LIKE', "%{$search}%")
+                            ->orderBy($sort, $by)
+                            ->limit(10)
+                            ->paginate(10)
+                            ->toArray();
+                }
             }
             return null;
         }

@@ -16,10 +16,15 @@ return new class extends Migration {
             $table->integer('id1001');
             $table->date('tgl_ujian');
             $table->integer('hasilnilai_kolom_1')->default(null);
+            $table->integer('waktupengerjaan_kolom_1')->default(null);
             $table->integer('hasilnilai_kolom_2')->default(null);
+            $table->integer('waktupengerjaan_kolom_2')->default(null);
             $table->integer('hasilnilai_kolom_3')->default(null);
+            $table->integer('waktupengerjaan_kolom_3')->default(null);
             $table->integer('hasilnilai_kolom_4')->default(null);
+            $table->integer('waktupengerjaan_kolom_4')->default(null);
             $table->integer('hasilnilai_kolom_5')->default(null);
+            $table->integer('waktupengerjaan_kolom_5')->default(null);
         });
     }
 

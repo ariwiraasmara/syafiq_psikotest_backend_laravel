@@ -18,10 +18,15 @@ class as1002_peserta_hasilnilai_teskecermatan extends Model {
         'id1001',
         'tgl_ujian',
         'hasilnilai_kolom_1',
+        'waktupengerjaan_kolom_1',
         'hasilnilai_kolom_2',
+        'waktupengerjaan_kolom_2',
         'hasilnilai_kolom_3',
+        'waktupengerjaan_kolom_3',
         'hasilnilai_kolom_4',
+        'waktupengerjaan_kolom_4',
         'hasilnilai_kolom_5',
+        'waktupengerjaan_kolom_5',
     ];
 
     public $timestamps = false;

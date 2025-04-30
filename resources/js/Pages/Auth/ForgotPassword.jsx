@@ -1,6 +1,6 @@
-import InputError from '@/Components/native/InputError';
-import PrimaryButton from '@/Components/native/PrimaryButton';
-import TextInput from '@/Components/native/TextInput';
+import InputError from '@/Components/InputError';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 

@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cookie;
 use Exception;
 class UserController extends Controller {
     //
     protected userService $service;
     protected personalaccesstokensService $patService;
     protected as1001_peserta_profilService $pesertaService;
+    protected $path, $domain;
     public function __construct(
         userService $service,
         personalaccesstokensService $patService,
@@ -30,6 +32,8 @@ class UserController extends Controller {
             $this->service = $service;
             $this->patService = $patService;
             $this->pesertaService = $pesertaService;
+            $this->path = env('SESSION_PATH', '/');
+            $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
     #POST
@@ -46,12 +50,11 @@ class UserController extends Controller {
                     if (Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
-                        $path = '/';
-                        $domain = 'psikotestasyik.com';
                         // $token = Crypt::encryptString($user->createToken($request->email, ['server:update'])->plainTextToken);
                         $pat = $this->patService->get(['name' => $request->email]);
                         $tokenExpire = fun::daysLater('+1 day');
                         $isTokenupdate = false;
+                        $expirein = 6 * 60; // jam * menit
                         if($pat[0]['expires_at'] == date('Y-m-d 00:00:00')) {
                             $this->patService->update($pat[0]['id'],[
                                 'abilities' => '["*"]',
@@ -82,22 +85,41 @@ class UserController extends Controller {
                                 'token'      => $token,
                                 'unique'     => $unique,
                                 'xsrf_token' => csrf_token(),
+                            ],
+                            'copyright @' => [
+                                'Year'  => date('Y'),
+                                '1' => [
+                                    'nama' => 'Syafiq',
+                                    'email' => 'syafiq@gmail.com',
+                                    'sebagai' => 'owner'
+                                ],
+                                '2' => [
+                                    'nama' => 'Syahri Ramadhan Wiraasmara',
+                                    'email' => 'ariwiraasmara.sc37@gmail.com',
+                                    'sebagai' => 'developer'
+                                ]
                             ]
                         ]);
-                        $expirein = 6 * 60; // jam * menit
-                        
-                        $response->withCookie(cookie('islogin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('isadmin', true, $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('isauth', true, $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('__sysauth__', Crypt::encryptString($unique), $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('__token__', $token, $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('__unique__', $unique, $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('email', $request->email, $expirein, $path, $domain, true, true, false, 'Strict'))
-                                ->withCookie(cookie('nama', $data['data'][0]['name'], $expirein, $path, $domain, true, false, false, 'Strict'))
-                                ->withCookie(cookie('personal_access_token', Crypt::encryptString($pat[0]['id'].'|'.$pat[0]['token']), $expirein, $path, $domain, true, true, false, 'Strict'))
-                                ->withCookie(cookie('remember_token', Crypt::encryptString($data['data'][0]['remember_token']), $expirein, $path, $domain, true, true, false, 'Strict'));
-                        return $response;
+
+                        // $request->session()->put('email', $request->email);
+                        // $request->session()->put('nama', $data['data'][0]['name']);
+                        // $request->session()->put('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']));
+                        // $request->session()->put('rtk', fun::encrypt($data['data'][0]['remember_token']));
+
+                        return $response
+                        // return redirect('/api/dashboard_admin')
+                                ->cookie('email', $request->email, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('nama', $data['data'][0]['name'], $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                // ->cookie('pat', fun::enval($pat[0]['id'].'|'.$pat[0]['token'], true), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                // ->cookie('rtk', fun::enval($data['data'][0]['remember_token'], true), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('islogin', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('isadmin', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('isauth', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('expire_at', fun::daysLater('+12 hours'), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('__sysauth__', Crypt::encryptString($unique), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('__token__', $token, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('__unique__', $unique, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
+                                ->cookie('XSRF-TOKEN', csrf_token(), $expirein, $this->path, $this->domain, true, true, false, 'Strict');
                     }
                 }
                 return match($data['error']){
@@ -138,20 +160,22 @@ class UserController extends Controller {
     #url = '/api/logout/'
     public function logout(Request $request): Response|JsonResponse|String|int|null {
         try {
-            // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
-            $domain = 'localhost';
             Auth::logout();
-            fun::setCookieOff('islogin', true, $domain);
-            fun::setCookieOff('isadmin', true, $domain);
-            fun::setCookieOff('isauth', true, $domain);
-            fun::setCookieOff('__sysel__', true, $domain);
-            return jsr::print([
+            $response = new Response([
                 'success' => 1,
                 'pesan'   => 'Akhirnya Logout!',
                 'sesi'    => [
                     'expire_at' => fun::daysLater('+6 hours')
                 ]
-            ], 'ok');
+            ]);
+            return $response->cookie('email', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('nama', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('islogin', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('isadmin', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('isauth', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('__sysauth__', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('__token__', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
+                            ->cookie('__unique__', null, -1, $this->path, $this->domain, true, true, false, 'Strict');
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada UserController->logout!', [
@@ -174,7 +198,7 @@ class UserController extends Controller {
             return jsr::print([
                 'success' => 1,
                 'pesan'   => 'Dashboard!',
-                'profil'  => fun::readable($request->header()['email'][0]),
+                'profil'  => fun::readable($request->cookie('nama')).', '.fun::readable($request->cookie('email')),
                 'data'    => $this->pesertaService->allLatest()
             ], 'ok');
         }

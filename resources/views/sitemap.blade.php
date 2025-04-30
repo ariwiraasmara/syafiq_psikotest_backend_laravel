@@ -1,0 +1,29 @@
+<?php
+// ! Copyright @
+// ! Syafiq
+// ! Syahri Ramadhan Wiraasmara (ARI)
+?>
+@extends('layouts.app')
+@section('content')
+    <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
+        <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+            <h1 class="font-bold text-2xl text-center underline uppercase">
+                {{ $pesan }}
+            </h1>
+
+            @if($error)
+                {{ $error }}
+            @endif
+        </div>
+    </div>
+
+    @component('components.footer', ['hidden' => '', 'otherCSS' => 'bottom-0 w-full']) @endcomponent
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(() => {
+                // window.location.href='/';
+            }, 10000);
+        });
+    </script>
+@endsection

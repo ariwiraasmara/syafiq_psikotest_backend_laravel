@@ -171,13 +171,13 @@ class myfunction {
     }
 
     public static function enval($str, bool $isencrypt = false) {
-        if($isencrypt) return self::encrypt(bin2hex(base64_encode( $str )));
-        return bin2hex(base64_encode( $str ));
+        if($isencrypt) return base64_encode(self::encrypt(bin2hex( $str )));
+        return base64_encode(bin2hex( $str ));
     }
 
     public static function denval(String|float $str, bool $isencrypt = false) {
-        if($isencrypt) return base64_decode(hex2bin( self::decrypt($str) ));
-        return base64_decode(hex2bin( $str ));
+        if($isencrypt) return hex2bin(self::decrypt( base64_decode($str) ));
+        return hex2bin(base64_decode( $str ));
     }
 
 
@@ -287,19 +287,19 @@ class myfunction {
         }
     }
 
-    public static function setRawCookie(string $name = 'token', $val=1, $hari=1, $jam=24, $menit=60, $detik=60) {
-        setcookie($name, $val, time() + ($hari * $jam * $menit * $detik), "/"); // 86400 = 1 day
+    public static function setRawCookie(string $name = 'token', $val=1, $expire=1*24*60*60, $path = '/', $domain = null, $secure = false, $httponly = false, $raw = false, $samesite = 'none') {
+        setcookie($name, $val, time() + $expire, $path, $domain, true, true); // 86400 = 1 day
     }
 
-    public static function setOneCookie(string $name = 'token', $val=1, $isencrypt = false, $hari=1, $jam=24, $menit=60, $detik=60, $path = '/', $domain = null) {
-        if($isencrypt) cookie($name, self::encrypt(self::enval($val)), time() + ($hari * $jam * $menit * $detik), $path, $domain, true, true); // 86400 = 1 day
-        else cookie($name, $val, time() + ($hari * $jam * $menit * $detik), $path);
+    public static function setOneCookie(string $name = 'token', $val=1, $isencrypt = false, $expire=1*24*60*60, $path = '/', $domain = null, $secure = false, $httponly = false, $raw = false, $samesite = 'none') {
+        if($isencrypt) cookie($name, self::encrypt(self::enval($val)), time() + $expire, $path, $domain, true, true); // 86400 = 1 day
+        else cookie($name, $val, time() + $expire, $path);
     }
 
-    public static function setCookie($array, $isencrypt = false, $expire=1*24*60*60, $path = '/', $domain = null) {
+    public static function setCookie($array, $isencrypt = false, $expire=1*24*60*60, $path = '/', $domain = null, $secure = false, $httponly = false, $raw = false, $samesite = 'none') {
         foreach($array as $arr => $val) {
-            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($expire), $path, $domain, true, true); // 86400 = 1 day
-            else cookie($arr, $val, time() + ($expire), $path, $domain, true, true); // 86400 = 1 day
+            if($isencrypt) cookie($arr, self::encrypt(self::enval($val)), time() + ($expire), $path, $domain, $secure, $httponly, $raw, $samesite); // 86400 = 1 day
+            else cookie($arr, $val, time() + ($expire), $path, $domain, $secure, $httponly, $raw, $samesite); // 86400 = 1 day
         }
     }
 

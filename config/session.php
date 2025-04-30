@@ -47,7 +47,7 @@ return [
     |
     */
 
-    'encrypt' => env('SESSION_ENCRYPT', false),
+    'encrypt' => env('SESSION_ENCRYPT', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -199,6 +199,7 @@ return [
     |
     */
 
+    // 'same_site' => env('SESSION_SAME_SITE', 'none'),
     // 'same_site' => env('SESSION_SAME_SITE', 'lax'),
     'same_site' => env('SESSION_SAME_SITE', 'strict'),
 

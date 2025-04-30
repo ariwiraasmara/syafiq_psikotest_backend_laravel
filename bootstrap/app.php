@@ -12,19 +12,29 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // Register your custom throttle middleware
+        $middleware->api(append: [
+            \App\Http\Middleware\CustomThrottleRequests::class,
+        ]);
+
         $middleware->web(append: [
+            \Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+            \App\Http\Middleware\CustomThrottleRequests::class,
         ]);
 
-        $middleware->api(prepend: [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-        ]);
+        // $middleware->web(append: [
+        //     \App\Http\Middleware\HandleInertiaRequests::class,
+        //     \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
+        // ]);
 
-        $middleware->alias([
-            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+        $middleware->encryptCookies(except: [
+            'isadmin',
+            'islogin',
+            'isauth',
+            'expire_at',
         ]);
-
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {

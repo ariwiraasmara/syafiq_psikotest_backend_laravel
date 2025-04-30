@@ -76,13 +76,18 @@ class as1002_peserta_hasilnilai_teskecermatanService {
     public function store(int $id, array $val): array|Collection|String|int|null {
         try {
             $res = $this->repo2->store([
-                'id1001'             => $id,
-                'tgl_ujian'          => date('Y-m-d H:i:s'),
-                'hasilnilai_kolom_1' => $val['hasilnilai_kolom_1'],
-                'hasilnilai_kolom_2' => $val['hasilnilai_kolom_2'],
-                'hasilnilai_kolom_3' => $val['hasilnilai_kolom_3'],
-                'hasilnilai_kolom_4' => $val['hasilnilai_kolom_4'],
-                'hasilnilai_kolom_5' => $val['hasilnilai_kolom_5'],
+                'id1001'                  => $id,
+                'tgl_ujian'               => date('Y-m-d H:i:s'),
+                'hasilnilai_kolom_1'      => $val['hasilnilai_kolom_1'],
+                'waktupengerjaan_kolom_1' => $val['waktupengerjaan_kolom_1'],
+                'hasilnilai_kolom_2'      => $val['hasilnilai_kolom_2'],
+                'waktupengerjaan_kolom_2' => $val['waktupengerjaan_kolom_2'],
+                'hasilnilai_kolom_3'      => $val['hasilnilai_kolom_3'],
+                'waktupengerjaan_kolom_3' => $val['waktupengerjaan_kolom_3'],
+                'hasilnilai_kolom_4'      => $val['hasilnilai_kolom_4'],
+                'waktupengerjaan_kolom_4' => $val['waktupengerjaan_kolom_4'],
+                'hasilnilai_kolom_5'      => $val['hasilnilai_kolom_5'],
+                'waktupengerjaan_kolom_5' => $val['waktupengerjaan_kolom_5'],
             ]);
             if($res > 0) return $res;
             return 0;

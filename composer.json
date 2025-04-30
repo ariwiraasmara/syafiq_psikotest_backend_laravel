@@ -15,6 +15,7 @@
             "email": "ariwiraasmara.sc37@gmail.com"
         }
     ],
+    "copyrights": "Syafiq. Syahri Ramadhan Wiraasmara (ARI). Year: 2025",
     "keywords": [
         "laravel",
         "framework",
@@ -37,11 +38,10 @@
         "laravel/framework": "^12",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.4",
-        "livewire/volt": "^1.0",
         "predis/predis": "^2.3",
         "spatie/laravel-sitemap": "^7.3",
-        "tightenco/ziggy": "^2.0"
+        "tightenco/ziggy": "^2.0",
+        "tonysm/tailwindcss-laravel": "^2.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -50,9 +50,8 @@
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
-        "pestphp/pest": "^3",
-        "phpunit/phpunit": "^11",
-        "pestphp/pest-plugin-laravel": "^3.0"
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin-laravel": "^3.1"
     },
     "autoload": {
         "psr-4": {
