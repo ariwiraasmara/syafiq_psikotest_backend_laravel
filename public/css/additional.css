@@ -1,0 +1,126 @@
+/*
+! Copyright @
+! Syafiq
+! Syahri Ramadhan Wiraasmara (ARI) 
+*/
+body {
+    background-color: rgba(200, 200, 255, 0.9);
+    font-family: Georgia, Helvetica, sans-serif;
+}
+
+.background-header {
+    background-image: url('https://images.pexels.com/photos/55787/pexels-photo-55787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-position: center top;
+    background-repeat: repeat;
+}
+
+.background-welcome {
+    background-image: url('https://images.pexels.com/photos/158063/bellingrath-gardens-alabama-landscape-scenic-158063.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-position: right center;
+    background-repeat: repeat;
+    height: 50vh;
+}
+
+.background-about {
+    background-image: url('https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-position: right center;
+    background-repeat: repeat;
+    height: 75vh;
+}
+
+.fab {
+    position: fixed; /* Fixed position to float over content */
+    bottom: 0px; /* Distance from the bottom of the screen */
+    right: 20px; /* Distance from the right of the screen */
+    color: white; /* White text color */
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    border-radius: 50%; /* Circular shape */
+    font-size: 24px; /* Font size */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+    z-index: 9;
+    cursor: pointer;
+}
+
+.btn-sm {
+    width: 50px;
+    height: 30px;
+    padding: 5px;
+}
+
+.btn-md {
+    width: 75px;
+    height: 55px;
+    padding: 5px;
+}
+
+.btn-lg {
+    width: 100px;
+    height: 80px;
+    padding: 5px;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: left 3s;
+}
+
+.btn:active::after {
+    left: 100%;
+    transition: left 3s;
+}
+
+.radioku {
+    font-size: 22px;
+}
+
+.radioku input[type="radio"] {
+    width: 17px;
+    height: 17px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Style the radio button when checked */
+input[type="radio"]:checked {
+    background-color: #007bff; /* Change color when checked */
+    border-color: #007bff;
+}
+
+/* Optional: Add a hover effect */
+input[type="radio"]:hover {
+    border-color: #007bff;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 75px;
+    height: 75px;
+    -webkit-animation: spin 0.75s linear infinite; /* Safari */
+    animation: spin 0.75s linear infinite;
+}
+  
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
