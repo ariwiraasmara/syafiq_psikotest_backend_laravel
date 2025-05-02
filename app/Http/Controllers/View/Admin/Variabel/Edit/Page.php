@@ -31,7 +31,7 @@ class Page extends Controller {
         ]);
     }
 
-    public function bladeView($id): View|Response|JsonResponse|Collection|array|String|int|null {
+    public function bladeView(Request $request, $id): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get(fun::denval($id, true));
         return view('pages.admin.variabel.edit.page', [
             'title'                => 'Edit Variabel | Admin | Psikotest Online App',
@@ -45,6 +45,7 @@ class Page extends Controller {
             'unique'               => fun::random('combwisp', 50),
             'id'                   => $id,
             'data'                 => $data,
+            'nama'                 => $request->session()->get('nama'),
         ]);
     }
 

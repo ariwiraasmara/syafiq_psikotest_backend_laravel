@@ -21,7 +21,7 @@ class Home extends Controller {
         
     }
 
-    public function view(): Inar|JsonResponse|Collection|array|String|int|null {
+    public function view(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
         return Inertia::render('Home', [
             'title'     => 'Psikotest Online App',
             'pathURL'   => url()->current(),
@@ -30,7 +30,7 @@ class Home extends Controller {
         ]);
     }
 
-    public function bladeView(): View|Response|JsonResponse|Collection|array|String|int|null {
+    public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
         return view('home', [
             'title'                => 'Psikotest Online App',
             'pathURL'              => url()->current(),
@@ -38,7 +38,8 @@ class Home extends Controller {
             'is_breadcrumb_hidden' => 'hidden',
             'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
             'onetime'              => true,
-            'unique'               => fun::random('combwisp', 50)
+            'unique'               => fun::random('combwisp', 50),
+            'ispeserta'            => 'null'
         ]);
     }
 }

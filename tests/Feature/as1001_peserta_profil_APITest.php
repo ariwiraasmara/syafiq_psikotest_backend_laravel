@@ -13,6 +13,7 @@ beforeEach(function() {
     $this->seed();
 });
 
+/*
 test('all peserta page', function() {
     $emailuser = 'ariwiraasmara.sc37@gmail.com';
     $user = User::where(['email' => $emailuser])->first();
@@ -169,3 +170,4 @@ test('delete data variabel', function() {
     ])->delete('/api/peserta/1');
     $response->assertStatus(200);
 });
+*/

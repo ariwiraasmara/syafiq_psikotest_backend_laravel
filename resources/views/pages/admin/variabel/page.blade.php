@@ -22,12 +22,12 @@
             <button type="button" id="btn-togglesearch" class="rounded-lg btn-sm text-white" onclick="toggleSearch()" style="width: 75px; background-color: #55f;">
                 <ion-icon name="search-outline"></ion-icon>
             </button>
-            <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 75px; height: 30px;" onchange="sortChange();">
+            <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 50px; height: 30px;" onchange="sortChange();">
                 <option value="" disabled>Pilih Berdasarkan...</option>
                 <option value="variabel" @if($sort == 'variabel') selected @endif >Nama Variabel</option>
                 <option value="values" @if($sort == 'values') selected @endif >Nilai Variabel</option>
             </select>
-            <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 75px; height: 30px;" onchange="byChange();">
+            <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 50px; height: 30px;" onchange="byChange();">
                 <option value="" disabled>Urutkan Berdasarkan...</option>
                 <option value="asc" @if($by == 'asc') selected @endif>A - Z</option>
                 <option value="desc" @if($by == 'desc') selected @endif>Z - A</option>
@@ -52,7 +52,7 @@
                                 </span>
                             </div>
                             <div class="text-right" style="margin-top: -23px;">
-                                <a href="{{ '/admin/variabel-edit/'.myfunction::enval($data['id'], true); }}" rel="nofollow" style="margin-right: 15px;">
+                                <a href="{{ route('admin_variabel_edit', ['id' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" style="margin-right: 15px;">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                     <span class="hidden">Edit</span>
                                 </a>
@@ -66,7 +66,7 @@
                 @endforeach
             </div>
         </div>
-        <button type="button" class="fab bg-blue-700" style="margin-bottom: 90px;" onclick="toAdd()">
+        <button type="button" class="fab bg-blue-700" style="margin-bottom: 90px;" onclick="window.location.href = '{{ route('admin_variabel_baru') }}'">
             <a href="#" rel="nofollow" title="Variabel Baru">
                 +
             </a>
@@ -100,13 +100,7 @@
             }
         }
 
-        function toAdd() {
-            // setLoading(true);
-            window.location.href = '/admin/variabel-baru';
-        }
-
         async function fDelete(id, nvariabel, nvalues) {
-            // e.preventDefault();
             if(validator.isBase64(id)) {
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data variabel ini?",
@@ -122,7 +116,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/admin/variabel-delete/${id}`, {
+                            const response = await axios.delete(`/public/admin/variabel-delete/${id}`, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -136,7 +130,6 @@
                                 }, 1000);
                             }
                         } catch (error) {
-                            // Swal.showValidationMessage(`Request failed: ${error}`);
                             console.info('Terjadi Error AdminVariabel-fDelte:', error)
                         }
                     }
@@ -156,7 +149,7 @@
         }
 
         function refresh() {
-            window.location.href= `/admin/variabel-setting/variabel/asc/-?page=1`;
+            window.location.href= `{{ route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']) }}?page=1`;
         }
 
         function sortChange() {
@@ -164,7 +157,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
+            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
         }
 
         function byChange() {
@@ -172,7 +165,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
+            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
         }
 
         function search() {
@@ -180,7 +173,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/variabel-setting/${sort}/${by}/${search}?page=1`;
+            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page=1`;
         }
         
         function pageChange() {
@@ -189,7 +182,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/variabel-setting/${sort}/${by}/${search}?page=${page}`;
+            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page=${page}`;
         }
     </script>
 @endsection

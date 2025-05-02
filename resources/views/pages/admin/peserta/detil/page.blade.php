@@ -10,7 +10,7 @@
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
-        'link_back'    => '/admin/peserta/nama/asc/-?page=1',
+        'link_back'    => route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']).'?page=1',
         'appbar_title' => $appbar_title,
     ]) @endcomponent
 
@@ -19,7 +19,7 @@
         <div>
             <p>
                 <span class='mr-4'>
-                    <a href="{{ '/admin/peserta-edit/'.$id }}" rel="nofollow" title="Edit Data Peserta {{ $dataprofil['nama'] }}">
+                    <a href="{{ route('admin_peserta_edit', ['id' => $id]); }}" rel="nofollow" title="Edit Data Peserta {{ $dataprofil['nama'] }}">
                         <ion-icon name="pencil-outline"></ion-icon>
                     </a>
                 </span>
@@ -65,13 +65,11 @@
                 </div>
             </div>
 
-            <div>
-                @component('components.admin.peserta.tabdatahasilpsikotestpesertadetil', [
-                    'unique'     => $unique,
-                    'peserta_id' => myfunction::enval($dataprofil['id'], true),
-                    'hasiltes'   => $hasiltes
-                ]) @endcomponent
-            </div>
+            @component('components.admin.peserta.tabdatahasilpsikotestpesertadetil', [
+                'unique'     => $unique,
+                'peserta_id' => myfunction::enval($dataprofil['id'], true),
+                'hasiltes'   => $hasiltes
+            ]) @endcomponent
         </div>
     </div>
 
@@ -118,13 +116,13 @@
         function getData() {
             const tgl1 = document.getElementById('date-waktufrom').value;
             const tgl2 = document.getElementById('date-waktuto').value;
-            window.location.href = `/admin/peserta-detil/${tgl1}/${tgl2}/{{ myfunction::enval($dataprofil['id'], true); }}`;
+            window.location.href = `/public/admin/peserta-detil/${tgl1}/${tgl2}/{{ myfunction::enval($dataprofil['id'], true); }}`;
         }
 
         function cancelSearch() {
             document.getElementById('date-waktufrom').value = null;
             document.getElementById('date-waktuto').value = null;
-            window.location.href = `/admin/peserta-detil/-/-/{{ myfunction::enval($dataprofil['id'], true); }}`;
+            window.location.href = `/public/admin/peserta-detil/-/-/{{ myfunction::enval($dataprofil['id'], true); }}`;
         }
     </script>
 @endsection

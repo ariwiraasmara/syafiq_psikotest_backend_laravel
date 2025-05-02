@@ -31,7 +31,7 @@ class Page extends Controller {
         ]);
     }
 
-    public function bladeView(): View|Response|JsonResponse|Collection|array|String|int|null {
+    public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
         return view('pages.admin.variabel.baru.page', [
             'title'                => 'Variabel Baru | Admin | Psikotest Online App',
             'appbar_title'         => 'Variabel Baru',
@@ -42,6 +42,7 @@ class Page extends Controller {
             'robots'               => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'onetime'              => false,
             'unique'               => fun::random('combwisp', 50),
+            'nama'                 => $request->session()->get('nama'),
         ]);
     }
 

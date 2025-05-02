@@ -23,12 +23,12 @@
                     <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 text-black border-black">
                         <div class="static">
                             <div>
-                                <a href="{{ '/admin/psikotest/kecermatan/detil/'.myfunction::enval($data['id'], true).'?page=1'}}" onclick="onDetil(${item.id})">
+                                <a href="{{ route('admin_psikotest_kecermatan_detil', ['id' => myfunction::enval($data['id'], true)]).'?page=1'}}">
                                     {{ $data['kolom_x'] }}
                                 </a>
                             </div>
                             <div class="text-right" style="margin-top: -23px;">
-                                <a href="{{ '/admin/psikotest/kecermatan-edit/'.myfunction::enval($data['id'], true); }}" rel="nofollow" title="{{ 'Edit Data '.$data['kolom_x'] }}" style="margin-right: 15px;">
+                                <a href="{{ route('admin_psikotest_kecermatan_edit', ['id' => myfunction::enval($data['id'], true)]) }}" rel="nofollow" title="{{ 'Edit Data '.$data['kolom_x'] }}" style="margin-right: 15px;">
                                     <ion-icon name="pencil-outline"></ion-icon>
                                     <span class="hidden">Edit</span>
                                 </a>
@@ -42,7 +42,7 @@
                 @endforeach
             </div>
 
-            <button type="button" class="fab bg-blue-700" style="margin-bottom: 75px;" onclick="toAdd()">
+            <button type="button" class="fab bg-blue-700" style="margin-bottom: 75px;" onclick="window.location.href = `{{ route('admin_psikotest_kecermatan_baru') }}`">
                 <a href="#" rel="nofollow" title="Psikotest Kecermatan Baru">
                     +
                 </a>
@@ -54,14 +54,7 @@
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
-        function toAdd() {
-            // e.preventDefault();
-            // setLoading(true);
-            window.location.href = `/admin/psikotest/kecermatan-baru`;
-        }
-
         async function fDelete(id, kolom_x) {
-            // e.preventDefault();
             if(validator.isBase64(id)) {
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data Psikotest Kecermatan ini?",
@@ -77,7 +70,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/admin/psikotest/kecermatan-delete/${DOMPurify.sanitize(id)}`, {
+                            const response = await axios.delete(`/public/admin/psikotest/kecermatan-delete/${DOMPurify.sanitize(id)}`, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -88,12 +81,11 @@
                             // Hapus item dari state variabels setelah sukses
                             if(response.data.success) {
                                 setTimeout(() => {
-                                    window.location.href = '/admin/psikotest/kecermatan';
+                                    window.location.href = `{{ route('admin_psikotest_kecermatan') }}`;
                                 }, 1000);
                             }
                         } catch (error) {
                             console.info('Terjadi Error AdminPsikotestKecermatan-fDelete', error);
-                            // Swal.showValidationMessage(`Terjadi Error AdminPsikotestKecermatan-fDelete: ${error}`);
                         }
                     }
                 }).then((result) => {

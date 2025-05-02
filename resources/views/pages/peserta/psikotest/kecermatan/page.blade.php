@@ -116,7 +116,7 @@
                 const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
                     withCredentials: true,  // Mengirimkan cookie dalam permintaan
                 });
-                const response = await axios.post(`/api/peserta-hasil-tes/${parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)))}`, {
+                const response = await axios.post(`/public/api/peserta-hasil-tes/${parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)))}`, {
                     hasilnilai_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom1`))),
                     waktupengerjaan_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`waktupengerjaan_kolom_1`))),
                     //
@@ -144,7 +144,7 @@
                 if(parseInt(response.data.success)) {
                     localStorage.removeItem('sesi_psikotest_kecermatan');
                     setTimeout(() => {
-                        window.location.href = `/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest')}`;
+                        window.location.href = `/public/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest')}`;
                         sessionStorage.clear();
                     }, 3000);
                 }
@@ -164,7 +164,7 @@
             else {
                 localStorage.setItem('sesi_psikotest_kecermatan', nextSession);
                 sessionStorage.setItem(`nilai_total_psikotest_kecermatan_kolom${nextSession}`, 0);
-                window.location.href = `/peserta/psikotest/kecermatan/${nextSession}`;
+                window.location.href = `/public/peserta/psikotest/kecermatan/${nextSession}`;
             }
         }
 
@@ -186,7 +186,7 @@
                                 const nextSession = parseInt(sessionID) + 1;
                                 localStorage.setItem('sesi_psikotest_kecermatan', nextSession);
                                 sessionStorage.setItem(`nilai_total_psikotest_kecermatan_kolom${nextSession}`, 0);
-                                window.location.href = `/peserta/psikotest/kecermatan/${nextSession}`;
+                                window.location.href = `/public/peserta/psikotest/kecermatan/${nextSession}`;
                             }
                         }, 3000);
                     }

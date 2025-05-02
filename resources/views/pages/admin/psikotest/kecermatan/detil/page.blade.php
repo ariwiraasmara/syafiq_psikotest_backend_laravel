@@ -23,7 +23,7 @@
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
-        'link_back'    => '/admin/psikotest/kecermatan',
+        'link_back'    => route('admin_psikotest_kecermatan'),
         'appbar_title' => $appbar_title,
     ]) @endcomponent
 
@@ -40,7 +40,7 @@
             ' ]'; }}
 
                 <span class='ml-4'>
-                    <a href="{{ '/admin/psikotest/kecermatan-edit/'.$id }}" rel='nofollow' title='Edit Data Pertanyaan'>
+                    <a href="{{ route('admin_psikotest_kecermatan_edit', ['id' => $id]); }}" rel='nofollow' title='Edit Data Pertanyaan'>
                         <span class="hidden">Edit Data Pertanyaan</span>
                         <span class="mr-2"><ion-icon name="pencil-outline"></ion-icon></span>
                     </a>
@@ -73,7 +73,7 @@
                                         {{ $data['soal_jawaban']['jawaban']; }}
                                     </td>
                                     <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
-                                        <a href="{{ '/admin/psikotest/kecermatan/detil-edit/'.$id.'/'.myfunction::enval($data['id'], true); }}" rel="nofollow" title="{{ 'Edit Soal & Jawaban ' }}">
+                                        <a href="{{ route('admin_psikotest_kecermatan_detil_edit', ['id1' => $id, 'id2' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" title="{{ 'Edit Soal & Jawaban ' }}">
                                             <ion-icon name="pencil-outline"></ion-icon>
                                             <span class="hidden">Edit</span>
                                         </a>
@@ -127,13 +127,13 @@
 
     <script>
         function pageChange(value) {
-            window.location.href= `/admin/psikotest/kecermatan/detil/{{ $id }}?page=${value}`;
+            window.location.href= `/public/admin/psikotest/kecermatan/detil/{{ $id }}?page=${value}`;
         }
 
         function toAdd(currentpage) {
             try {
                 sessionStorage.setItem('admin_psikotest_kecermatan_tabellastpage', DOMPurify.sanitize(currentpage));
-                window.location.href = '/admin/psikotest/kecermatan/detil-baru/{{ $id; }}';
+                window.location.href = `{{ route('admin_psikotest_kecermatan_detil_baru', ['id' => $id]) }}`;
             }
             catch(err) {
                 console.info('Terjadi Error DetilPsikotestKecermatanDetil-toAdd', err);
@@ -141,7 +141,6 @@
         }
 
         async function fDelete(id1, id2, soalA, soalB, soalC, soalD, jawaban) {
-            // e.preventDefault();
             if(validator.isBase64(id1) && validator.isBase64(id2)) {
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data soal dan jawaban ini?",
@@ -161,7 +160,7 @@
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`,  {
                                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                             });
-                            const response = await axios.delete(`/admin/psikotest/kecermatan/detil-delete/${DOMPurify.sanitize(id1)}/${DOMPurify.sanitize(id2)}`, {
+                            const response = await axios.delete(`/public/admin/psikotest/kecermatan/detil-delete/${DOMPurify.sanitize(id1)}/${DOMPurify.sanitize(id2)}`, {
                                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -175,7 +174,6 @@
                                 }, 1000);
                             }
                         } catch (error) {
-                            // Swal.showValidationMessage(`Request failed: ${error}`);
                             console.info('Terjadi Error DetilPsikotestKecermatanDetil-fDelete', error);
                         }
                     }

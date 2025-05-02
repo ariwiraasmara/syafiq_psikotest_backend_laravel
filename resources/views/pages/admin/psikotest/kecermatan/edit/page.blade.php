@@ -7,7 +7,7 @@
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
-        'link_back'    => '/admin/psikotest/kecermatan/',
+        'link_back'    => route('admin_psikotest_kecermatan'),
         'appbar_title' => $appbar_title,
     ]) @endcomponent
 
@@ -15,7 +15,7 @@
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
         <div class="">
-            <form action="{{ '/admin/psikotest/kecermatan-edit/'.$id }}" method="POST">
+            <form action="{{ route('admin_psikotest_kecermatan_edit', ['id' => $id]); }}" method="POST">
                 @method('PUT')
                 @csrf()
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" readonly />
@@ -56,7 +56,7 @@
                         Simpan
                     </button>
 
-                    <button type="button" class="mt-4 p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="window.location.href='/admin/psikotest/kecermatan'">
+                    <button type="button" class="mt-4 p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="window.location.href= `{{ route('admin_psikotest_kecermatan') }}`">
                         Kembali
                     </button>
                 </div>

@@ -6,7 +6,8 @@
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
-        'link_back' => '/admin/variabel-setting/variabel/asc/-?page=1',
+        'nama'         => $nama,
+        'link_back'    => route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']).'?page=1',
         'appbar_title' => $appbar_title,
     ]) @endcomponent
 
@@ -14,7 +15,7 @@
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
         <div class="">
-            <form action="/admin/variabel-baru" method="POST">
+            <form action="{{ route('admin_variabel_store') }}" method="POST">
                 @csrf()
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" disabled />
                 <input  type="text" id="txt-variabel" name="variabel" required focused
@@ -34,7 +35,7 @@
                         Simpan
                     </button>
 
-                    <button type="button" class="mt-4 p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="window.location.href = '/admin/variabel'">
+                    <button type="button" class="mt-4 p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="window.location.href = `{{ route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']).'?page=1' }}`">
                         Kembali
                     </button>
                 </div>

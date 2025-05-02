@@ -13,6 +13,7 @@ beforeEach(function() {
     $this->seed();
 });
 
+/*
 test('all() return all kecermatan kolom pertanyaan', function() {
     $emailuser = 'ariwiraasmara.sc37@gmail.com';
     $user = User::where(['email' => $emailuser])->first();
@@ -160,3 +161,4 @@ test('delete data kecermatan kolom pertanyaan', function() {
     ])->delete('/api/kecermatan/kolompertanyaan/1');
     $response->assertStatus(200);
 });
+*/

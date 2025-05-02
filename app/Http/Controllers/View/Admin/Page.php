@@ -38,6 +38,15 @@ class Page extends Controller {
     }
 
     public function view(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
+        $date = date('d');
+        if( ($date == 1) || ($date == 16) ) {
+            if(!$request->session()->has('is_generatate_sitemap') || now()->greaterThanOrEqualTo($request->session()->get('is_generatate_sitemap_expiry'))) {
+                // Session tidak ada atau sudah kadaluarsa, generate sitemap
+                $request->session()->put('is_generatate_sitemap', true);
+                $request->session()->put('is_generatate_sitemap_expiry', now()->addHours(24));
+                return redirect('/generate-sitemap');
+            }
+        }
         return Inertia::render('admin/page', [
             'title'    => 'Login | Psikotest Online App',
             'pathURL'  => url()->current(),
@@ -47,12 +56,31 @@ class Page extends Controller {
     }
 
     public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
+        if( isset($_COOKIE['islogin']) &&
+            isset($_COOKIE['isadmin']) &&
+            isset($_COOKIE['isauth']) &&
+            isset($_COOKIE['__sysauth__']) &&
+            isset($_COOKIE['__token__']) &&
+            isset($_COOKIE['__unique__'])
+        ) {
+            return redirect(route('admin_dashboard'));
+        }
+        
+        $date = date('d');
+        if( ($date == 1) || ($date == 16) ) {
+            if(!$request->session()->has('is_generatate_sitemap') || now()->greaterThanOrEqualTo($request->session()->get('is_generatate_sitemap_expiry'))) {
+                // Session tidak ada atau sudah kadaluarsa, generate sitemap
+                $request->session()->put('is_generatate_sitemap', true);
+                $request->session()->put('is_generatate_sitemap_expiry', now()->addHours(24));
+                return redirect('/generate-sitemap');
+            }
+        }
         return view('pages.admin.page', [
             'title'                => 'Login | Psikotest Online App',
             'pathURL'              => url()->current(),
             'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
             'onetime'              => true,
-            'breadcrumb'           => '/admin',
+            'breadcrumb'           => route('admin'),
             'is_breadcrumb_hidden' => 'hidden',
             'unique'               => fun::random('combwisp', 50)
         ]);
@@ -61,7 +89,7 @@ class Page extends Controller {
     #POST
     public function login(Request $request) {
         try {
-            if(date('Y-m-d H:i:s') > $request->cookie('expire_at')) {
+            // if(date('Y-m-d H:i:s') > $request->cookie('expire_at')) {
                 $credentials = $request->validate([
                     'email'     => 'required|string',
                     'password'  => 'required|string',
@@ -123,7 +151,7 @@ class Page extends Controller {
                             Cookie::queue('isadmin', true, $expirein, $path, $domain, true, true, false, 'None');
                             Cookie::queue('isauth', true, $expirein, $path, $domain, true, true, false, 'None');
                             Cookie::queue('expire_at', fun::daysLater('+12 hours'), $expirein, $path, $domain, true, true, false, 'None');
-                            return redirect('/admin/dashboard')
+                            return redirect(route('admin_dashboard'))
                                 ->cookie('email', $request->email, $expirein, $path, $domain, true, true, false, 'Strict')
                                 ->cookie('__sysauth__', $sysauth, $expirein, $path, $domain, true, true, false, 'Strict')
                                 ->cookie('__token__', $token, $expirein, $path, $domain, true, true, false, 'Strict')
@@ -131,20 +159,20 @@ class Page extends Controller {
                                 ->cookie('XSRF-TOKEN', csrf_token(), $expirein, $path, $domain, true, true, false, 'Strict');
                         }
                         else {
-                            return redirect('/admin')->with('error', 'Terjadi Kesalahan! Authentication Error!');
+                            return redirect(route('admin'))->with('error', 'Terjadi Kesalahan! Authentication Error!');
                         }
                     }
                     else {
-                        return redirect('/admin')->with('error', 'Terjadi Kesalahan! Email/Password Salah! Silahkan Coba Lagi!');
+                        return redirect(route('admin'))->with('error', 'Terjadi Kesalahan! Email/Password Salah! Silahkan Coba Lagi!');
                     }
                 }
                 else {
-                    return redirect('/admin')->with('error', 'Terjadi Kesalahan!');
+                    return redirect(route('admin'))->with('error', 'Terjadi Kesalahan!');
                 }
-            }
-            else {
-                return redirect('/admin')->with('error', 'Sesi Anda Telah Berakhir!<br/><br/>Terakhir Login: <b>'.$request->cookie('expire_at').'</b><br/><br/>Datang dan Login Kembali Setelah : <b>'.$request->cookie('expire_at').'</b><br/><br/>Kami mohon maaf atas ketidaknyamanan ini dan menghargai pengertian Anda.');
-            }
+            // }
+            // else {
+            //     return redirect(route('admin'))->with('error', 'Sesi Anda Telah Berakhir!<br/><br/>Terakhir Login: <b>'.$request->cookie('expire_at').'</b><br/><br/>Datang dan Login Kembali Setelah : <b>'.$request->cookie('expire_at').'</b><br/><br/>Kami mohon maaf atas ketidaknyamanan ini dan menghargai pengertian Anda.');
+            // }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada UserController->login!', [
@@ -153,7 +181,7 @@ class Page extends Controller {
                 'line' => $err->getLine(),
                 'trace' => $err->getTraceAsString(),
             ]);
-            return redirect('/admin')->with('error', 'Terjadi Kesalahan!!!');
+            return redirect(route('admin'))->with('error', 'Terjadi Kesalahan!!!');
         }
     }
 }

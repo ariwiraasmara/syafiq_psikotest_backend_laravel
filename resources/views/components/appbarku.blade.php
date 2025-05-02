@@ -23,7 +23,7 @@
             </button>
             <div id="sessionmenuadmin" class="hidden absolute bg-white shadow-lg rounded-lg text-left max-w-xs overflow-hidden" style="right: 1%; z-index: 9;">
                 <button type="button" class="text-left block px-4 py-2 text-black hover:bg-gray-200 w-full" onclick="closetoggleMenuSessionAdmin()">{{ $nama }}</button>
-                <button type="button" class="text-left block px-4 py-2 text-black hover:bg-gray-200 w-full" onclick="window.location.href = '/logout'">Logout</button>
+                <button type="button" class="text-left block px-4 py-2 text-black hover:bg-gray-200 w-full" onclick="window.location.href = `{{ route('logout'); }}`">Logout</button>
                 <button type="button" class="text-left block px-4 py-2 text-black hover:bg-gray-200 w-full" onclick="closetoggleMenuSessionAdmin()">Tutup</button>
             </div>
         </div>

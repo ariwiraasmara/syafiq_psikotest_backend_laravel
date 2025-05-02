@@ -40,6 +40,12 @@ class Page extends Controller {
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
         
         $data = $this->service->all($sort, $by, $search);
+        $lastpage = 0;
+        $fdata = null;
+        if($data != null) {
+            $fdata = $data['data'];
+            $lastpage = $data['last_page'];
+        }
         return view('pages.admin.variabel.page', [
             'title'                => 'Variabel Setting | Admin | Psikotest Online App',
             'appbar_title'         => 'Variabel Setting',
@@ -51,11 +57,11 @@ class Page extends Controller {
             'onetime'              => false,
             'unique'               => fun::random('combwisp', 50),
             'nama'                 => $request->session()->get('nama'),
-            'data'                 => $data['data'],
+            'data'                 => $fdata,
             'sort'                 => $sort,
             'by'                   => $by,
             'search'               => $search,
-            'lastpage'             => $data['last_page'],
+            'lastpage'             => $lastpage,
             'key'                  => fun::encrypt('@12!', 0)
         ]);
     }

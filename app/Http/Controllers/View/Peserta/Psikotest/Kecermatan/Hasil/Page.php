@@ -34,18 +34,24 @@ class Page extends Controller {
 
     public function bladeView(Request $request, $no_identitas, $tgl_tes): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get($no_identitas, $tgl_tes);
-        return view('pages.peserta.psikotest.kecermatan.hasil.page', [
-            'title'                => 'Hasil Psikotest Kecermatan Peserta | Psikotest Online App',
-            'pathURL'              => url()->current(),
-            'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'onetime'              => false,
-            'breadcrumb'           => '/peserta/psikotest/kecermatan/hasil/'.$no_identitas.'/'.$tgl_tes,
-            'is_breadcrumb_hidden' => 'hidden',
-            'unique'               => fun::random('combwisp', 50),
-            'appbar_title'         => 'Hasil Psikotest Kecermatan',
-            'data'                 => $data,
-            'no_identitas'         => $no_identitas,
-            'tgl_tes'              => $tgl_tes,
-        ]);
+        // return $data;
+        if($data != -12) {
+            return view('pages.peserta.psikotest.kecermatan.hasil.page', [
+                'title'                => 'Hasil Psikotest Kecermatan Peserta | Psikotest Online App',
+                'pathURL'              => url()->current(),
+                'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+                'onetime'              => false,
+                'breadcrumb'           => '/peserta/psikotest/kecermatan/hasil/'.$no_identitas.'/'.$tgl_tes,
+                'is_breadcrumb_hidden' => 'hidden',
+                'unique'               => fun::random('combwisp', 50),
+                'appbar_title'         => 'Hasil Psikotest Kecermatan',
+                'data'                 => $data,
+                'no_identitas'         => $no_identitas,
+                'tgl_tes'              => $tgl_tes,
+            ]);
+        }
+        else {
+            return view('errors.404');
+        }
     }
 }

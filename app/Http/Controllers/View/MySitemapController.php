@@ -113,7 +113,7 @@ class MySitemapController extends Controller {
                 'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
                 'onetime'              => false,
                 'unique'               => fun::random('combwisp', 50),
-                'pesan'                => 'generate sitemap seo berhasil!',
+                'pesan'                => 'generate sitemap seo berhasil!<br/>tunggu 10 detik untuk kembali ke halaman Admin!',
                 'error'                => false,
             ]);
         }

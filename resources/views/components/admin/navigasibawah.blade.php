@@ -5,25 +5,25 @@
 @endphp
 <div class="bg-black shadow-md max-w-screen w-full fixed" style="bottom: 0px; padding: 5px;">
     <div class="container mx-auto flex justify-between items-center text-white">
-        <a href="/admin/dashboard" id="nav-admin-dashboard" class="text-center" rel='follow' title="Halaman Dashboard | Admin" style="padding: 5px">
+        <a href="{{ route('admin_dashboard') }}" id="nav-admin-dashboard" class="text-center" rel='follow' title="Halaman Dashboard | Admin" style="padding: 5px">
             <span class="text-xl">
                 <ion-icon name="home-outline"></ion-icon>
             </span><br/>
             <span class="text-base">Dashboard</span>
         </a>
-        <a href="/admin/peserta/nama/asc/-?page=1" id="nav-admin-peserta" class="text-center" rel='follow' title="Halaman Peserta | Admin" style="padding: 5px">
+        <a href="{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']) }}?page=1" id="nav-admin-peserta" class="text-center" rel='follow' title="Halaman Peserta | Admin" style="padding: 5px">
             <span class="text-xl">
                 <ion-icon name="people-outline"></ion-icon>
             </span><br/>
             <span class="text-base">Peserta</span>
         </a>
-        <a href="/admin/psikotest" id="nav-admin-psikotest" class="text-center" rel='follow' title="Halaman Psikotest | Admin" style="padding: 5px">
+        <a href="{{ route('admin_psikotest') }}" id="nav-admin-psikotest" class="text-center" rel='follow' title="Halaman Psikotest | Admin" style="padding: 5px">
             <span class="text-xl">
                 <ion-icon name="folder-open-outline"></ion-icon>
             </span><br/>
             <span class="text-base">Psikotest</span>
         </a>
-        <a href="/admin/variabel-setting/variabel/asc/-?page=1" id="nav-admin-variabel" class="text-center" rel='follow' title="Halaman Variabel | Admin" style="padding: 5px">
+        <a href="{{ route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']) }}?page=1" id="nav-admin-variabel" class="text-center" rel='follow' title="Halaman Variabel | Admin" style="padding: 5px">
             <span class="text-xl">
                 <ion-icon name="settings-outline"></ion-icon>
             </span><br/>

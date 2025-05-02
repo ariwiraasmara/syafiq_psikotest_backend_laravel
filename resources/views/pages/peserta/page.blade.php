@@ -16,27 +16,22 @@
                         <div class='form_admin_peserta text-left'>
                             <input  type="text" id="nama" name ="nama" required focused
                                     placeholder="Nama..." label="Nama..."
-                                    {{-- onchange="handleChange_Nama(event)" --}}
                                     class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
                             />
                             <input  type="number" id="no_identitas" name ="no_identitas" required focused
                                     placeholder="no_identitas..." label="no_identitas..."
-                                    {{-- onchange="handleChange_No_identitas(event)" --}}
                                     class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
                             />
                             <input  type="email" id="email" name ="email" required focused
                                     placeholder="Email..." label="Email..."
-                                    {{-- onchange="handleChange_Email(event)" --}}
                                     class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
                             />
                             <input  type="date" id="tgl_lahir" name ="tgl_lahir" required focused
                                     placeholder="Tanggal Lahir..." label="Tanggal Lahir..."
-                                    {{-- onchange="handleChange_Tgl_lahir(event)" --}}
                                     class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
                             />
                             <input  type="text" id="asal" name ="asal" required focused
                                     placeholder="Asal..." label="Asal..."
-                                    {{-- onchange="handleChange_Asal(event)" --}}
                                     class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
                             />
                         </div>
@@ -81,7 +76,7 @@
         <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
             <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
                 <div class="p-3 text-center">
-                    <a href="/" onclick="onBack()" rel='follow' title='Kembali'>
+                    <a href="#" onclick="onBack()" rel='follow' title='Kembali'>
                         <h2 class="font-bold underline text-2lg uppercase text-black">
                             Silahkan datang esok hari lagi!
                         </h2>
@@ -119,26 +114,6 @@
         let email = null;
         let tgl_lahir = null;
         let asal = null;
-
-        function handleChange_Nama(e) {
-            e.preventDefault();
-        }
-        
-        function handleChange_No_identitas(e) {
-            e.preventDefault();
-        }
-        
-        function handleChange_Email(e) {
-            e.preventDefault();
-        }
-        
-        function handleChange_Tgl_lahir(e) {
-            e.preventDefault();
-        }
-        
-        function handleChange_Asal(e) {
-            e.preventDefault();
-        }
 
         function checkData() {
             try {
@@ -184,7 +159,7 @@
                     const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
                         withCredentials: true,  // Mengirimkan cookie dalam permintaan
                     });
-                    const response = await axios.post(`/api/peserta/setup`, {
+                    const response = await axios.post(`/public/api/peserta/setup`, {
                         nama: nama,
                         no_identitas: no_identitas,
                         email: email,
@@ -226,7 +201,7 @@
                         localStorage.setItem('sesi_psikotest_kecermatan', 1);
                         sessionStorage.setItem('nilai_total_psikotest_kecermatan_kolom1', 0);
                         sessionStorage.setItem('waktupengerjaan_kolom_1', 0);
-                        window.location.href = '/peserta/psikotest/kecermatan/1';
+                        window.location.href = `{{ route('peserta_psikotest_kecermatan', ['page' => 1]) }}`;
                     }
                     else if(response.data.success === 'datex') {
                         document.getElementById('formpeserta').classList.add('hidden');
@@ -264,7 +239,7 @@
                 sessionStorage.removeItem(`waktupengerjaan_kolom3`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom4`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom5`);
-                window.location.href = '/peserta/psikotest/kecermatan/1';
+                window.location.href = `{{ route('peseta_psikotest_kecermatan', ['page' => 1]); }}`;
             }
             catch(err) {
                 console.info('Terjadi Error Peserta-continueSession:', err);
@@ -275,8 +250,8 @@
             try {
                 localStorage.clear();
                 sessionStorage.clear();
-                Cookies.remove('ispeserta');
-                window.location.href= '/';
+                // Cookies.remove('ispeserta');
+                window.location.href= `{{ route('home') }}`;
             }
             catch(err) {
                 console.info('Terjadi Error Peserta-onBack:', err);

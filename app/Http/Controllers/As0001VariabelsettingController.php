@@ -157,8 +157,9 @@ class As0001VariabelsettingController extends Controller {
 
     #PUT
     #url = '/api/variabel-setting/{id}'
-    public function update(Request $request, int $id): Response|JsonResponse|String|int|null {
+    public function update(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
+            return $request;
             $credentials = $request->validate([
                 'variabel' => 'required|string|max:255',
                 'values'   => 'required',
@@ -203,7 +204,7 @@ class As0001VariabelsettingController extends Controller {
 
     #DELETE
     #url = '/api/variabel-setting/{id}'
-    public function delete(Request $request, int $id): Response|JsonResponse|String|int|null {
+    public function delete(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {

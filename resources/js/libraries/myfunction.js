@@ -14,7 +14,7 @@ function setCookie(vname, vvalue, vexpire, vpath, vdomain) {
     document.cookie = vname + "=" + vvalue + ";" + expires + path + domain + secure + sameSite + httpOnly + partitioned;
 }
 
-const readable = (str) => {
+function readable(str) {
     if (str === null) return null;
 
     // Langkah pertama: Menggunakan browser API untuk mendekode entitas HTML
@@ -33,7 +33,7 @@ const readable = (str) => {
             .replace(/&#39;/g, "'");
 };
 
-const readableDate = (dateStr) => {
+function readableDate(dateStr) {
     const date = new Date(dateStr);
 
     // Menggunakan toLocaleDateString untuk format tanggal
@@ -43,7 +43,7 @@ const readableDate = (dateStr) => {
     console.log(formattedDate); // Output: 24 Desember 2024
 }
 
-const currentDate = (type) => {
+function currentDate(type) {
     const getDate = new Date();
     const year = getDate.getFullYear();
     const month = getDate.getMonth() + 1;
@@ -60,7 +60,7 @@ const currentDate = (type) => {
     else return `${year}-${month}-${date} ${hour}:${minute}:${seconds}`;
 }
 
-const encrypt = async (text, key) => {
+async function encrypt(text, key) {
     const iv = window.crypto.getRandomValues(new Uint8Array(12));
     const encodedData = new TextEncoder().encode(text);
     const encryptedData = await window.crypto.subtle.encrypt(
@@ -75,7 +75,7 @@ const encrypt = async (text, key) => {
     return { encryptedData, iv };
 };
 
-const decrypt = async (cipher, key) => {
+async function decrypt(cipher, key) {
     const decryptedData = await window.crypto.subtle.decrypt(
         {
             name: "AES-GCM",
@@ -88,7 +88,7 @@ const decrypt = async (cipher, key) => {
     return new TextDecoder().decode(decryptedData);
 };
 
-const generateKey = async () => {
+async function generateKey() {
     return await window.crypto.subtle.generateKey(
         {
             name: "AES-GCM",
@@ -99,7 +99,7 @@ const generateKey = async () => {
     );
 };
 
-const enval = (str, isencrypt = false) => {
+function enval(str, isencrypt = false) {
     const encoded = btoa(str);
     const hexEncoded = Buffer.from(encoded, 'utf8').toString('hex');
 
@@ -110,7 +110,7 @@ const enval = (str, isencrypt = false) => {
     return hexEncoded;
 };
 
-const denval = (str, isencrypt = false) => {
+function denval(str, isencrypt = false) {
     let decodedHex;
 
     if (isencrypt) {
@@ -123,7 +123,7 @@ const denval = (str, isencrypt = false) => {
     return atob(decodedHex);
 };
 
-const random = (str, length = 10) => {
+function random(str, length = 10) {
     try {
         let seed;
 

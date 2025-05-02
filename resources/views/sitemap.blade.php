@@ -8,7 +8,7 @@
     <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
         <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
             <h1 class="font-bold text-2xl text-center underline uppercase">
-                {{ $pesan }}
+                @php echo $pesan; @endphp
             </h1>
 
             @if($error)
@@ -22,7 +22,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
-                // window.location.href='/';
+                window.location.href= "{{ route('admin'); }}";
             }, 10000);
         });
     </script>

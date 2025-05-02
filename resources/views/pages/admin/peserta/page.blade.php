@@ -82,7 +82,7 @@
         }
 
         function refresh() {
-            window.location.href= `/admin/peserta/nama/asc/-?page=1`;
+            window.location.href= `{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']) }}?page=1`;
         }
 
         function sortChange() {
@@ -90,7 +90,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
+            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
         }
 
         function byChange() {
@@ -98,7 +98,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
+            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
         }
 
         function search() {
@@ -106,7 +106,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/peserta/${sort}/${by}/${search}?page=1`;
+            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page=1`;
         }
         
         function pageChange() {
@@ -115,7 +115,7 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/peserta/${sort}/${by}/${search}?page=${page}`;
+            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page=${page}`;
         }
     </script>
 @endsection

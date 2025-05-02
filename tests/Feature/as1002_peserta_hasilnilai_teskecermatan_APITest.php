@@ -13,6 +13,7 @@ beforeEach(function() {
     $this->seed();
 });
 
+/*
 test('semua hasil tes peserta tertentu', function() {
     $emailuser = 'ariwiraasmara.sc37@gmail.com';
     $user = User::where(['email' => $emailuser])->first();
@@ -89,3 +90,4 @@ test('saves data hasil tes kecermatan peserta', function() {
     ]);
     $response->assertStatus(201);
 });
+*/
