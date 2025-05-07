@@ -22,7 +22,7 @@
                 Peserta
             </button>
             <div id="submenupeserta" class="hidden absolute bg-white shadow-lg mt-2 rounded-lg text-left">
-                <button type="button" class="text-left block px-4 py-2 text-gray-800" onclick="window.location.href= '{{ route('peserta') }}'">Mulai Psikotest</button>
+                <button type="button" class="text-left block px-4 py-2 text-gray-800" onclick="toPeserta()">Mulai Psikotest</button>
                 <button type="button" class="text-left block px-4 py-2 text-gray-800" onclick="popupHasilTesPsikotestKecermatan()">Hasil Tes Psikotest Kecermatan</button>
             </div>
         </div>
@@ -33,7 +33,7 @@
     function toPeserta() {
         try {
             const pathDomain = '/'; // Use a valid path or domain option if needed
-            Cookies.set('ispeserta', true, { expires: 6, path: pathDomain, secure: true, sameSite: 'strict' });
+            Cookies.set('ispeserta', true, { expires: 1, path: pathDomain, secure: true, sameSite: 'strict' });
             localStorage.setItem('ispeserta', true);
             window.location.href = "{{ route('peserta') }}";
         }

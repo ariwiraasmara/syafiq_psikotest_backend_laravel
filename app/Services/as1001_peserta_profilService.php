@@ -91,7 +91,8 @@ class as1001_peserta_profilService {
             $datenow = date('Y');
             $tgl_lahir = date('Y', strtotime($val['tgl_lahir']));
             $usia = $datenow - $tgl_lahir;
-            $res = $this->repo1->store([
+            // $res = $this->repo1->store([
+            return $this->repo1->store([
                 'nama'          => $val['nama'],
                 'no_identitas'  => $val['no_identitas'],
                 'email'         => $val['email'],
@@ -138,7 +139,7 @@ class as1001_peserta_profilService {
         }
     }
 
-    public function setUpPesertaTes(array $val): array|Collection|String|int|null {
+    public function setUpPesertaTes(array $val) {
         try {
             $cek1 = $this->repo1->get(['no_identitas' => $val['no_identitas']]);
             $encrypted_user_data = [
@@ -148,7 +149,7 @@ class as1001_peserta_profilService {
                 'tgl_lahir'    => fun::enval($val['tgl_lahir'], true),
                 'asal'         => fun::enval($val['asal'], true),
             ];
-            if($cek1) {
+            if($cek1 != '' || $cek1 != null || !empty($cek1)) {
                 //? Apakah peserta sudah terdaftar
                 $cek2 = $this->repo2->getCheckTesDate($cek1[0]['id'], $val['tgl_tes']);
                 if($cek2) {
@@ -182,12 +183,16 @@ class as1001_peserta_profilService {
                     ]);
                 }
             }
-            //? Jika peserta belum terdaftar
-            $res = $this->store($val);
-            if($res > 0) {
-                return collect(['success' => 1, 'status' => 'Insert', 'res' => $res]);
+            else {
+                //? Jika peserta belum terdaftar
+                $res = $this->store($val);
+                if($res > 0) {
+                    return collect(['success' => 1, 'status' => 'Insert', 'res' => $res]);
+                }
+                else {
+                    return $res;
+                }
             }
-            return $res;
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as1001_peserta_profilService->setUpPesertaTes!', [

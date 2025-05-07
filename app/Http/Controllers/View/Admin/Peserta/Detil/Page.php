@@ -29,14 +29,24 @@ class Page extends Controller {
         $this->service2 = $service2;
     }
 
-    public function view(Request $request, int $id): Inar|JsonResponse|Collection|array|String|int|null {
-        $data = $this->service1->get($id);
+    public function view(Request $request, String $tgl1, String $tgl2, String $id): Inar|JsonResponse|Collection|array|String|int|null {
+        $data = $this->service2->search(fun::denval($id, true), $tgl1, $tgl2);
+
+        if($tgl1 == 'null' || $tgl1 == '-' || $tgl1 == '' || $tgl1 == ' ' || $tgl1 == null) $tgl1 = '';
+        if($tgl2 == 'null' || $tgl2 == '-' || $tgl2 == '' || $tgl2 == ' ' || $tgl2 == null) $tgl2 = '';
+
         return Inertia::render('admin/peserta/detil/page', [
-            'title'   => 'Detil Peserta | Admin | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'onetime' => false,
-            'data'    => $data
+            'title'      => 'Detil Peserta | Admin | Psikotest Online App',
+            'pathURL'    => url()->current(),
+            'robots'     => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'onetime'    => false,
+            'unique'     => fun::random('combwisp', 50),
+            'nama'       => $request->session()->get('nama'),
+            'id'         => $id,
+            'dataprofil' => $data['peserta'][0],
+            'hasiltes'   => $data['hasiltes'],
+            'tgl1'       => $tgl1,
+            'tgl2'       => $tgl2
         ]);
     }
 

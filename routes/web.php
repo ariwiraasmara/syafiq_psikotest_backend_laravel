@@ -2,6 +2,9 @@
 //! Copyright @
 //! Syafiq
 //! Syahri Ramadhan Wiraasmara (ARI)
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use App\Libraries\myroute;
 use App\Libraries\myfunction as fun;
@@ -16,8 +19,12 @@ Route::middleware(
     'throttle:250,1', // 200 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
 )->group(function () {
     Route::get('/peserta', myroute::view('Peserta\Page', 'bladeView'))->name('peserta');
+    
+    Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))
+                ->name('peserta_setup');
     if( fun::getRawCookie('ispeserta') ) {
         Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'bladeView'))->name('peserta_psikotest_kecermatan');
+        Route::post('/peserta-psikotest-kecermatan/{id}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'store'))->name('peserta_psikotest_kecermatan_store');
         Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'))->name('psikotest_kecermatan_pertanyaan');
         Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'))->name('psikotest_kecermatan_soaljawaban');
     }
@@ -36,10 +43,7 @@ Route::middleware(
     'auth',
     'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
 )->group(function () {
-    if( fun::getRawCookie('XSRF-TOKEN') &&
-        fun::getRawCookie('__sysauth__') &&
-        fun::getRawCookie('__token__') &&
-        fun::getRawCookie('islogin') &&
+    if( fun::getRawCookie('islogin') &&
         fun::getRawCookie('isadmin') &&
         fun::getRawCookie('isauth')
     ) {
@@ -75,7 +79,8 @@ Route::middleware(
 });
 
 Route::get('hello', function(){
-    return url()->current();
+    // return url()->current();
+    return csrf_token();
 });
 
 Route::get('hello-auth', function(){
@@ -87,10 +92,18 @@ Route::get('hello-auth', function(){
     return 'hello... UGH!';
 });
 
-Route::get('/test-cookie', function () {
+Route::get('/test-cookie', function (Request $request) {
+    Cookie::queue('isloginnnnnnnnn', true, (60*24*60*60), '/', 'https://psikotesasyik.com', true, true, false, 'none');
+    $request->session()->put('session', 'I am SESSION!');
     return response('Test Cookie')->cookie(
-        'test_cookie', 'test_value', 60, '/', null, false, true, false, 'Lax'
+        'test_cookie', 'test_value', 60, '/', null, false, true, false, 'none'
     );
 });
+
+Route::get('/test-session', function (Request $request) {
+    return $request->session()->get('session');
+});
+
+
 
 // require __DIR__.'/auth.php';

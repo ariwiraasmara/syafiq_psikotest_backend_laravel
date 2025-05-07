@@ -128,7 +128,7 @@ class myfunction {
     // SEND EMAIL
     public function toSendMail(String $to=null, String $subject=null, String $txt=null) {
         try {
-            $headers = "From: dev.ariwiraasmara.emailgateway@gmail.com";
+            $headers = "From: noreply@psikotesasyik.com";
             mail($to,$subject,$txt,$headers);
         }
         catch(Exception $e) {
@@ -138,7 +138,7 @@ class myfunction {
 
     public function toSendMailBy(String $to=null, String $subject=null, String $txt=null, String $headers=null) {
         try {
-            //$headers = "From: dev.ariwiraasmara.emailgateway@gmail.com";
+            //$headers = "From: noreply@psikotesasyik.com";
             mail($to,$subject,$txt,$headers);
         }
         catch(Exception $e) {

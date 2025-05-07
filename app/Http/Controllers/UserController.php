@@ -101,13 +101,7 @@ class UserController extends Controller {
                             ]
                         ]);
 
-                        // $request->session()->put('email', $request->email);
-                        // $request->session()->put('nama', $data['data'][0]['name']);
-                        // $request->session()->put('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']));
-                        // $request->session()->put('rtk', fun::encrypt($data['data'][0]['remember_token']));
-
                         return $response
-                        // return redirect('/api/dashboard_admin')
                                 ->cookie('email', $request->email, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
                                 ->cookie('nama', $data['data'][0]['name'], $expirein, $this->path, $this->domain, true, true, false, 'Strict')
                                 // ->cookie('pat', fun::enval($pat[0]['id'].'|'.$pat[0]['token'], true), $expirein, $this->path, $this->domain, true, true, false, 'Strict')

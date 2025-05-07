@@ -34,7 +34,8 @@ class Logout extends Controller {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')
+        return redirect()->route('home')
+                ->cookie('email', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
                 ->cookie('islogin', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
                 ->cookie('isadmin', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
                 ->cookie('isauth', null, -1, $this->path, $this->domain, true, true, false, 'Strict')

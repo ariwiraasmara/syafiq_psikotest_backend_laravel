@@ -51,11 +51,11 @@
                 />
 
                 <div class="">
-                    <button type="button" class="mt-4 p-2 border-2 border-white bg-blue-700 hover:bg-blue-500 text-white rounded-lg text-center w-full" onclick="submit()">
+                    <button type="button" class="mt-4 p-2 bg-blue-700 hover:bg-blue-500 shadow-xl text-white rounded-lg text-center w-full" onclick="submit()">
                         Simpan
                     </button>
 
-                    <button type="button" class="mt-4 p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="window.location.href= `{{ route('admin_psikotest_kecermatan_detil', ['id' => $id1]); }}`">
+                    <button type="button" class="mt-4 p-2 bg-pink-700 hover:bg-pink-500 shadow-xl text-white rounded-lg text-center w-full" onclick="window.location.href= `{{ route('admin_psikotest_kecermatan_detil', ['id' => $id1]); }}`">
                         Kembali
                     </button>
                 </div>

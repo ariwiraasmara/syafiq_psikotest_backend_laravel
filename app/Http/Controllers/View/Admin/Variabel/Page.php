@@ -24,12 +24,18 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request, $page = 1): Inar|JsonResponse|Collection|array|String|int|null {
-        if($page == 0 || $page < 0 || $page == '' || $page == ' ' || $page == null) $page = 1;
+    public function view(Request $request, $sort, $by, $search): Inar|JsonResponse|Collection|array|String|int|null {
+        if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
+        if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
+        if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
+        $page = @$_GET['page'];
+
         return Inertia::render('admin/variabel/page', [
             'title'   => 'Variabel Setting | Admin | Psikotest Online App',
             'pathURL' => url()->current(),
             'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'unique'  => fun::random('combwisp', 50),
+            'nama'    => $request->session()->get('nama'),
             'page'    => $page
         ]);
     }
@@ -38,7 +44,8 @@ class Page extends Controller {
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
-        
+        $page = @$_GET['page'];
+
         $data = $this->service->all($sort, $by, $search);
         $lastpage = 0;
         $fdata = null;
@@ -62,7 +69,8 @@ class Page extends Controller {
             'by'                   => $by,
             'search'               => $search,
             'lastpage'             => $lastpage,
-            'key'                  => fun::encrypt('@12!', 0)
+            'key'                  => fun::encrypt('@12!', 0),
+            'page'                 => $page
         ]);
     }
 

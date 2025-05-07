@@ -19,7 +19,7 @@ return [
     'allowed_methods' => ['*'],
     // 'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => ['https://psikotesasyik.com', '*'],
     // 'allowed_origins' => [ // Pastikan ini sesuai dengan URL frontend Anda
     //     'http://localhost',
     //     'http://localhost:8000',

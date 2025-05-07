@@ -12,9 +12,9 @@ class as1001_peserta_profil extends Model {
 
     protected $guarded = [];
     protected $table = 'as1001_peserta_profil';
-    // protected $primaryKey = 'id';
+    protected $primaryKey = 'id';
     protected $fillable = [
-        // 'id',
+        'id',
         'nama',
         'no_identitas',
         'email',

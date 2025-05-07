@@ -23,12 +23,18 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request) {
+    public function view(Request $request, $id1, $id2) {
+        $data = $this->service->getOne(fun::denval($id2, true));
         return Inertia::render('admin/psikotest/kecermatan/detil/edit/page', [
             'title'   => 'Edit Detil Psikotest Kecermatan | Admin | Psikotest Online App',
             'pathURL' => url()->current(),
             'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'onetime' => false,
+            'unique'  => fun::random('combwisp', 50),
+            'nama'    => $request->session()->get('nama'),
+            'id1'     => $id1,
+            'id2'     => $id2,
+            'data'    => $data[0]['soal_jawaban']
         ]);
     }
 

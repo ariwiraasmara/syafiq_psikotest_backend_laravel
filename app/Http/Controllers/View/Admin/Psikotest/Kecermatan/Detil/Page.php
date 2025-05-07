@@ -24,7 +24,16 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request, $page): Inar|JsonResponse|Collection|array|String|int|null {
+    public function view(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
+        $page = @$_GET['page'];
+        $data = $this->service->all(fun::denval($id, true));
+        $jawaban = [];
+        $lastpage = 1;
+        if(!empty($data['soaljawaban'])) {
+            $jawaban = $data['soaljawaban']['data'];
+            $lastpage = $data['soaljawaban']['last_page'];
+        }
+
         return Inertia::render('admin/psikotest/kecermatan/detil/page', [
             'title'   => 'Detil Psikotest Kecermatan | Admin | Psikotest Online App',
             'pathURL' => url()->current(),

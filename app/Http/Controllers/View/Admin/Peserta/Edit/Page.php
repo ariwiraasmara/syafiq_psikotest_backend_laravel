@@ -23,17 +23,22 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
+    public function view(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
+        $data = $this->service->get(fun::denval($id, true));
         return Inertia::view('admin/peserta/edit/page', [
             'title'   => 'Edit Peserta | Admin | Psikotest Online App',
             'pathURL' => url()->current(),
             'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'onetime' => false,
+            'unique'  => fun::random('combwisp', 50),
+            'nama'    => $request->session()->get('nama'),
+            'id'      => $id,
+            'data'    => $data[0]
         ]);
     }
 
     public function bladeView(Request $request, $id): View|Response|JsonResponse|Collection|array|String|int|null {
-        $data = $this->service->get(fun::denval($id, true), );
+        $data = $this->service->get(fun::denval($id, true));
         return view('pages.admin.peserta.edit.page', [
             'title'                => 'Edit Peserta | Admin | Psikotest Online App',
             'appbar_title'         => 'Edit Peserta',
@@ -47,7 +52,6 @@ class Page extends Controller {
             'nama'                 => $request->session()->get('nama'),
             'id'                   => $id,
             'data'                 => $data[0]
-
         ]);
     }
 

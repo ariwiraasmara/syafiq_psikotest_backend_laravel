@@ -208,7 +208,7 @@ class As1001PesertaProfilController extends Controller {
 
     #POST
     #url = '/api/peserta/setup/'
-    public function setUpPesertaTes(Request $request): Response|JsonResponse|String|int|null {
+    public function setUpPesertaTes(Request $request) {
         try {
             // return $request->no_identitas;
             $data = $this->service->setUpPesertaTes([
@@ -219,6 +219,7 @@ class As1001PesertaProfilController extends Controller {
                 'asal'         => fun::readable($request->asal),
                 'tgl_tes'      => fun::readable($request->tgl_tes),
             ]);
+            return $data;
             if($data['success'] == 1) {
                 $data->put('success', 1);
                 $data->put('pesan', 'Berhasil Setup Data Peserta Tes!');

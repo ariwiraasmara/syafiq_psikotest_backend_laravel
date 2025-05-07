@@ -23,12 +23,15 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request) {
+    public function view(Request $request, $id) {
         return Inertia::render('admin/psikotest/kecermatan/detil/baru/page', [
             'title'   => 'Detil Psikotest Kecermatan Baru | Admin | Psikotest Online App',
             'pathURL' => url()->current(),
             'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'onetime' => false,
+            'unique'  => fun::random('combwisp', 50),
+            'nama'    => $request->session()->get('nama'),
+            'id'      => $id
         ]);
     }
 

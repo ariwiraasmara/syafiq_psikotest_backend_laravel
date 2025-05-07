@@ -22,20 +22,22 @@ class Page extends Controller {
     }
 
     public function view(Request $request, $no_identitas, $tgl_tes): Inar|JsonResponse|Collection|array|String|int|null {
+        $data = $this->service->get($no_identitas, $tgl_tes);
         return Inertia::render('peserta/psikotest/kecermatan/hasil/page', [
-            'title'           => 'Hasil Psikotest Kecermatan Peserta | Psikotest Online App',
-            'pathURL'         => url()->current(),
-            'robots'          => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'onetime'         => false,
-            'no_identitas'    => $no_identitas,
-            'tgl_tes'         => $tgl_tes,
+            'title'        => 'Hasil Psikotest Kecermatan Peserta | Psikotest Online App',
+            'pathURL'      => url()->current(),
+            'robots'       => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'onetime'      => false,
+            'data'         => $data,
+            'no_identitas' => $no_identitas,
+            'tgl_tes'      => $tgl_tes,
         ]);
     }
 
     public function bladeView(Request $request, $no_identitas, $tgl_tes): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get($no_identitas, $tgl_tes);
         // return $data;
-        if($data != -12) {
+        if($data['hasiltes']->count() > 0) {
             return view('pages.peserta.psikotest.kecermatan.hasil.page', [
                 'title'                => 'Hasil Psikotest Kecermatan Peserta | Psikotest Online App',
                 'pathURL'              => url()->current(),

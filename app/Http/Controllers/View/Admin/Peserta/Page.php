@@ -21,12 +21,19 @@ class Page extends Controller {
         $this->service = $service;
     }
 
-    public function view(Request $request, $page): Inar|JsonResponse|Collection|array|String|int|null {
+    public function view(Request $request, $sort, $by, $search): Inar|JsonResponse|Collection|array|String|int|null {
+        if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
+        if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
+        if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
+        $page = @$_GET['page'];
+
         return Inertia::render('admin/peserta/page', [
             'title'   => 'Daftar Peserta | Admin | Psikotest Online App',
             'pathURL' => url()->current(),
             'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
             'onetime' => false,
+            'unique'  => fun::random('combwisp', 50),
+            'nama'    => $request->session()->get('nama'),
             'page'    => $page
         ]);
     }
@@ -35,7 +42,8 @@ class Page extends Controller {
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
-        
+        $page = @$_GET['page'];
+
         $data = $this->service->allProfil($sort, $by, $search);
         $lastpage = 0;
         $fdata = null;
@@ -59,6 +67,7 @@ class Page extends Controller {
             'by'                   => $by,
             'search'               => $search,
             'lastpage'             => $lastpage,
+            'page'                 => $page
         ]);
     }
 }

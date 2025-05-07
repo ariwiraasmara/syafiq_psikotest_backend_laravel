@@ -18,7 +18,7 @@
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
         <div>
             <p>
-                <span class='mr-4'>
+                <span class='mr-4' style="font-size: 20px;">
                     <a href="{{ route('admin_peserta_edit', ['id' => $id]); }}" rel="nofollow" title="Edit Data Peserta {{ $dataprofil['nama'] }}">
                         <ion-icon name="pencil-outline"></ion-icon>
                     </a>
@@ -53,12 +53,12 @@
                 </div>
                 <div class='static grid grid-cols-2 gap-2 mt-2'>
                     <div class='w-full'>
-                        <button type="button" title='Batal Pencarian Data dan Refresh Data' class="w-full border-2 border-black rounded-lg p-2 text-black text-lg font-bold" style="background-color: #5f5" onclick="cancelSearch()">
+                        <button type="button" title='Batal Pencarian Data dan Refresh Data' class="w-full rounded-lg p-2 text-black text-lg font-bold" style="background-color: #5f5" onclick="cancelSearch()">
                             <ion-icon name="refresh-outline"></ion-icon>
                         </button>
                     </div>
                     <div class="w-full">
-                        <button type="button" title='Cari Data' class="w-full border-2 border-black rounded-lg p-2 text-white text-lg" style="background-color: #55f" onclick="getData()">
+                        <button type="button" title='Cari Data' class="w-full rounded-lg p-2 text-white text-lg" style="background-color: #55f" onclick="getData()">
                             <ion-icon name="search-outline"></ion-icon>
                         </button>
                     </div>

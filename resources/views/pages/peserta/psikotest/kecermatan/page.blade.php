@@ -51,7 +51,7 @@
         </div>
 
         <div class="border-t-2 border-black p-4">
-            <button type="button" onclick="next_session({{ $sessionID }})" class="right border-2 p-2 border-white bg-blue-700 hover:bg-blue-500 text-white rounded-lg text-center w-full">
+            <button type="button" onclick="next_session({{ $sessionID }})" class="right p-2 bg-blue-700 hover:bg-blue-500 shadow-xl text-white rounded-lg text-center w-full">
                 <ion-icon name="arrow-forward-circle-outline" style="font-size: 40px; margin-top: 0px;"></ion-icon>
             </button>
         </div>
@@ -111,12 +111,11 @@
 
         async function submit() {
             try {
+                const id = parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)));
                 axios.defaults.withCredentials = true;
                 axios.defaults.withXSRFToken = true;
-                const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
-                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                });
-                const response = await axios.post(`/public/api/peserta-hasil-tes/${parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)))}`, {
+                const response = await axios.post(`../../../peserta-psikotest-kecermatan/${id}`, {
+                    unique: '{{ $unique; }}',
                     hasilnilai_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom1`))),
                     waktupengerjaan_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`waktupengerjaan_kolom_1`))),
                     //
@@ -135,7 +134,7 @@
                     withCredentials: true,  // Mengirimkan cookie dalam permintaan
                     headers: {
                         'Content-Type': 'application/json',
-                        'XSRF-TOKEN': csrfToken,
+                        'XSRF-TOKEN': '{{ csrf_token(); }}',
                         'tokenlogin': parseInt('{{ $unique; }}'),
                     }
                 });
@@ -144,7 +143,7 @@
                 if(parseInt(response.data.success)) {
                     localStorage.removeItem('sesi_psikotest_kecermatan');
                     setTimeout(() => {
-                        window.location.href = `/public/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest')}`;
+                        window.location.href = `/public/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest_kecermatan')}`;
                         sessionStorage.clear();
                     }, 3000);
                 }

@@ -29,6 +29,8 @@ class Page extends Controller {
             'pathURL' => url()->current(),
             'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'onetime' => false,
+            'unique'  => fun::random('combwisp', 10),
+            'nama'    => $request->session()->get('nama')
         ]);
     }
 

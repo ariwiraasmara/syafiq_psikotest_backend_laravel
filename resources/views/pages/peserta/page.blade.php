@@ -10,38 +10,37 @@
     <div id="formpeserta">
         <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
             <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                <div class="p-6 rounded-lg border-3 border-black" style="background-color: rgba(0, 0, 0, 0.5);">
-                    
-                        <h2 class="text-2xl text-bold uppercase font-bold text-center text-white">Peserta</h2>
+                <div class="form-entry">
+                        <h2 class="text-2xl text-bold uppercase font-bold text-center text-black">Peserta</h2>
                         <div class='form_admin_peserta text-left'>
                             <input  type="text" id="nama" name ="nama" required focused
                                     placeholder="Nama..." label="Nama..."
-                                    class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                                    class="w-full mt-4 border-black border-2 p-2 rounded-lg text-black"
                             />
                             <input  type="number" id="no_identitas" name ="no_identitas" required focused
                                     placeholder="no_identitas..." label="no_identitas..."
-                                    class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                                    class="w-full mt-4 border-black border-2 p-2 rounded-lg text-black"
                             />
                             <input  type="email" id="email" name ="email" required focused
                                     placeholder="Email..." label="Email..."
-                                    class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                                    class="w-full mt-4 border-black border-2 p-2 rounded-lg text-black"
                             />
                             <input  type="date" id="tgl_lahir" name ="tgl_lahir" required focused
                                     placeholder="Tanggal Lahir..." label="Tanggal Lahir..."
-                                    class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                                    class="w-full mt-4 border-black border-2 p-2 rounded-lg text-black"
                             />
                             <input  type="text" id="asal" name ="asal" required focused
                                     placeholder="Asal..." label="Asal..."
-                                    class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                                    class="w-full mt-4 border-black border-2 p-2 rounded-lg text-black"
                             />
                         </div>
 
                         <div class="mt-4 grid grid-cols-2 gap-4 justify-self-center">
-                            <button type="button" id="submit" class="btn p-2 border-2 border-white bg-blue-700 hover:bg-blue-500 text-white rounded-lg text-center" onclick="submit()">
+                            <button type="button" id="submit" class="p-2 bg-blue-700 hover:bg-blue-500 shadow-xl text-white rounded-lg text-center" onclick="submit()">
                                 Lanjut
                             </button>
 
-                            <button type="button" class="btn p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center" onclick="onBack()">
+                            <button type="button" class="p-2 bg-pink-700 hover:bg-pink-500 shadow-xl text-white rounded-lg text-center" onclick="onBack()">
                                 Kembali
                             </button>
                         </div>
@@ -57,13 +56,13 @@
                     <h2 class='font-bold underline text-2lg uppercase'>Anda masih punya sesi!</h2>
 
                     <div class="mt-4">
-                        <button type="button" class="btn p-2 border-2 border-white bg-blue-700 hover:bg-blue-500 text-white rounded-lg text-center w-full" onclick="continueSession()">
+                        <button type="button" class="p-2 bg-blue-700 hover:bg-blue-500 text-white rounded-lg text-center w-full" onclick="continueSession()">
                             Lanjut
                         </button>
                     </div>
 
                     <div class="mt-4">
-                        <button type="button" class="btn p-2 border-2 border-white bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="onBack()" rel="follow">
+                        <button type="button" class="p-2 bg-pink-700 hover:bg-pink-500 text-white rounded-lg text-center w-full" onclick="onBack()" rel="follow">
                             Kembali
                         </button>
                     </div>
@@ -156,10 +155,8 @@
                 else {
                     axios.defaults.withCredentials = true;
                     axios.defaults.withXSRFToken = true;
-                    const csrfToken = await axios.get(`/sanctum/csrf-cookie`, {
-                        withCredentials: true,  // Mengirimkan cookie dalam permintaan
-                    });
-                    const response = await axios.post(`/public/api/peserta/setup`, {
+                    const response = await axios.post(`{{ route('peserta_setup') }}`, {
+                        unique: '{{ $unique; }}',
                         nama: nama,
                         no_identitas: no_identitas,
                         email: email,
@@ -169,7 +166,7 @@
                     }, {
                         withCredentials: true,  // Mengirimkan cookie dalam permintaan
                         headers: {
-                            'XSRF-TOKEN': csrfToken,
+                            'XSRF-TOKEN': '{{ csrf_token(); }}',
                             'Content-Type': 'application/json',
                             'tokenlogin': random,
                         }
@@ -201,7 +198,7 @@
                         localStorage.setItem('sesi_psikotest_kecermatan', 1);
                         sessionStorage.setItem('nilai_total_psikotest_kecermatan_kolom1', 0);
                         sessionStorage.setItem('waktupengerjaan_kolom_1', 0);
-                        window.location.href = `{{ route('peserta_psikotest_kecermatan', ['page' => 1]) }}`;
+                        window.location.href = `/public/peserta/psikotest/kecermatan/1`;
                     }
                     else if(response.data.success === 'datex') {
                         document.getElementById('formpeserta').classList.add('hidden');
@@ -239,7 +236,7 @@
                 sessionStorage.removeItem(`waktupengerjaan_kolom3`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom4`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom5`);
-                window.location.href = `{{ route('peseta_psikotest_kecermatan', ['page' => 1]); }}`;
+                window.location.href = `/public/peserta/psikotest/kecermatan/1`;
             }
             catch(err) {
                 console.info('Terjadi Error Peserta-continueSession:', err);

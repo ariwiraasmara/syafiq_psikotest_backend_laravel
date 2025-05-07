@@ -40,13 +40,13 @@ class Page extends Controller {
             'pathURL'  => url()->current(),
             'robots'   => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
             'onetime'  => false,
-            'data'     => $data,
-            'req_nama' => $request->cookie('nama'),
+            'unique'   => fun::random('combwisp', 50),
+            'nama'     => $request->session()->get('nama'),
+            'data'     => $data
         ]);
     }
 
     public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
-        $token = $request->cookie('email');
         $data = $this->pesertaService->allLatest();
         return view('pages.admin.dashboard.page', [
             'title'                => 'Dashboard | Admin | Psikotest Online App',
@@ -59,8 +59,7 @@ class Page extends Controller {
             'is_breadcrumb_hidden' => 'hidden',
             'unique'               => fun::random('combwisp', 50),
             'nama'                 => $request->session()->get('nama'),
-            'data'                 => $data,
-            'token'                => $token
+            'data'                 => $data
         ]);
     }
 }

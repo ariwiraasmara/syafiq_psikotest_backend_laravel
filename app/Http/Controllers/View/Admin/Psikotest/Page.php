@@ -17,10 +17,16 @@ class Page extends Controller {
     //
     public function view(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
         return Inertia::render('admin/psikotest/page', [
-            'title'   => 'Daftar Psikotest | Admin | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'onetime' => false,
+            'title'     => 'Daftar Psikotest | Admin | Psikotest Online App',
+            'pathURL'   => url()->current(),
+            'robots'    => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'onetime'   => false,
+            'unique'    => fun::random('combwisp', 50),
+            'nama'      => $request->session()->get('nama'),
+            'psikotest' => [
+                'kecermatan',
+                // 'intelegensia'
+            ]
         ]);
     }
 

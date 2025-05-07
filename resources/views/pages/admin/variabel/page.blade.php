@@ -15,23 +15,31 @@
 
     <div class="p-4 text-black" style="margin-bottom: 130px;">
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
-        <div class="p-2 text-right">
-            <button type="button" id="btn-refresh" class="rounded-lg btn-sm text-white" style="width: 75px; background-color: #0a0;" onclick="refresh()">
-                <ion-icon name="refresh-outline"></ion-icon>
-            </button>
-            <button type="button" id="btn-togglesearch" class="rounded-lg btn-sm text-white" onclick="toggleSearch()" style="width: 75px; background-color: #55f;">
-                <ion-icon name="search-outline"></ion-icon>
-            </button>
-            <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 50px; height: 30px;" onchange="sortChange();">
-                <option value="" disabled>Pilih Berdasarkan...</option>
-                <option value="variabel" @if($sort == 'variabel') selected @endif >Nama Variabel</option>
-                <option value="values" @if($sort == 'values') selected @endif >Nilai Variabel</option>
-            </select>
-            <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg border-2 border-black bg-white" style="width: 50px; height: 30px;" onchange="byChange();">
-                <option value="" disabled>Urutkan Berdasarkan...</option>
-                <option value="asc" @if($by == 'asc') selected @endif>A - Z</option>
-                <option value="desc" @if($by == 'desc') selected @endif>Z - A</option>
-            </select>
+        <div class="p-2 container mx-auto flex justify-between items-center w-full">
+            <div class="w-full">
+                <button type="button" id="btn-refresh" class="rounded-lg text-white w-full" style="padding: 5px; background-color: #0a0;" onclick="refresh()">
+                    <ion-icon name="refresh-outline"></ion-icon>
+                </button>
+            </div>
+            <div class="w-full">
+                <button type="button" id="btn-togglesearch" class="rounded-lg text-white w-full" onclick="toggleSearch()" style="padding: 5px; background-color: #55f;">
+                    <ion-icon name="search-outline"></ion-icon>
+                </button>
+            </div>
+            <div class="w-full">
+                <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg border-2 border-black bg-white w-full" style="padding: 5px;" onchange="sortChange();">
+                    <option value="" disabled>Pilih Berdasarkan...</option>
+                    <option value="variabel" @if($sort == 'variabel') selected @endif >Nama Variabel</option>
+                    <option value="values" @if($sort == 'values') selected @endif >Nilai Variabel</option>
+                </select>
+            </div>
+            <div class="w-full">
+                <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg border-2 border-black bg-white w-full" style="padding: 5px;" onchange="byChange();">
+                    <option value="" disabled>Urutkan Berdasarkan...</option>
+                    <option value="asc" @if($by == 'asc') selected @endif>A - Z</option>
+                    <option value="desc" @if($by == 'desc') selected @endif>Z - A</option>
+                </select>
+            </div>
         </div>
         <div id="searchArea" class="mt-2 p-2 flex hidden">
             <div class="w-80 flex-1">
