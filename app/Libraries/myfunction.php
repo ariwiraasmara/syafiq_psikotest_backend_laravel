@@ -180,7 +180,6 @@ class myfunction {
         return hex2bin(base64_decode( $str ));
     }
 
-
     // ENCRYPT ONE WAY
     public static function hash(String|float $str) {
         return Hash::make($str, ['rounds' => 12,]);

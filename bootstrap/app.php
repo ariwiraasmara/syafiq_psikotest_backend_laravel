@@ -34,6 +34,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'islogin',
             'isauth',
             'expire_at',
+            'csrf_token',
+            'XSRF-TOKEN'
         ]);
         //
     })

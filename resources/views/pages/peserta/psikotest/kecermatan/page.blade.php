@@ -30,6 +30,7 @@
         </div>
 
         <div class="text-center text-black" style="padding: 20px; padding-top: 170px;">
+            <div class="font-bold underline text-lg text-center">Kerjakanlah Soal-Soal ini. Cocokkan dan isi yang tidak ada.</div>
             @php $no = 1; @endphp
             @foreach ($dataKecermatanSoal as $data)
                 @component('components.peserta.soaljawaban', [

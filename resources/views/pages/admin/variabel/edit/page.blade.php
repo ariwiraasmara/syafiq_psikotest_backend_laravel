@@ -15,7 +15,7 @@
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
         <div class="">
-            <form action="{{ route('admin_variabel_update', ['id' => $id]); }}" method="POST">
+            <form action="{{ route('admin_variabel_update', ['id' => $id, 'type' => 'php']); }}" method="POST">
                 @method('PUT')
                 @csrf()
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" readonly />

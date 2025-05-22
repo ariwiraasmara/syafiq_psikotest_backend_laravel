@@ -11,32 +11,52 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use App\Services\as0001_variabelsettingService;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Exception;
+use Meta;
 
 class Page extends Controller {
     //
     protected as0001_variabelsettingService $service;
+    protected $titlepage, $path, $domain;
     public function __construct(as0001_variabelsettingService $service) {
         $this->service = $service;
+        $this->titlepage = 'Variabel Setting | Admin | Psikotest Online App';
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request, $sort, $by, $search): Inar|JsonResponse|Collection|array|String|int|null {
+    public function reactView(Request $request, $sort, $by, $search): Inar|JsonResponse|Collection|array|String|int|null {
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
         $page = @$_GET['page'];
+        $unique = fun::random('combwisp', 50);
 
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
+            ->set('canonical', url()->current())
+            ->set('og:url', url()->current())
+            ->set('robots', 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate')
+            ->set('XSRF-TOKEN', csrf_token())
+            ->set('__unique__', $unique);
+
+        Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+        Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+            
         return Inertia::render('admin/variabel/page', [
-            'title'   => 'Variabel Setting | Admin | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'unique'  => fun::random('combwisp', 50),
+            'title'   => $this->titlepage,
+            'token'   => csrf_token(),
+            'unique'  => $unique,
             'nama'    => $request->session()->get('nama'),
-            'page'    => $page
+            'email'   => $request->session()->get('email'),
+            'page'    => $page,
+            'pat'     => $request->session()->get('pat'),
+            'rtk'     => $request->session()->get('rtk'),
         ]);
     }
 
@@ -54,7 +74,7 @@ class Page extends Controller {
             $lastpage = $data['last_page'];
         }
         return view('pages.admin.variabel.page', [
-            'title'                => 'Variabel Setting | Admin | Psikotest Online App',
+            'title'                => $this->titlepage,
             'appbar_title'         => 'Variabel Setting',
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/admin/variabel',
@@ -64,6 +84,8 @@ class Page extends Controller {
             'onetime'              => false,
             'unique'               => fun::random('combwisp', 50),
             'nama'                 => $request->session()->get('nama'),
+            'pat'                  => $request->session()->get('pat'),
+            'rtk'                  => $request->session()->get('rtk'),
             'data'                 => $fdata,
             'sort'                 => $sort,
             'by'                   => $by,

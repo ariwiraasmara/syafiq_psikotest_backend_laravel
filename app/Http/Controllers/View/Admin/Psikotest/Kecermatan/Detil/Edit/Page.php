@@ -11,38 +11,66 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Services\as2002_kecermatan_soaljawabanService;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use App\Services\as2001_kecermatan_kolompertanyaanService;
+use App\Services\as2002_kecermatan_soaljawabanService;
 use App\Libraries\myfunction as fun;
 use Exception;
+use Meta;
 
 class Page extends Controller {
     //
-    protected as2002_kecermatan_soaljawabanService $service;
-    public function __construct(as2002_kecermatan_soaljawabanService $service) {
-        $this->service = $service;
+    protected as2001_kecermatan_kolompertanyaanService $service1;
+    protected as2002_kecermatan_soaljawabanService $service2;
+    protected $titlepage, $path, $domain;
+    public function __construct(
+        as2001_kecermatan_kolompertanyaanService $service1,
+        as2002_kecermatan_soaljawabanService $service2) {
+        $this->service1 = $service1;
+        $this->service2 = $service2;
+        $this->titlepage = 'Edit Detil Psikotest Kecermatan | Admin | Psikotest Online App';
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request, $id1, $id2) {
-        $data = $this->service->getOne(fun::denval($id2, true));
+    public function reactView(Request $request, $id1, $id2) {
+        $unique = fun::random('combwisp', 50);
+        $data1 = $this->service1->get($id1);
+        $data2 = $this->service2->getOne($id2);
+        // return $data2[0];
+
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
+            ->set('canonical', url()->current())
+            ->set('og:url', url()->current())
+            ->set('robots', 'none, nosnippet, noarchive, notranslate, noimageindex')
+            ->set('XSRF-TOKEN', csrf_token())
+            ->set('__unique__', $unique);
+
+        Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+        Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+
         return Inertia::render('admin/psikotest/kecermatan/detil/edit/page', [
-            'title'   => 'Edit Detil Psikotest Kecermatan | Admin | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
-            'onetime' => false,
-            'unique'  => fun::random('combwisp', 50),
-            'nama'    => $request->session()->get('nama'),
-            'id1'     => $id1,
-            'id2'     => $id2,
-            'data'    => $data[0]['soal_jawaban']
+            'title'  => $this->titlepage,
+            'token'  => csrf_token(),
+            'unique' => $unique,
+            'nama'   => $request->session()->get('nama'),
+            'email'  => $request->session()->get('email'),
+            'pat'    => $request->session()->get('pat'),
+            'rtk'    => $request->session()->get('rtk'),
+            'id1'    => $id1,
+            'id2'    => $id2,
+            'data1'  => $data1[0],
+            'data2'  => $data2[0]['soal_jawaban']
         ]);
     }
 
     public function bladeView(Request $request, $id1, $id2): View|Response|JsonResponse|Collection|array|String|int|null {
-        $data = $this->service->getOne(fun::denval($id2, true));
+        $data2 = $this->service2->getOne(fun::denval($id2, true));
         // return $data[0]['soal_jawaban'];
         return view('pages.admin.psikotest.kecermatan.detil.edit.page', [
-            'title'                => 'Edit Detil Psikotest Kecermatan | Admin | Psikotest Online App',
+            'title'                => $this->titlepage,
             'appbar_title'         => 'Edit Detil Psikotest Kecermatan',
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/admin/psikotest/kecermatan/detil/edit',
@@ -54,7 +82,7 @@ class Page extends Controller {
             'nama'                 => $request->session()->get('nama'),
             'id1'                  => $id1,
             'id2'                  => $id2,
-            'data'                 => $data[0]['soal_jawaban']
+            'data'                 => $data2[0]['soal_jawaban']
         ]);
     }
 
@@ -79,7 +107,7 @@ class Page extends Controller {
                     ]],
                     'jawaban' => $request->jawaban
                 ];
-                $data = $this->service->update(fun::denval($id1, true), fun::denval($id2, true), [
+                $data = $this->service2->update(fun::denval($id1, true), fun::denval($id2, true), [
                     'soal_jawaban' => $soaljawaban,
                 ]);
                 if($data->isNotEmpty()) {

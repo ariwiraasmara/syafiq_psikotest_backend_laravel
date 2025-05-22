@@ -11,33 +11,53 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Services\as2002_kecermatan_soaljawabanService;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use App\Services\as2002_kecermatan_soaljawabanService;
 use App\Libraries\myfunction as fun;
 use Exception;
+use Meta;
 
 class Page extends Controller {
     //
     protected as2002_kecermatan_soaljawabanService $service;
+    protected $titlepage, $path, $domain;
     public function __construct(as2002_kecermatan_soaljawabanService $service) {
         $this->service = $service;
+        $this->titlepage = 'Detil Psikotest Kecermatan Baru | Admin | Psikotest Online App';
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request, $id) {
+    public function reactView(Request $request, $id) {
+        $unique = fun::random('combwisp', 50);
+
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
+            ->set('canonical', url()->current())
+            ->set('og:url', url()->current())
+            ->set('robots', 'none, nosnippet, noarchive, notranslate, noimageindex')
+            ->set('XSRF-TOKEN', csrf_token())
+            ->set('__unique__', $unique);
+
+        Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+        Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+
         return Inertia::render('admin/psikotest/kecermatan/detil/baru/page', [
-            'title'   => 'Detil Psikotest Kecermatan Baru | Admin | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
-            'onetime' => false,
-            'unique'  => fun::random('combwisp', 50),
+            'title'   => $this->titlepage,
+            'token'   => csrf_token(),
+            'unique'  => $unique,
             'nama'    => $request->session()->get('nama'),
+            'email'   => $request->session()->get('email'),
+            'pat'     => $request->session()->get('pat'),
+            'rtk'     => $request->session()->get('rtk'),
             'id'      => $id
         ]);
     }
 
     public function bladeView(Request $request, $id): View|Response|JsonResponse|Collection|array|String|int|null {
         return view('pages.admin.psikotest.kecermatan.detil.baru.page', [
-            'title'                => 'Detil Psikotest Kecermatan Baru | Admin | Psikotest Online App',
+            'title'                => $this->titlepage,
             'appbar_title'         => 'Detil Psikotest Kecermatan Baru',
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/admin/psikotest/kecermatan/detil/baru',

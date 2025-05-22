@@ -11,27 +11,49 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Services\as1001_peserta_profilService;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
+use App\Services\as1001_peserta_profilService;
 use App\Libraries\myfunction as fun;
 use Exception;
+use Meta;
 
 class Page extends Controller {
    //
     protected as1001_peserta_profilService $service;
+    protected $titlepage, $path, $domain;
     public function __construct(as1001_peserta_profilService $service) {
         $this->service = $service;
+        $this->titlepage = 'Edit Peserta | Admin | Psikotest Online App';
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
+    public function reactView(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
+        $unique = fun::random('combwisp', 50);
         $data = $this->service->get(fun::denval($id, true));
+
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
+            ->set('canonical', url()->current())
+            ->set('og:url', url()->current())
+            ->set('robots', 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate')
+            ->set('XSRF-TOKEN', csrf_token())
+            ->set('__unique__', $unique);
+
+        Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+        Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+
         return Inertia::view('admin/peserta/edit/page', [
-            'title'   => 'Edit Peserta | Admin | Psikotest Online App',
+            'title'   => $this->titlepage,
             'pathURL' => url()->current(),
             'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
-            'onetime' => false,
-            'unique'  => fun::random('combwisp', 50),
+            'token'   => csrf_token(),
+            'unique'  => $unique,
             'nama'    => $request->session()->get('nama'),
+            'email'   => $request->session()->get('email'),
+            'pat'     => $request->session()->get('pat'),
+            'rtk'     => $request->session()->get('rtk'),
             'id'      => $id,
             'data'    => $data[0]
         ]);
@@ -40,7 +62,7 @@ class Page extends Controller {
     public function bladeView(Request $request, $id): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get(fun::denval($id, true));
         return view('pages.admin.peserta.edit.page', [
-            'title'                => 'Edit Peserta | Admin | Psikotest Online App',
+            'title'                => $this->titlepage,
             'appbar_title'         => 'Edit Peserta',
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/admin/peserta-edit',

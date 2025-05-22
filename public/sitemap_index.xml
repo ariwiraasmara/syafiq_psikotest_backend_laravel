@@ -2,14 +2,10 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <sitemap>
         <loc>http://localhost:8000/sitemap.xml</loc>
-            <lastmod>2025-05-01T20:31:56+07:00</lastmod>
+            <lastmod>2025-05-16T19:48:17+07:00</lastmod>
     </sitemap>
     <sitemap>
         <loc>http://localhost:8000/sitemap_hasil_psikotest_kecermatan_peserta.xml</loc>
-            <lastmod>2025-05-01T20:31:56+07:00</lastmod>
-    </sitemap>
-    <sitemap>
-        <loc>http://localhost:8000/sitemap_admin_peserta_detil.xml</loc>
-            <lastmod>2025-05-01T20:31:56+07:00</lastmod>
+            <lastmod>2025-05-16T19:48:17+07:00</lastmod>
     </sitemap>
 </sitemapindex>

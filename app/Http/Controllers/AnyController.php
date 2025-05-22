@@ -26,14 +26,14 @@ class AnyController extends Controller {
             $this->patService = $patService;
     }
 
-    public function csrf_token() {
+    public function csrf_token(Request $request) {
         try {
             $response = new Response([
                 'success' => 1,
                 'pesan'   => 'CSRF TOKEN!',
                 'data'    => csrf_token()
             ]);
-            $response->withCookie(cookie('csrf_token', csrf_token(), 1));
+            $response->cookie('csrf_token', csrf_token(), 1);
             return $response;
         }
         catch(Exception $err) {

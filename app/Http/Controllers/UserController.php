@@ -14,9 +14,9 @@ use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cookie;
 use Exception;
 class UserController extends Controller {
     //
@@ -47,7 +47,7 @@ class UserController extends Controller {
             if($credentials) {
                 $data = $this->service->login(fun::readable($request->email), fun::readable($request->password));
                 if($data['success'] > 0) {
-                    if (Auth::attempt($credentials, true)) {
+                    if(Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
                         // $token = Crypt::encryptString($user->createToken($request->email, ['server:update'])->plainTextToken);
@@ -68,7 +68,8 @@ class UserController extends Controller {
                         if(!$isTokenupdate) $tokenExpire = $pat[0]['expires_at'];
                         $token = fun::random('combwisp', 50);
                         $unique = fun::random('combwisp', 50);
-                        $response = new Response([
+
+                        $rfdt = [
                             'success' => 1,
                             'pesan'   => 'Yehaa! Berhasil Login!',
                             'data'    => [
@@ -99,13 +100,18 @@ class UserController extends Controller {
                                     'sebagai' => 'developer'
                                 ]
                             ]
-                        ]);
+                        ];
+
+                        // $request->session()->put('email', $request->email);
+                        // $request->session()->put('nama', $data['data'][0]['name']);
+                        // $request->session()->put('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']));
+                        // $request->session()->put('rtk', fun::encrypt($data['data'][0]['remember_token']));
+
+                        $response = new Response($rfdt);
 
                         return $response
+                        // return redirect('admin/dashboard')
                                 ->cookie('email', $request->email, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
-                                ->cookie('nama', $data['data'][0]['name'], $expirein, $this->path, $this->domain, true, true, false, 'Strict')
-                                // ->cookie('pat', fun::enval($pat[0]['id'].'|'.$pat[0]['token'], true), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
-                                // ->cookie('rtk', fun::enval($data['data'][0]['remember_token'], true), $expirein, $this->path, $this->domain, true, true, false, 'Strict')
                                 ->cookie('islogin', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
                                 ->cookie('isadmin', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')
                                 ->cookie('isauth', true, $expirein, $this->path, $this->domain, true, true, false, 'Strict')

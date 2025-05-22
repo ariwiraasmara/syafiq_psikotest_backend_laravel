@@ -2,13 +2,13 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import "../../css/app.css";
-import "../../css/animate.css";
+// import "../../css/app.css";
+// import "../../css/animate.css";
 import * as React from 'react';
 import axios from 'axios';
 import { Head } from '@inertiajs/react'
-import store from '../store.js';
-import { Provider } from 'react-redux';
+// import store from '../store.js';
+// import { Provider } from 'react-redux';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -69,13 +69,9 @@ export default function RootLayout({ children }) {
 
     return (
         <React.StrictMode>
-            <Provider store={store}>
-            <html lang="id">
-                <body className={`antialiased`} >
-                    {children}
-                </body>
-            </html>
-            </Provider>
+            {/* <Provider> */}
+            {children}
+            {/* </Provider> */}
         </React.StrictMode>
     );
 }

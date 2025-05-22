@@ -9,6 +9,7 @@
         <span class="mr-4">{{ $soal2 }}</span>
         <span class="mr-4">{{ $soal3 }}</span>
         <span class="mr-4">{{ $soal4 }}</span>
+        <span class="">.....</span>
     </div>
 
     <div class="justify-center text-center mt-2" id="{{ 'jawabangroup-'.$id }}">

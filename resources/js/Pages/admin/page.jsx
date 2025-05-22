@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import Layout from '@/Layouts/layout';
+import Layout from '@/Layouts/layout.jsx';
 import * as React from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -17,11 +17,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EmailIcon from '@mui/icons-material/Email';
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 
-import Myhelmet from '@/components/Myhelmet';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import Footer from '@/components/Footer';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import Footer from '@/components/Footer.jsx';
 
-import { random, currentDate } from '@/libraries/myfunction';
+import { random, currentDate } from '@/libraries/myfunction.js';
 
 const styledTextField = {
     '& .MuiOutlinedInput-notchedOutline': {
@@ -137,27 +137,20 @@ export default function Admin(props) {
                         secure : secure,
                     };
 
-                    Cookies.set('islogin', true, cookieRules);
-                    Cookies.set('isadmin', true, cookieRules);
-                    Cookies.set('isauth', true, cookieRules);
-                    Cookies.set('expire_at', response.data.sesi.expire_at, cookieRules);
-                    Cookies.set('__token-x-1__', response.data.sesi.token, cookieRules);
-                    Cookies.set('__unique__', response.data.sesi.unique, cookieRules);
-                    // Cookies.set('nama', response.data.data.nama, cookieRules);
-                    // Cookies.set('email', emaillogin, cookieRules);
-                    // Cookies.set('pat', response.data.data.token_1, cookieRules);
-                    // Cookies.set('rtk', response.data.data.token_2, cookieRules);
+                    // Cookies.set('islogin', true, cookieRules);
+                    // Cookies.set('isadmin', true, cookieRules);
+                    // Cookies.set('isauth', true, cookieRules);
+                    // Cookies.set('expire_at', response.data.sesi.expire_at, cookieRules);
+                    // Cookies.set('__token-x-1__', response.data.sesi.token, cookieRules);
+                    // Cookies.set('__unique__', response.data.sesi.unique, cookieRules);
 
-                    localStorage.setItem('islogin', true);
-                    localStorage.setItem('isadmin', true);
-                    localStorage.setItem('isauth', true);
-                    localStorage.setItem('ispeserta', false);
+                    localStorage.setItem('islogin', '1');
+                    localStorage.setItem('isadmin', '1');
+                    localStorage.setItem('isauth', '1');
+                    localStorage.setItem('ispeserta', '0');
                     localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
                     localStorage.setItem('nama', response.data.data.nama);
                     localStorage.setItem('email', emaillogin);
-                    localStorage.setItem('pat', response.data.data.token_1);
-                    localStorage.setItem('remember-token', response.data.data.token_2);
-                    localStorage.setItem('csrfToken', csrfToken);
                     // route('admin/dashboard');
                     window.location.href = '/admin/dashboard';
                 }

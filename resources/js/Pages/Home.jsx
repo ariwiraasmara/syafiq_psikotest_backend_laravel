@@ -1,17 +1,18 @@
 // ! Copyright @
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
-import Layout from '@/Layouts/layout';
+import Layout from '@/Layouts/layout.jsx';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
-import Myhelmet from '@/components/Myhelmet';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import Footer from '@/components/Footer';
-import FooterLinkSEORel from '@/components/FooterLinkSEORel';
-import Homepage_Header from '@/components/homepage/Homepage_Header';
-import Homepage_Navbar from '@/components/homepage/Homepage_Navbar';
-import Homepage_Welcome from '@/components/homepage/Homepage_Welcome';
-import Homepage_About from '@/components/homepage/Homepage_About';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import Footer from '@/components/Footer.jsx';
+import FooterLinkSEORel from '@/components/FooterLinkSEORel.jsx';
+import Homepage_Header from '@/components/homepage/Homepage_Header.jsx';
+import Homepage_Navbar from '@/components/homepage/Homepage_Navbar.jsx';
+import Homepage_Welcome from '@/components/homepage/Homepage_Welcome.jsx';
+import Homepage_About from '@/components/homepage/Homepage_About.jsx';
 
 Home.propTypes = {
     title: PropTypes.string,
@@ -20,19 +21,6 @@ Home.propTypes = {
 };
 
 export default function Home(props) {
-    const textColor = localStorage.getItem('text-color');
-
-    const MemoHelmet = React.memo(function Memo() {
-        return(
-            <Myhelmet
-                title={props.title}
-                robots={props.robots}
-                pathURL={props.pathURL}
-                onetime={true}
-            />
-        );
-    });
-
     const MemoNavBreadcrumb = React.memo(function Memo() {
         return(
             <NavBreadcrumb content={`Homepage`} hidden={`hidden`} />
@@ -75,7 +63,6 @@ export default function Home(props) {
 
     return(
         <Layout>
-            <MemoHelmet />
             <MemoNavBreadcrumb />
             <MemoHomepageHeader />
             <MemoHomepageNavbar />

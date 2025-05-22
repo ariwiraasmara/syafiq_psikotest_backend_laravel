@@ -4,10 +4,10 @@
 import Layout from '@/Layouts/layout';
 import * as React from 'react';
 import Link from '@mui/material/Link';
-import Myhelmet from '@/components/Myhelmet';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import Footer from '@/components/Footer';
-import FooterLinkSEORel from '@/components/FooterLinkSEORel';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import Footer from '@/components/Footer.jsx';
+import FooterLinkSEORel from '@/components/FooterLinkSEORel.jsx';
 
 export default function Home(props) {
     const textColor = localStorage.getItem('text-color');

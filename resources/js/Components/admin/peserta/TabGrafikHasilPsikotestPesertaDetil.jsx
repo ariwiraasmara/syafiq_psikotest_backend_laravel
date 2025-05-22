@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import PesertaDetil_GrafikKecermatan from './GrafikHasilPsikotestKecermatan_Peserta';
+import PesertaDetil_GrafikKecermatan from './GrafikHasilPsikotestPesertaDetil_Peserta';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;

@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import Layoutadmin from '@/Layouts/Layoutadmin';
+import Layoutadmin from '@/Layouts/Layoutadmin.jsx';
 import axios from 'axios';
 import * as React from 'react';
 
@@ -17,12 +17,12 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import Myhelmet from '@/components/Myhelmet';
-import Appbarku from '@/components/Appbarku';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import ListPeserta from '@/components/admin/ListPeserta';
-import Footer from '@/components/Footer';
-import ComboPaging from '@/components/ComboPaging';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import Appbarku from '@/components/Appbarku.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import ListPeserta from '@/components/admin/ListPeserta.jsx';
+import Footer from '@/components/Footer.jsx';
+import ComboPaging from '@/components/ComboPaging.jsx';
 
 import { readable, random } from '@/libraries/myfunction';
 import DOMPurify from 'dompurify';

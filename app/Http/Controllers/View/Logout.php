@@ -20,11 +20,10 @@ class Logout extends Controller {
         $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request) {
+    public function reactView(Request $request) {
         // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
-        $user = $request->user();
         Auth::logout();
-        $user->delete();
+        // $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return Inertia::render('logout/page');

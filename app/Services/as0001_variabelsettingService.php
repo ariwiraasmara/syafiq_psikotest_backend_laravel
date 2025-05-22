@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Repositories\as0001_variabelsettingRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use App\Libraries\myfunction as fun;
 use Exception;
 class as0001_variabelsettingService {
 
@@ -17,8 +18,12 @@ class as0001_variabelsettingService {
 
     public function all(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            // if($search == 'null' || $search == '-' ||$search == '' || $search == ' ' || $search == null) $search = null;
-            return $this->repo->all($sort, $by, $search);
+            $data = $this->repo->all($sort, $by, $search);
+            return $data;
+            // return $data->map(function ($item) {
+            //     // return $item['id'] = fun::enval($item['id'], true);
+            //     return $item['id'];
+            // });
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->all!', [

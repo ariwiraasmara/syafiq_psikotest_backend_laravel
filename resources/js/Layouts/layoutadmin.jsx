@@ -7,8 +7,12 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import NavigasiBawah from '@/components/admin/NavigasiBawah';
+import NavigasiBawah from '@/components/admin/NavigasiBawah.jsx';
 import Cookies from 'js-cookie';;
+
+interface Layoutadmin {
+    children: React.ReactNode;
+}
 
 Layoutadmin.propTypes = {
     children: PropTypes.any,

@@ -33,6 +33,7 @@
     "homepage": "https://github.com/ariwiraasmara/syafiq_psikotest_backend_laravel#readme",
     "require": {
         "php": "^8.2",
+        "f9webltd/laravel-meta": "^3.0",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/breeze": "^2.2",
         "laravel/framework": "^12",
@@ -51,7 +52,7 @@
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.8",
-        "pestphp/pest-plugin-laravel": "^3.1"
+        "pestphp/pest-plugin-laravel": "^3.2"
     },
     "autoload": {
         "psr-4": {

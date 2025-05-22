@@ -3,7 +3,7 @@
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
 import './style.css';
-import Layoutadmin from '@/Layouts/Layoutadmin';
+import Layoutadmin from '@/Layouts/Layoutadmin.jsx';
 import axios from 'axios';
 import * as React from 'react';
 import Swal from 'sweetalert2';
@@ -24,16 +24,16 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-import Myhelmet from '@/components/Myhelmet';
-import Appbarku from '@/components/Appbarku';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import ComboPaging from '@/components/ComboPaging';
-import Footer from '@/components/Footer';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import Appbarku from '@/components/Appbarku.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import ComboPaging from '@/components/ComboPaging.jsx';
+import Footer from '@/components/Footer.jsx';
 import { readable, random, } from '@/libraries/myfunction';
 import validator from 'validator';
 import DOMPurify from 'dompurify';
 
-export default function AdminVariabel(props) {
+export default function AdminVariabelSetting(props) {
     const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
     const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
     const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));

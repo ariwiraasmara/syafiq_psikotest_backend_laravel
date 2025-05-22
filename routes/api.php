@@ -6,19 +6,17 @@ use App\Http\Middleware\BearerTokenCheck;
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;
 use App\Http\Middleware\ContentSecurityPolicy;
-use App\Http\Middleware\IndexedDB;
 use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
-use App\Http\Middleware\VerifyFastApiKey;
 use App\Http\Middleware\XRobotTags;
 use App\Http\Middleware\XRobotUntags;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Libraries\myroute;
-use App\Models\PersonalAccessTokens;
 use App\Models\User;
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
@@ -27,6 +25,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
+    // 'auth',
     'throttle:150,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     CheckTokenLogin::class,
@@ -123,6 +122,7 @@ Route::middleware([
 });
 
 Route::middleware([
+    // 'web',
     'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     CheckTokenLogin::class,
     CacheControlMiddleware::class,
@@ -207,6 +207,15 @@ Route::post('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIw
         ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
 
 //? PUBLIC API ROUTE PERCOBAAN
+Route::get('hello-auth', function(){
+    if (Auth::check()) {
+        // The user is logged in...
+        // return var_dump(Auth());
+        return 'hello... AUTH';
+    }
+    return 'hello... UGH!';
+});
+
 Route::get('/hello', function(Request $request) {
         $emailuser = 'ariwiraasmara.sc37@gmail.com';
     $user = User::where(['email' => $emailuser])->first();
@@ -225,4 +234,3 @@ Route::put('/hello', function(){
 Route::delete('/hello', function(){
     return 'hello';
 });
-

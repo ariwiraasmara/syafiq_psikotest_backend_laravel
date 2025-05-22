@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import Layout from '@/Layouts/layout';
+import Layout from '@/Layouts/layout.jsx';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';

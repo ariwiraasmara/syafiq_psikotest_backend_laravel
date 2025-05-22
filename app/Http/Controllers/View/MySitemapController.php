@@ -31,6 +31,9 @@ class MySitemapController extends Controller {
 
     public function generate(Request $request) {
         try {
+            // Session tidak ada atau sudah kadaluarsa, generate sitemap
+            $request->session()->put('is_generatate_sitemap', true);
+            $request->session()->put('is_generatate_sitemap_expiry', now()->addHours(24));
             $profilpeserta = $this->profilpesertaService->allReport_forSitemap();
 
             $this->sitemap->add(Url::create('/')
@@ -89,20 +92,20 @@ class MySitemapController extends Controller {
                 );
 
                 //generate ketiga
-                $this->sitemap_admin_peserta_detil->add(Url::create('/admin/peserta-detil/'.$profilpeserta[$x]['tgl_ujian'].'/'.$profilpeserta[$x]['tgl_ujian'].'/'.fun::enval($profilpeserta[$x]['id'], true))
-                        ->setLastModificationDate(Carbon::now())
-                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
-                        ->setPriority(1)
-                );
+                // $this->sitemap_admin_peserta_detil->add(Url::create('/admin/peserta-detil/'.$profilpeserta[$x]['tgl_ujian'].'/'.$profilpeserta[$x]['tgl_ujian'].'/'.fun::enval($profilpeserta[$x]['id'], true))
+                //         ->setLastModificationDate(Carbon::now())
+                //         ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                //         ->setPriority(1)
+                // );
                 $index_number++;
             }
 
             $this->sitemap->writeToFile(public_path('sitemap.xml'));
             $this->sitemap_hasil_psikotest_peserta->writeToFile(public_path('sitemap_hasil_psikotest_kecermatan_peserta.xml'));
-            $this->sitemap_admin_peserta_detil->writeToFile(public_path('sitemap_admin_peserta_detil.xml'));
+            // $this->sitemap_admin_peserta_detil->writeToFile(public_path('sitemap_admin_peserta_detil.xml'));
             $this->sitemapindex->add(url('sitemap.xml'), Carbon::now())
-                                ->add(url('sitemap_hasil_psikotest_kecermatan_peserta.xml'), Carbon::now())
-                                ->add(url('sitemap_admin_peserta_detil.xml'), Carbon::now());
+                                ->add(url('sitemap_hasil_psikotest_kecermatan_peserta.xml'), Carbon::now());
+                                // ->add(url('sitemap_admin_peserta_detil.xml'), Carbon::now());
             $this->sitemapindex->writeToFile(public_path('sitemap_index.xml'));
 
             return view('sitemap', [

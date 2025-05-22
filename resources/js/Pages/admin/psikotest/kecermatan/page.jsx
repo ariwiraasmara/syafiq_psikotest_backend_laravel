@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import Layoutadmin from '@/Layouts/Layoutadmin';
+import Layoutadmin from '@/Layouts/Layoutadmin.jsx';
 import axios from 'axios';
 import * as React from 'react';
 import Swal from 'sweetalert2';
@@ -15,10 +15,10 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-import Myhelmet from '@/components/Myhelmet';
-import Appbarku from '@/components/Appbarku';
-import NavBreadcrumb from '@/components/NavBreadcrumb';
-import Footer from '@/components/Footer';
+import Myhelmet from '@/components/Myhelmet.jsx';
+import Appbarku from '@/components/Appbarku.jsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.jsx';
+import Footer from '@/components/Footer.jsx';
 
 import { readable, random } from '@/libraries/myfunction';
 import DOMPurify from 'dompurify';

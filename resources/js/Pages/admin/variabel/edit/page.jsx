@@ -2,7 +2,7 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
-import Layoutadmindetil from '@/Layouts/Layoutadmindetil';
+import Layoutadmindetil from '@/Layouts/Layoutadmindetil.jsx';
 import axios from 'axios';
 import * as React from 'react';
 import Box from '@mui/material/Box';

@@ -239,7 +239,6 @@ export default function PesertaPsikotestKecermatan(props) {
                                 if (sessionID > 5) {
                                     submit();
                                 } else {
-                                    // router.push(`/peserta/psikotest/kecermatan/`);
                                     window.location.reload();
                                     // window.location.href = `/peserta/psikotest/kecermatan/${sessionID}`;
                                 }
@@ -272,6 +271,7 @@ export default function PesertaPsikotestKecermatan(props) {
                 <span className="mr-4">{soal2}</span>
                 <span className="mr-4">{soal3}</span>
                 <span className="mr-4">{soal4}</span>
+                <span className="font-bold">.....</span>
             </div>
         )
     });
@@ -342,7 +342,6 @@ export default function PesertaPsikotestKecermatan(props) {
             console.info('response', response);
             if(parseInt(response.data.success)) {
                 sessionStorage.removeItem('sesi_psikotest_kecermatan');
-                // router.push(`/peserta/psikotest/kecermatan/hasil?identitas=${sessionStorage.getItem('no_identitas_peserta_psikotest')}&tgl_tes=${localStorage.getItem('tgl_tes_peserta_psikotest')}`);
                 window.location.href = `/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest')}`;
             }
             console.info('Tidak dapat menyimpan data sesi');
@@ -360,7 +359,6 @@ export default function PesertaPsikotestKecermatan(props) {
             return nextSessionID;
         });
         console.info('sessionID', parseInt(sessionID));
-        // router.push(`/peserta/psikotest/kecermatan/`);
         window.location.reload();
         // window.location.href = `/peserta/psikotest/kecermatan/${sessionID}`;
     }

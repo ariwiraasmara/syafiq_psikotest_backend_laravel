@@ -159,7 +159,6 @@ class As0001VariabelsettingController extends Controller {
     #url = '/api/variabel-setting/{id}'
     public function update(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
-            return $request;
             $credentials = $request->validate([
                 'variabel' => 'required|string|max:255',
                 'values'   => 'required',
