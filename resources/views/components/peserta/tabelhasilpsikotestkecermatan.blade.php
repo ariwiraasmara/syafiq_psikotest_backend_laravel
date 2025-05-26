@@ -34,11 +34,11 @@
             </tr>
             <tr>
                 <td class="p-2">Lama Pengerjaan</td>
-                <td class="text-center p-2">{{ $waktu_kolom1; }}</td>
-                <td class="text-center p-2">{{ $waktu_kolom2; }}</td>
-                <td class="text-center p-2">{{ $waktu_kolom3; }}</td>
-                <td class="text-center p-2">{{ $waktu_kolom4; }}</td>
-                <td class="text-center p-2">{{ $waktu_kolom5; }}</td>
+                <td class="text-center p-2">{{ $waktu_kolom1; }} detik</td>
+                <td class="text-center p-2">{{ $waktu_kolom2; }} detik</td>
+                <td class="text-center p-2">{{ $waktu_kolom3; }} detik</td>
+                <td class="text-center p-2">{{ $waktu_kolom4; }} detik</td>
+                <td class="text-center p-2">{{ $waktu_kolom5; }} detik</td>
             </tr>
         </tbody>
     </table>

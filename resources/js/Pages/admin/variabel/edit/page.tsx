@@ -48,10 +48,11 @@ AdminVariabelEdit.propTypes = {
 };
 
 export default function AdminVariabelEdit(props: AdminVariabelEdit) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+
     const [loading, setLoading] = React.useState<boolean>(false);
     const [nvariabel, setNvariabel] = React.useState<string>('');
     const [nvalues, setNvalues] = React.useState<string>('');
@@ -60,24 +61,33 @@ export default function AdminVariabelEdit(props: AdminVariabelEdit) {
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid ${borderColor}`,
-            color: textColorRGB,
+            color: 'rgba(255, 255, 255, 1)',
+            borderRadius: 3,
         },
-        '& .MuiInputLabel-root': {
-            color: textColorRGB,
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: 'rgba(255, 255, 255, 1)',
         },
         '& .MuiOutlinedInput-input': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: borderColor, // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
-            color: textColorRGB, // warna hover
+            color: '#fff', // warna hover
         },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        background: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const handleChange_Nvariable = (event: any) => {
@@ -187,7 +197,7 @@ export default function AdminVariabelEdit(props: AdminVariabelEdit) {
 
     const MemoFooter = React.memo(function Memo() {
         return(
-            <Footer hidden={`hidden`} />
+            <Footer hidden={`hidden`} otherCSS={''} />
         );
     });
 
@@ -199,31 +209,29 @@ export default function AdminVariabelEdit(props: AdminVariabelEdit) {
             <div className="p-4 mb-14">
                 <h1 className='hidden'>Halaman Edit Variabel | Admin</h1>
                 <Box component="form"
-                    sx={{ '& > :not(style)': { marginTop: 3, p: 0, width: '100%' } }}
+                    sx={{ '& > :not(style)': { marginTop: 2, width: '100%' } }}
                     onSubmit={(e) => submit(e)}
                     noValidate
                     autoComplete="off">
-                    <TextField  type="text" id="variabel" variant="outlined" focused
+                    <TextField  type="text" id="variabel" variant="outlined"
                                 placeholder="Variabel..." label="Variabel..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_Nvariable}
                                 defaultValue={nvariabel} />
-                    <TextField  type="text" id="values" variant="outlined" focused
+                    <TextField  type="text" id="values" variant="outlined"
                                 placeholder="Nilai..." label="Nilai..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_Nvalues}
                                 defaultValue={nvalues} />
                     <Box>
-                        <div>
-                            <Button variant="contained" size="large" fullWidth color="primary" type="submit">
-                                Simpan
-                            </Button>
-                        </div>
-                        <div className="mt-4">
-                            <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e) => cancel(e)} rel='follow' title='Kembali' href='/admin/variabel' type="button">
-                                Batal
-                            </Button>
-                        </div>
+                        <Button variant="contained" size="large" fullWidth color="primary" type="submit" sx={styledButton}>
+                            Simpan
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e) => cancel(e)} rel='follow' title='Kembali' href='/admin/variabel' type="button" sx={styledButton}>
+                            Batal
+                        </Button>
                     </Box>
                 </Box>
             </div>

@@ -4,9 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Passport\Passport;
 
-class AppServiceProvider extends ServiceProvider
-{
+class AppServiceProvider extends ServiceProvider {
+    
     /**
      * Register any application services.
      */
@@ -21,5 +22,11 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Vite::prefetch(concurrency: 3);
+        Passport::loadKeysFrom(__DIR__.'/../secrets/oauth');
+        // Passport::hashClientSecrets();
+
+        Passport::tokensExpireIn(now()->addDays(7));
+        Passport::refreshTokensExpireIn(now()->addDays(7));
+        Passport::personalAccessTokensExpireIn(now()->addDays(7));
     }
 }

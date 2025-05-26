@@ -36,7 +36,7 @@
     <body class="antialiased">
         @inertia
 
-        <footer class="hidden">
+        <footer class="hidden bottom-px">
             <h2 class='font-bold'>Copyright @ {{ date('Y') }} : </h2>
             <h3 class='mt-2'>
                 <address><strong>Syafiq (syafiq@gmail.com, +6285311487755)</strong></address>

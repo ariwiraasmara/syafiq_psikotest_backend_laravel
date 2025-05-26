@@ -28,6 +28,16 @@ body {
     height: 75vh;
 }
 
+/* untuk layar desktop */
+@media (min-width: 1024px) {
+
+}
+
+/* untuk layar mobile */
+@media (max-width: 767px) {
+
+}
+
 .form-entry {
     padding: 25px;
     border-radius: 15px;

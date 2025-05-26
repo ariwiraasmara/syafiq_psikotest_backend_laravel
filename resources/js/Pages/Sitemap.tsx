@@ -3,25 +3,36 @@
 // ! Syahri Ramadhan Wiraasmara (ARI)
 import Layout from '@/Layouts/layout';
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
-import Myhelmet from '@/components/Myhelmet.jsx.tsx';
-import NavBreadcrumb from '@/components/NavBreadcrumb.jsx.tsx';
-import Footer from '@/components/Footer.jsx.tsx';
-import FooterLinkSEORel from '@/components/FooterLinkSEORel.jsx.tsx';
+import NavBreadcrumb from '@/components/NavBreadcrumb.tsx';
+import Footer from '@/components/Footer.tsx';
+import FooterLinkSEORel from '@/components/FooterLinkSEORel.tsx';
 
-export default function Home(props) {
-    const textColor = localStorage.getItem('text-color');
+import DOMPurify from 'dompurify';
 
-    const MemoHelmet = React.memo(function Memo() {
-        return(
-            <Myhelmet
-                title={props.title}
-                robots={props.robots}
-                pathURL={props.pathURL}
-                onetime={true}
-            />
-        );
-    });
+interface Sitemap {
+    // Define any props you expect to pass to the component here
+    // For example: title?: string;
+    title: string;
+    unique: string;
+    pesan: string;
+    error: string;
+}
+
+Sitemap.propTypes = {
+    title: PropTypes.string,
+    unique: PropTypes.string,
+    pesan: PropTypes.string,
+    error: PropTypes.string,
+};
+
+
+export default function Sitemap(props: Sitemap) {
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
 
     const MemoNavBreadcrumb = React.memo(function Memo() {
         return(
@@ -31,7 +42,7 @@ export default function Home(props) {
 
     const MemoFooter = React.memo(function Memo() {
         return(
-            <Footer />
+            <Footer hidden={''} otherCSS={``} />
         );
     });
 
@@ -41,21 +52,16 @@ export default function Home(props) {
         }
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => {
-    }, []);
-
     return(
         <Layout>
-            <MemoHelmet />
             <MemoNavBreadcrumb />
-            <div class="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
-                <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                    <h1 class="font-bold text-2xl text-center underline uppercase">
+            <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]" >
+                <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+                    <h1 className="font-bold text-2xl text-center underline uppercase">
                         {props.pesan}
                     </h1>
 
-                    {IfError}
+                    <IfError />
                 </div>
             </div>
             <FooterLinkSEORel>

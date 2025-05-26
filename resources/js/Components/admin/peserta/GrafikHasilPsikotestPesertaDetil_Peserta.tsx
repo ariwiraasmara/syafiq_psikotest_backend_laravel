@@ -49,12 +49,12 @@ GrafikHasilPsikotestKecermatan_Peserta.propTypes = {
 export default function GrafikHasilPsikotestKecermatan_Peserta(props: GrafikHasilPsikotestKecermatan_Peserta) {
     const [dataLoading, setDataLoading] = React.useState(false);
     const hasiltes: any = props.data;
-    console.info(hasiltes);
+    // console.info(hasiltes);
 
     const labels: any = hasiltes.map((item: any) => item.tgl_ujian);
-    console.info('labels', labels);
-
-    const dataset_nilai: any = {
+    // console.info('labels', labels);
+    
+    const chartDataNilai: any = {
         labels: labels,
         datasets: [
             {
@@ -99,9 +99,48 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props: GrafikHasi
             },
         ],
     };
-    console.info('dataset_nilai', dataset_nilai);
+    // console.info('chartDataNilai', chartDataNilai.labels);
 
-    const dataset_waktu: any = {
+    const options_nilai: any = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Hasil Nilai',
+                color: '#000',
+                font: {
+                    size: 18,
+                },
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context: any) {
+                        return `${context.dataset.label}: ${context.raw}`;
+                    },
+                },
+            },
+        },
+        scales: {
+            x: {
+                title: {
+                    display: true,
+                    text: 'Tanggal Ujian',
+                    color: '#000',
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: 'Nilai',
+                    color: '#000',
+                },
+                beginAtZero: true,
+            },
+        },
+    };
+    // console.info('options_nilai', options_nilai);
+
+    const chartDataWaktu: any = {
         labels: labels,
         datasets: [
             {
@@ -146,46 +185,7 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props: GrafikHasi
             },
         ],
     };
-    console.info('dataset_waktu', dataset_waktu);
-
-    const options_nilai: any = {
-        responsive: true,
-        plugins: {
-            title: {
-                display: true,
-                text: 'Hasil Nilai',
-                color: '#000',
-                font: {
-                    size: 18,
-                },
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context: any) {
-                        return `${context.dataset.label}: ${context.raw}`;
-                    },
-                },
-            },
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Tanggal Ujian',
-                    color: '#000',
-                },
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Nilai',
-                    color: '#000',
-                },
-                beginAtZero: true,
-            },
-        },
-    };
-    console.info('options_nilai', options_nilai);
+    // console.info('dataset_waktu', dataset_waktu);
 
     const options_waktu: any = {
         responsive: true,
@@ -224,27 +224,20 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props: GrafikHasi
             },
         },
     };
-    console.info('options_waktu', options_waktu);
-
-    const chartDataNilai: any = {
-        labels: labels,
-        datasets: dataset_nilai,
-    };
-    console.info('chartDataNilai', chartDataNilai);
-
-    const chartDataWaktu: any = {
-        labels: labels,
-        datasets: dataset_waktu,
-    };
-    console.info('chartDataWaktu', chartDataWaktu);
+    // console.info('options_waktu', options_waktu);
 
     return (
         <React.StrictMode>
             <div className={`${props.textColor}`}>
                 {/**!grafik error?!**/}
                 {parseInt(props.data.length) > 0 ? (
-                    <div className='bg-slate-50 p-2 rounded-md text-black'>
-                        <Line data={chartDataNilai} options={options_nilai} />
+                    <div>
+                        <div className='bg-slate-50 p-2 rounded-md text-black shadow-xl'>
+                            <Line data={chartDataNilai} options={options_nilai} />
+                        </div>
+                        <div className='bg-slate-50 p-2 rounded-md text-black shadow-xl mt-6'>
+                            <Line data={chartDataWaktu} options={options_waktu} />
+                        </div>
                     </div>
                 ) : (
                     dataLoading ? (
@@ -254,7 +247,9 @@ export default function GrafikHasilPsikotestKecermatan_Peserta(props: GrafikHasi
                             <CircularProgress color="info" size={50} />
                         </div>
                     ) : (
-                        <div>Click Tombol "Batal & Refresh" terlebih dahulu untuk mendapatkan data ini..</div>
+                        <div className='bg-white p-2 shadow-xl text-center'>
+                            Cari datanya terlebih dahulu...
+                        </div>
                     )
                 )}
             </div>

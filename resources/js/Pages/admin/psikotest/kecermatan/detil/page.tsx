@@ -57,10 +57,11 @@ AdminDetilPsikotestKecermatan.propTypes = {
 };
 
 export default function AdminDetilPsikotestKecermatan(props: AdminDetilPsikotestKecermatan) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     // const [pkid, setPkid] = React.useState(0);
     // const pkid = DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id'));
     const pkid: number = parseInt(props.id);
@@ -82,6 +83,7 @@ export default function AdminDetilPsikotestKecermatan(props: AdminDetilPsikotest
     const tableHeaderColumnNumber = {
         p: 2,
         borderBottom: '1px solid #000',
+        borderRight: '1px solid #000',
         color: '#000',
         textAlign: 'center',
         fontWeight: 'bold',
@@ -99,6 +101,7 @@ export default function AdminDetilPsikotestKecermatan(props: AdminDetilPsikotest
 
     const tableBodyColumnNumber = {
         p: 2,
+        borderRight: '1px solid #000',
         textAlign: 'right',
         color: '#000',
     }
@@ -333,7 +336,7 @@ export default function AdminDetilPsikotestKecermatan(props: AdminDetilPsikotest
                                 </Link>
                             </span>
                         </h2>
-                        <Paper sx={{ marginTop: '20px', width: '100%', overflow: 'hidden', borderRadius: 2 }}>
+                        <Paper className='shadow-xl' sx={{ marginTop: '20px', width: '100%', overflow: 'hidden', borderRadius: 2 }}>
                             <TableContainer sx={{ maxHeight: 350 }}>
                                 <Table stickyHeader aria-label="sticky table">
                                     <TableHead>
@@ -392,7 +395,14 @@ export default function AdminDetilPsikotestKecermatan(props: AdminDetilPsikotest
                             </TableContainer>
                         </Paper>
                         <div className='mt-2 text-center'>
-                            <IconButton onClick={(e: any) => toAdd(e)} aria-label="tambah" size="large" sx={{ border: 2, borderColor: borderColorRGB, rounded: 100, color: textColorRGB }}>
+                            <IconButton onClick={(e: any) => toAdd(e)}
+                                        aria-label="tambah" size="large"
+                                        className='shadow-xl'
+                                        sx={{
+                                            background: '#1976d2',
+                                            borderRadius: 100,
+                                            color: '#fff'
+                                        }}>
                                 <AddIcon />
                             </IconButton>
                         </div>

@@ -46,10 +46,11 @@ AdminPsikotestKecermatan.propTypes = {
 };
 
 export default function AdminPsikotestKecermatan(props: AdminPsikotestKecermatan) {
-    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState<any>([]);
 

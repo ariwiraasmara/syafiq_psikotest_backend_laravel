@@ -31,7 +31,7 @@ class Page extends Controller {
 
     public function reactView(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
         $unique = fun::random('combwisp', 50);
-        $data = $this->service->get(fun::denval($id, true));
+        $data = $this->service->get($id);
 
         meta()->title($this->titlepage)
             ->set('og:title', $this->titlepage)
@@ -44,10 +44,8 @@ class Page extends Controller {
         Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
         Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
 
-        return Inertia::view('admin/peserta/edit/page', [
+        return Inertia::render('admin/peserta/edit/page', [
             'title'   => $this->titlepage,
-            'pathURL' => url()->current(),
-            'robots'  => 'none, nosnippet, noarchive, notranslate, noimageindex',
             'token'   => csrf_token(),
             'unique'  => $unique,
             'nama'    => $request->session()->get('nama'),

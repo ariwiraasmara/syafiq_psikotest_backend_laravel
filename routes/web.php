@@ -13,18 +13,18 @@ use App\Libraries\myfunction as fun;
 
 Route::get('/', myroute::view('Home', 'reactView'))->name('home');
 
-Route::get('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}', myroute::view('Peserta\Psikotest\Kecermatan\Hasil\Page', 'bladeView'))->name('peserta_psikotest_kecermatan_hasil');
+Route::get('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}', myroute::view('Peserta\Psikotest\Kecermatan\Hasil\Page', 'reactView'))->name('peserta_psikotest_kecermatan_hasil');
 Route::get('/generate-sitemap', myroute::view('MySitemapController', 'generate'))->name('generate_sitemap');
 
 Route::middleware(
     'throttle:250,1', // 200 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
 )->group(function () {
-    Route::get('/peserta', myroute::view('Peserta\Page', 'bladeView'))->name('peserta');
+    Route::get('/peserta', myroute::view('Peserta\Page', 'reactView'))->name('peserta');
     
     Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))
                 ->name('peserta_setup');
     if( fun::getRawCookie('ispeserta') ) {
-        Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'bladeView'))->name('peserta_psikotest_kecermatan');
+        Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'reactView'))->name('peserta_psikotest_kecermatan');
         Route::post('/peserta-psikotest-kecermatan/{id}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'store'))->name('peserta_psikotest_kecermatan_store');
         Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'))->name('psikotest_kecermatan_pertanyaan');
         Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'))->name('psikotest_kecermatan_soaljawaban');

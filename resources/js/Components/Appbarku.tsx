@@ -172,7 +172,7 @@ export default function Appbarku(props: Appbarku) {
     return (
         <React.StrictMode>
             <ElevationScroll {...props}>
-                <AppBar sx={{ background: '#000' }}>
+                <AppBar className='shadow-xl' sx={{ background: '#000' }}>
                     <Toolbar>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
                             {linkBack(props.isback, props.url)}
@@ -206,15 +206,16 @@ export default function Appbarku(props: Appbarku) {
                                     onClose={handleClose}
                                 >
                                     <MenuItem onClick={handleClose} sx={menuItem_style}>
-                                        <span className='mr-2'>{props.user}</span>
+                                        <AccountCircle />
+                                        <span className='ml-2'>{props.user}</span>
                                     </MenuItem>
                                     <MenuItem onClick={(event) => window.location.href = '/logout'} rel="follow" title="Logout" sx={menuItem_style}>
-                                        <span className='mr-2'>Logout</span>
                                         <LogoutIcon />
+                                        <span className='ml-2'>Logout</span>
                                     </MenuItem>
                                     <MenuItem onClick={handleClose} sx={menuItem_style}>
-                                        <span className='mr-2'>Tutup</span>
                                         <CloseIcon />
+                                        <span className='ml-2'>Tutup</span>
                                     </MenuItem>
                                     {/* <MenuItem>
                                         <span className='mr-2'>Tema</span>

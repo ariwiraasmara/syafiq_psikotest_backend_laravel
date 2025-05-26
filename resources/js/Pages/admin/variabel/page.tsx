@@ -58,10 +58,11 @@ AdminVariabelSetting.propTypes = {
 };
 
 export default function AdminVariabelSetting(props: AdminVariabelSetting) {
-    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+
     const [loading, setLoading] = React.useState<boolean>(false);
     const [loadingData, setLoadingData] = React.useState<boolean>(false);
     const [searchHidden, setSearchHidden] = React.useState<string>('hidden');

@@ -9,13 +9,13 @@ interface FooterLinkSEORel {
     // Define any props you expect to pass to the component here
     // For example: title?: string;
     children: any;
-}
+};
 
 FooterLinkSEORel.propTypes = {
     children: PropTypes.any
 };
 
-export default function FooterLinkSEORel({children}) {
+export default function FooterLinkSEORel({children}: FooterLinkSEORel) {
     const date = new Date();
     const year = date.getFullYear();
     return (

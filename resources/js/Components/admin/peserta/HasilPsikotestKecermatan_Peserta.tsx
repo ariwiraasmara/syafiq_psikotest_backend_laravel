@@ -87,7 +87,8 @@ export default function HasilPsikotestKecermatan_Peserta(props: HasilPsikotestKe
     const [value, setValue] = React.useState<number>(0);
         
     const TabStyle = {
-        color: props.textColor
+        color: '#000',
+        background:  '#E6E6FF',
     };
 
     const styledTextField = {
@@ -143,7 +144,7 @@ export default function HasilPsikotestKecermatan_Peserta(props: HasilPsikotestKe
                     'pranked': 'absolutely'
                 }
             });
-            console.info('response data peserta detil hasil', response);
+            // console.info('response data peserta detil hasil', response);
             setData(response.data.data);
         } catch (err) {
             console.error('Error TabelHasilPsikotestPesertaDetil-getDataHasilPsikotesKecermatan:', err);
@@ -191,7 +192,7 @@ export default function HasilPsikotestKecermatan_Peserta(props: HasilPsikotestKe
 
     return(
         <React.StrictMode>
-            <div className={`w-full p-4 rounded-md mb-0 bg-white shadow-xl`}>
+            <div className={`w-full rounded-t-xl p-4 mb-0 bg-white shadow-xl`}>
                 <div className='font-bold'>
                     <h3 className='font-bold ml-2'>Cari Data...</h3>
                 </div>
@@ -211,13 +212,13 @@ export default function HasilPsikotestKecermatan_Peserta(props: HasilPsikotestKe
                         />
                     </div>
                     <div className=''>
-                        <Button title='Cari Data' variant="contained" size="small" fullWidth color="primary" onClick={(e: any) => submitSearch(e)}>
+                        <Button title='Cari Data' variant="contained" fullWidth color="primary" onClick={(e: any) => submitSearch(e)}>
                             <SearchIcon />
                         </Button>
                     </div>
                 </div>
                 <div className='mt-2'>
-                    <Button title='Batal Cari Data dan Refresh Data' variant="contained" size="small" fullWidth color="warning" onClick={(e: any) => cancelSearch(e)} startIcon={<RestartAltIcon />}>
+                    <Button title='Batal Cari Data dan Refresh Data' variant="contained" fullWidth color="warning" onClick={(e: any) => cancelSearch(e)} startIcon={<RestartAltIcon />}>
                         Batal & Refresh
                     </Button>
                 </div>
@@ -227,6 +228,9 @@ export default function HasilPsikotestKecermatan_Peserta(props: HasilPsikotestKe
                 onChange={handleChange}
                 aria-label="Detil Data Hasil Psikotest Peserta"
                 variant="fullWidth" centered
+                className='shadow-xl'
+                sx={{
+                }}
             >
                 <Tab label="Tabel" {...a11yProps(0)} wrapped sx={TabStyle} />
                 <Tab label="Grafik" {...a11yProps(1)} wrapped sx={TabStyle} />

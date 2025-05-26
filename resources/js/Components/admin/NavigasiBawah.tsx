@@ -2,7 +2,6 @@
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
 import * as React from 'react';
-import axios from 'axios';
 // import { useRouter } from 'next/navigation';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
@@ -12,7 +11,6 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import AppSettingsAltOutlinedIcon from '@mui/icons-material/AppSettingsAltOutlined';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 interface NavigasiBawah {
     // Define any props you expect to pass to the component here
@@ -50,6 +48,7 @@ export default function NavigasiBawah(props: NavigasiBawah) {
                     sx={{
                         color: '#fff',
                         backgroundColor: props.navvar === 1 ? 'rgba(25, 25, 255, 1)' : 'rgba(0, 0, 0, 1)',
+                        borderRadius: 1,
                     }}
                     rel='follow'
                     title='Halaman Dashboard | Admin'
@@ -63,6 +62,7 @@ export default function NavigasiBawah(props: NavigasiBawah) {
                     sx={{
                         color: '#fff',
                         backgroundColor: props.navvar === 2 ? 'rgba(25, 25, 255, 1)' : 'rgba(0, 0, 0, 1)',
+                        borderRadius: 1,
                     }}
                     rel='follow'
                     title='Halaman Daftar Peserta | Admin'
@@ -76,7 +76,7 @@ export default function NavigasiBawah(props: NavigasiBawah) {
                     sx={{
                         color: '#fff',
                         backgroundColor: props.navvar === 3 ? 'rgba(25, 25, 255, 1)' : 'rgba(0, 0, 0, 1)',
-                        p: props.navvar === 3 ? 0 : 0,
+                        borderRadius: 1,
                     }}
                     rel='follow'
                     title='Halaman Daftar Psikotest | Admin'
@@ -90,6 +90,7 @@ export default function NavigasiBawah(props: NavigasiBawah) {
                     sx={{
                         color: '#fff',
                         backgroundColor: props.navvar === 4 ? 'rgba(25, 25, 255, 1)' : 'rgba(0, 0, 0, 1)',
+                        borderRadius: 1,
                     }}
                     rel='follow'
                     title='Halaman Daftar Variabel | Admin'

@@ -54,7 +54,7 @@
                     pointBackgroundColor: 'rgba(100, 50, 255, 1)',
                     pointRadius: 5,
                 },
-            ],
+            ]
         };
 
         const options = {

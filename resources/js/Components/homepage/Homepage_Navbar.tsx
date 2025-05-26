@@ -122,7 +122,7 @@ export default function Homepage_Navbar(props: Homepage_Navbar) {
         try {
             localStorage.setItem('ispeserta', 'true');
             // router.push(`/peserta/psikotest/kecermatan/hasil?identitas=${noidentitas}&tgl_tes=${tglTes}`);
-            window.location.href= `/peserta/psikotest/kecermatan/hasil?identitas=${noidentitas}&tgl_tes=${tglTes}`;
+            window.location.href= `/peserta/psikotest/kecermatan/hasil/${noidentitas}/${tglTes}`;
         }
         catch(err) {
             console.error(err);
@@ -141,83 +141,81 @@ export default function Homepage_Navbar(props: Homepage_Navbar) {
         }
     }
 
-    return(
-        <>
-            <div className="items-center justify-items-center text-center border-white border-b-2 p-2 bg-gradient-to-t from-sky-300 to-sky-700">
-                <span className="mr-2">
-                    <Button onClick={(e) => toHomepage(e)} sx={style}>
-                        Beranda
-                    </Button>
-                </span>
-                <MenuAdmin />
-                <span>
-                    <Button
-                        id="basic-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={(e) => handleClick_MenuPeserta(e)}
-                        sx={style}
-                    >
-                        Peserta
-                    </Button>
-                    <Menu
-                        id="basic-menu"
-                        anchorEl={anchorPeserta}
-                        open={open}
-                        onClose={(e) => handleClose_MenuPeserta(e)}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        <MenuItem onClick={(e) => toPeserta(e)}>Mulai Psikotest</MenuItem>
-                        <MenuItem onClick={(e) => handleOpenModal_HasilPsikotestKecermatanPeserta(e)}>Hasil Tes Psikotest Kecermatan</MenuItem>
-                    </Menu>
-                </span>
-            </div>
-            <Modal
-                open={openModal_HasilPsikotestKecermatanPeserta}
-                onClose={(e) => handleCloseModal_HasilPsikotestKecermatanPeserta(e)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box component="form"
-                    onSubmit={(e) => onSubmit_HasilPsikotestKecermatanPeserta(e)}
-                    sx={styleModal}
+    return(<>
+        <div className="items-center justify-items-center text-center border-white border-b-2 p-2 bg-gradient-to-t from-sky-300 to-sky-700">
+            <span className="mr-2">
+                <Button onClick={(e) => toHomepage(e)} sx={style}>
+                    Beranda
+                </Button>
+            </span>
+            <MenuAdmin />
+            <span>
+                <Button
+                    id="basic-button"
+                    aria-controls={open ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={(e) => handleClick_MenuPeserta(e)}
+                    sx={style}
                 >
-                    <div className='text-center'>
-                        <h2 className='font-bold'>Isi Data Dulu...</h2>
-                    </div>
-                    <div className='mt-4'>
-                        <span>No. Identitas (NIK, NIP, NISP, NIS, NIM, dll)</span>
-                        <TextField type="number" id="no-identitas" variant="outlined" fullWidth
-                                    focused required
-                                    onChange={(e) => ongetNoIdentitas(e)}
-                                    defaultValue={noidentitas}
-                                    sx={{
-                                        ':active' : '#000'
-                                    }}
-                        />
-                    </div>
-                    <div className='mt-4'>
-                        <span>Tanggal Tes</span>
-                        <TextField  type="date" id="tanggal-tes" variant="outlined" fullWidth
-                                    focused required
-                                    onChange = {(e) => ongetTanggalTes(e)}
-                                    defaultValue={tglTes} />
-                    </div>
-                    <div className='mt-4'>
-                        <Button variant="contained" color="primary" fullWidth type="submit">
-                            OK
-                        </Button>
-                    </div>
-                    <div className='mt-4'>
-                        <Button variant="contained" color="secondary" fullWidth onClick={(e) => handleCloseModal_HasilPsikotestKecermatanPeserta(e)} type="button">
-                            Batal
-                        </Button>
-                    </div>
-                </Box>
-            </Modal>
-        </>
-    );
+                    Peserta
+                </Button>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorPeserta}
+                    open={open}
+                    onClose={(e) => handleClose_MenuPeserta(e)}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={(e) => toPeserta(e)}>Mulai Psikotest</MenuItem>
+                    <MenuItem onClick={(e) => handleOpenModal_HasilPsikotestKecermatanPeserta(e)}>Hasil Tes Psikotest Kecermatan</MenuItem>
+                </Menu>
+            </span>
+        </div>
+        <Modal
+            open={openModal_HasilPsikotestKecermatanPeserta}
+            onClose={(e) => handleCloseModal_HasilPsikotestKecermatanPeserta(e)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box component="form"
+                onSubmit={(e) => onSubmit_HasilPsikotestKecermatanPeserta(e)}
+                sx={styleModal}
+            >
+                <div className='text-center'>
+                    <h2 className='font-bold'>Isi Data Dulu...</h2>
+                </div>
+                <div className='mt-4'>
+                    <span>No. Identitas (NIK, NIP, NISP, NIS, NIM, dll)</span>
+                    <TextField type="number" id="no-identitas" variant="outlined" fullWidth
+                                focused required
+                                onChange={(e) => ongetNoIdentitas(e)}
+                                defaultValue={noidentitas}
+                                sx={{
+                                    ':active' : '#000'
+                                }}
+                    />
+                </div>
+                <div className='mt-4'>
+                    <span>Tanggal Tes</span>
+                    <TextField  type="date" id="tanggal-tes" variant="outlined" fullWidth
+                                focused required
+                                onChange = {(e) => ongetTanggalTes(e)}
+                                defaultValue={tglTes} />
+                </div>
+                <div className='mt-4'>
+                    <Button variant="contained" color="primary" fullWidth type="submit">
+                        OK
+                    </Button>
+                </div>
+                <div className='mt-4'>
+                    <Button variant="contained" color="secondary" fullWidth onClick={(e) => handleCloseModal_HasilPsikotestKecermatanPeserta(e)} type="button">
+                        Batal
+                    </Button>
+                </div>
+            </Box>
+        </Modal>
+    </>);
 }

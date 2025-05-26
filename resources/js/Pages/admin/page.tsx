@@ -23,7 +23,7 @@ import LockPersonIcon from '@mui/icons-material/LockPerson';
 import NavBreadcrumb from '@/components/NavBreadcrumb.tsx';
 import Footer from '@/components/Footer.tsx';
 
-import { random, currentDate } from '@/libraries/myfunction.js';
+import { currentDate } from '@/libraries/myfunction.js';
 
 interface Admin {
     // Define any props you expect to pass to the component here
@@ -45,41 +45,46 @@ Admin.propTypes = {
     domain: PropTypes.string,
 };
 
-const styledTextField = {
-    '& .MuiOutlinedInput-notchedOutline': {
-        border: '2px solid rgba(0, 0, 0, 0.9)',
-        color: '#000',
-    },
-    '& .MuiInputLabel-root.MuiInputLabel-shrink': {
-        color: '#000',
-    },
-    '& .MuiOutlinedInput-input': {
-        color: '#000',
-    },
-    '& .MuiOutlinedInput-placeholder': {
-        color: '#000',
-    },
-    '&:hover .MuiOutlinedInput-notchedOutline': {
-        borderColor: 'rgba(0, 0, 0, 0.8)', // warna hover
-    },
-    '&:hover .MuiInputLabel-root': {
-        color: '#000', // warna hover
-    },
-    '& .MuiFormHelperText-root': {
-        color: '#000',  // Warna helper text
-    },
-    color: '#000',
-    marginTop: 3,
-}
-
 export default function Admin(props: Admin) {
-    const textColor: string|null = localStorage.getItem('text-color');
-    const borderColor: string|null = localStorage.getItem('border-color');
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [emaillogin, setEmaillogin] = React.useState('');
     const [passlogin, setPasslogin] = React.useState('');
     const [loading, setLoading] = React.useState(true);
-    const [sessionAdmin, setSessionAdmin] = React.useState(new Date(localStorage.getItem('sesi_admin')));
+    const [sessionAdmin, setSessionAdmin] = React.useState<any>(new Date(localStorage.getItem('sesi_admin')));
     const [cdate, setCdate] = React.useState(new Date(currentDate(null)));
+
+    const styledTextField = {
+        '& .MuiOutlinedInput-notchedOutline': {
+            color: '#fff',
+            borderRadius: 3,
+        },
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: '#fff',
+        },
+        '& .MuiOutlinedInput-input': {
+            color: '#fff',
+        },
+        '& .MuiOutlinedInput-placeholder': {
+            color: '#fff',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+            // borderColor: 'rgba(0, 0, 0, 0.8)', // warna hover
+        },
+        '&:hover .MuiInputLabel-root': {
+            color: '#fff', // warna hover
+        },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        color: '#fff',
+        marginTop: 2,
+        borderRadius: 3,
+        background: 'rgba(0, 0, 0, 0.45)',
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {
@@ -91,6 +96,21 @@ export default function Admin(props: Admin) {
         setLoading(false);
     }, []);
     // console.info('sessionAdmin', Date.now(sessionAdmin.expire_at));
+
+    document.addEventListener('keydown', (e) => {
+        const handlePreventDevTools = (e: any) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+                // alert('Developer Tools telah dinonaktifkan!');
+            }
+        }
+
+        window.addEventListener('keydown', handlePreventDevTools);
+
+        return () => {
+            window.removeEventListener('keydown', handlePreventDevTools);
+        };
+    });
 
     if(loading) {
         return (
@@ -210,7 +230,7 @@ export default function Admin(props: Admin) {
         <Layout>
             <MemoNavBreadcrumb />
             <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-                <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+                <div className="flex flex-col gap-8 row-start-2 items-center sm:items-start shadow-2xl">
                     <Box component="form"
                         onSubmit={(e: any) => submit(e)}
                         className="form-entry"
@@ -228,7 +248,7 @@ export default function Admin(props: Admin) {
                                         input: {
                                             startAdornment: (
                                                 <InputAdornment position="start">
-                                                    <EmailIcon sx={{ color: 'black' }} />
+                                                    <EmailIcon sx={{ color: 'white' }} />
                                                 </InputAdornment>
                                             ),
                                         },
@@ -242,7 +262,7 @@ export default function Admin(props: Admin) {
                                         input: {
                                             startAdornment: (
                                                 <InputAdornment position="start">
-                                                    <LockPersonIcon sx={{ color: 'black' }} />
+                                                    <LockPersonIcon sx={{ color: 'white' }} />
                                                 </InputAdornment>
                                             ),
                                         },

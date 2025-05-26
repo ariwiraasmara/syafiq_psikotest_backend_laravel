@@ -20,28 +20,37 @@ use Exception;
 class Page extends Controller {
     //
     protected as1001_peserta_profilService $service;
-    protected $path, $domain = null;
+    protected $titlepage, $path, $domain;
     public function __construct(as1001_peserta_profilService $service) {
         $this->service = $service;
+        $this->titlepage = 'Formulir Peserta | Psikotest Online App';
         $this->path = env('SESSION_PATH', '/');
         $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
-    public function view(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
+    public function reactView(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
+        $unique = fun::random('combwisp', 50);
+        
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
+            ->set('canonical', url()->current())
+            ->set('og:url', url()->current())
+            ->set('robots', 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate')
+            ->set('XSRF-TOKEN', csrf_token())
+            ->set('__unique__', $unique);
+        
         return Inertia::render('peserta/page', [
-            'title'   => 'Formulir Peserta | Psikotest Online App',
-            'pathURL' => url()->current(),
-            'robots'  => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-            'onetime' => true,
-            'unique'  => fun::random('combwisp', 50),
-            'path'    => $this->path,
-            'domain'  => $this->domain
+            'title'  => $this->titlepage,
+            'token'  => csrf_token(),
+            'unique' => $unique,
+            'path'   => $this->path,
+            'domain' => $this->domain
         ]);
     }
 
     public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
         return view('pages.peserta.page', [
-            'title'                => 'Formulir Peserta | Psikotest Online App',
+            'title'                => $this->titlepage,
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/peserta',
             'is_breadcrumb_hidden' => 'hidden',

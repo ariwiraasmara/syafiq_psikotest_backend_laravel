@@ -44,10 +44,11 @@ AdminPsikotestKecermatanDetilBaru.propTypes = {
 };
 
 export default function AdminPsikotestKecermatanDetilBaru(props: AdminPsikotestKecermatanDetilBaru) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState<boolean>(false);
     // const [pkid, setPkid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
     const pkid: number = parseInt(props.id);
@@ -56,24 +57,33 @@ export default function AdminPsikotestKecermatanDetilBaru(props: AdminPsikotestK
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid ${borderColor}`,
-            color: textColorRGB,
+            color: 'rgba(255, 255, 255, 1)',
+            borderRadius: 3,
         },
-        '& .MuiInputLabel-root': {
-            color: textColorRGB,
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: 'rgba(255, 255, 255, 1)',
         },
         '& .MuiOutlinedInput-input': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: borderColor, // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
-            color: textColorRGB, // warna hover
+            color: '#fff', // warna hover
         },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        background: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const [soalA, setSoalA] = React.useState<number>(0);
@@ -241,7 +251,7 @@ export default function AdminPsikotestKecermatanDetilBaru(props: AdminPsikotestK
                 </h3>
                 <h3 className={`mt-2 text-${textColor}`}><span className='font-bold'>Jawaban :</span> {jawaban}</h3>
                 <Box component="form"
-                    sx={{ '& > :not(style)': { marginTop: 2, p: 1, width: '100%' } }}
+                    sx={{ '& > :not(style)': { marginTop: 2, width: '100%' } }}
                     onSubmit={(e) => submit(e)}
                     noValidate
                     autoComplete="off">
@@ -266,16 +276,14 @@ export default function AdminPsikotestKecermatanDetilBaru(props: AdminPsikotestK
                                 defaultValue={jawaban} variant="outlined"
                                 sx={styledTextField} />
                     <Box>
-                        <div>
-                            <Button variant="contained" size="large" color="primary" fullWidth type="submit">
-                                Simpan
-                            </Button>
-                        </div>
-                        <div className="mt-2">
-                            <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e) => cancel(e)} type="button">
-                                Batal
-                            </Button>
-                        </div>
+                        <Button variant="contained" size="large" color="primary" fullWidth type="submit" sx={styledButton}>
+                            Simpan
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e) => cancel(e)} type="button" sx={styledButton}>
+                            Batal
+                        </Button>
                     </Box>
                 </Box>
             </div>

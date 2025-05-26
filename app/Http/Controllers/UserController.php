@@ -107,6 +107,8 @@ class UserController extends Controller {
                         // $request->session()->put('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']));
                         // $request->session()->put('rtk', fun::encrypt($data['data'][0]['remember_token']));
 
+                        $request->authenticate();
+                        $request->session()->regenerate();
                         $response = new Response($rfdt);
 
                         return $response

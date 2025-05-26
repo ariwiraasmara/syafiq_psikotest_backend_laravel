@@ -52,10 +52,11 @@ AdminPeserta.propTypes = {
 };
 
 export default function AdminPeserta(props: AdminPeserta) {
-    const textColor: any = localStorage.getItem('text-color');
-    const textColorRGB: any = localStorage.getItem('text-color-rgb');
-    const borderColor: any = localStorage.getItem('border-color');
-    const borderColorRGB: any = localStorage.getItem('border-color-rgb');
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState<boolean>(true);
     const [loadingData, setLoadingData] = React.useState<boolean>(true);
     const [searchHidden, setSearchHidden] = React.useState<string>('hidden');

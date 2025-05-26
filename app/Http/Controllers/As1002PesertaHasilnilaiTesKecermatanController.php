@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
 use App\Libraries\jsr;
+use App\Libraries\myfunction as fun;
 use Exception;
 
 class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
@@ -118,7 +119,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
 
     #POST
     #url = '/api/peserta-hasil-tes/{id}'
-    public function store(Request $request, int $id): Response|JsonResponse|String|int|null {
+    public function store(Request $request, $id, $nid): Response|JsonResponse|String|int|null {
         try {
             $credentials = $request->validate([
                 'hasilnilai_kolom_1'      => 'required|integer',
@@ -133,7 +134,7 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 'waktupengerjaan_kolom_5' => 'required|integer',
             ]);
             if($credentials) {
-                $data = $this->service->store($id, [
+                $data = $this->service->store(fun::denval($id, true), [
                     'hasilnilai_kolom_1'      => $request->hasilnilai_kolom_1,
                     'waktupengerjaan_kolom_1' => $request->waktupengerjaan_kolom_1,
                     'hasilnilai_kolom_2'      => $request->hasilnilai_kolom_2,
@@ -148,9 +149,10 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 if($data > 0) {
                     // Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     return jsr::print([
-                        'success' => 1,
-                        'pesan'   => 'Berhasil Menyimpan Data Hasil Nilai Peserta Tes!',
-                        'data'    => $data
+                        'success'      => 1,
+                        'pesan'        => 'Berhasil Menyimpan Data Hasil Nilai Peserta Tes!',
+                        // 'data'         => $data,
+                        'no_identitas' => fun::denval($nid, true),
                     ], 'created');
                 }
                 return jsr::print([

@@ -47,10 +47,11 @@ AdminPsikotestKecermatan.propTypes = {
 };
 
 export default function AdminPsikotestKecermatan(props: AdminPsikotestKecermatan) {
-    const textColor = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState(false);
     const [nid, setNid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
     const [kolom_x, setKolom_x] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_kolom_x')));
@@ -58,24 +59,33 @@ export default function AdminPsikotestKecermatan(props: AdminPsikotestKecermatan
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid ${borderColor}`,
-            color: textColorRGB,
+            color: 'rgba(255, 255, 255, 1)',
+            borderRadius: 3,
         },
-        '& .MuiInputLabel-root': {
-            color: textColorRGB,
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: 'rgba(255, 255, 255, 1)',
         },
         '& .MuiOutlinedInput-input': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: borderColor, // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
-            color: textColorRGB, // warna hover
+            color: '#fff', // warna hover
         },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        background: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const [nilai_A, setNilai_A] = React.useState<number>(0);
@@ -262,38 +272,38 @@ export default function AdminPsikotestKecermatan(props: AdminPsikotestKecermatan
                     onSubmit={(e: any) => submit(e)}
                     noValidate
                     autoComplete="off">
-                    <TextField  type="number" id="nilai_a" variant="outlined" focused
+                    <TextField  type="number" id="nilai_a" variant="outlined"
                                 placeholder="Nilai A..." label="Nilai A..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_nilai_A}
                                 defaultValue={nilai_A} />
-                    <TextField  type="number" id="nilai_b" variant="outlined" focused
+                    <TextField  type="number" id="nilai_b" variant="outlined"
                                 placeholder="Nilai B..." label="Nilai B..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_nilai_B}
                                 defaultValue={nilai_B} />
-                    <TextField  type="number" id="nilai_c" variant="outlined" focused
+                    <TextField  type="number" id="nilai_c" variant="outlined"
                                 placeholder="Nilai C..." label="Nilai C..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_nilai_C}
                                 defaultValue={nilai_C} />
-                    <TextField  type="number" id="nilai_d" variant="outlined" focused
+                    <TextField  type="number" id="nilai_d" variant="outlined"
                                 placeholder="Nilai D..." label="Nilai D..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_nilai_D}
                                 defaultValue={nilai_D} />
-                    <TextField  type="number" id="nilai_e" variant="outlined" focused
+                    <TextField  type="number" id="nilai_e" variant="outlined"
                                 placeholder="Nilai E..." label="Nilai E..."
                                 fullWidth sx={styledTextField}
                                 onChange={handleChange_nilai_E}
                                 defaultValue={nilai_E} />
                     <Box>
-                        <Button variant="contained" size="large" fullWidth color="primary" type="submit">
+                        <Button variant="contained" size="large" fullWidth color="primary" type="submit" sx={styledButton}>
                             Simpan
                         </Button>
                     </Box>
                     <Box>
-                        <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e: any) => cancel(e)} rel='follow' title='Kembali' href={urlBack} type="button">
+                        <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e: any) => cancel(e)} rel='follow' title='Kembali' href={urlBack} type="button" sx={styledButton}>
                             Batal
                         </Button>
                     </Box>

@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
-    // 'auth',
+    // 'auth:api',
     'throttle:150,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     BearerTokenCheck::class,
     CheckTokenLogin::class,
@@ -122,7 +122,6 @@ Route::middleware([
 });
 
 Route::middleware([
-    // 'web',
     'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     CheckTokenLogin::class,
     CacheControlMiddleware::class,
@@ -137,6 +136,7 @@ Route::middleware([
         ->name('logout');
 });
 
+/*
 Route::middleware([
     CheckTokenLogin::class,
     Pranker::class,
@@ -148,6 +148,7 @@ Route::middleware([
     Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'))
         ->name('api_psikotest_kecermatan_soaljawaban_allfortes');
 });
+*/
 
 Route::middleware([
     // 'throttle:100,1', // 100 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
@@ -179,7 +180,7 @@ Route::middleware([
                 ->middleware([XRobotTags::class])
                 ->name('api_peserta_hasil_tes_psikotes_get');
 
-        Route::post('/peserta-hasil-tes/{id}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
+        Route::post('/peserta-hasil-tes/{id}/{nid}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
                 ->middleware([XRobotUntags::class])
                 ->name('api_peserta_hasil_tes_psikotes_store');
 });

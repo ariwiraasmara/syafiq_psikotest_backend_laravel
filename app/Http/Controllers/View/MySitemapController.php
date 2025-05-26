@@ -19,6 +19,7 @@ class MySitemapController extends Controller {
     //
     protected $sitemap, $sitemap_hasil_psikotest_peserta, $sitemap_admin_peserta_detil, $sitemapindex;
     protected as1001_peserta_profilService $profilpesertaService;
+    protected $path, $domain;
     public function __construct(
         as1001_peserta_profilService $profilpesertaService
     ) {
@@ -27,9 +28,12 @@ class MySitemapController extends Controller {
         $this->sitemap_admin_peserta_detil = Sitemap::create('https://psikotesasyik.com');
         $this->sitemapindex = SitemapIndex::create();
         $this->profilpesertaService = $profilpesertaService;
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
     public function generate(Request $request) {
+        $unique = fun::random('combwisp', 20);
         try {
             // Session tidak ada atau sudah kadaluarsa, generate sitemap
             $request->session()->put('is_generatate_sitemap', true);
@@ -114,10 +118,10 @@ class MySitemapController extends Controller {
                 'breadcrumb'           => '/generate-sitemap',
                 'is_breadcrumb_hidden' => 'hidden',
                 'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-                'onetime'              => false,
-                'unique'               => fun::random('combwisp', 50),
+                'onetime'              => true,
+                'unique'               => $unique,
                 'pesan'                => 'generate sitemap seo berhasil!<br/>tunggu 10 detik untuk kembali ke halaman Admin!',
-                'error'                => false,
+                'error'                => '',
             ]);
         }
         catch(Exception $error) {
@@ -127,7 +131,7 @@ class MySitemapController extends Controller {
                 'breadcrumb'           => '/generate-sitemap',
                 'is_breadcrumb_hidden' => 'hidden',
                 'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
-                'onetime'              => false,
+                'onetime'              => true,
                 'unique'               => fun::random('combwisp', 50),
                 'pesan'                => 'generate sitemap seo gagal!',
                 'error'                => $error->getMessage()

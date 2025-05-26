@@ -132,9 +132,8 @@ export default function TabelHasilPsikotestPesertaDetil_Peserta(props: TabelHasi
                                 ) : (
                                     <TableRow>
                                         <TableCell colSpan={7}>
-                                            <div className='text-center font-bold'>
-                                                Belum Ada Data<br/>
-                                                Data Kosong!
+                                            <div className='text-center'>
+                                                Cari Datanya terlebih dahulu...
                                             </div>
                                         </TableCell>
                                     </TableRow>

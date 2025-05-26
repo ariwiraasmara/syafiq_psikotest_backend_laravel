@@ -1,6 +1,23 @@
+/* untuk layar umum */
 body {
     background-color: rgba(200, 200, 255, 0.9);
-    background-image: url(https://fruitthemes.com/demo/impressive-wordpress-theme/wp-content/uploads/sites/2/2018/06/pexels-photo-247474.jpeg);
+    background-image: url('./bg4.png');
     background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
     font-family: Georgia, Helvetica, sans-serif;
+}
+
+/* untuk layar desktop */
+@media (min-width: 1024px) {
+    body {
+        background-size: cover;
+    }
+}
+
+/* untuk layar mobile */
+@media (max-width: 767px) {
+    body {
+        background-size: 100% 100%;
+    }
 }

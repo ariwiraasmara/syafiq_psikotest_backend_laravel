@@ -42,10 +42,11 @@ AdminVariabelBaru.propTypes = {
 };
 
 export default function AdminVariabelBaru(props: AdminVariabelBaru) {
-    const textColor: string = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: string = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: string = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: string = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState<boolean>(false);
     const [nvariabel, setNvariabel] = React.useState<string>('');
     const [nvalues, setNvalues] = React.useState<string>('');
@@ -53,7 +54,6 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid #fff`,
             color: 'rgba(255, 255, 255, 1)',
             borderRadius: 3,
         },
@@ -64,10 +64,10 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
             color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
             color: '#fff', // warna hover
@@ -75,8 +75,12 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
         '& .MuiFormHelperText-root': {
             color: '#fff',  // Warna helper text
         },
-        background: 'rgba(0, 0, 0, 0.5)',
+        background: 'rgba(0, 0, 0, 0.6)',
         borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const handleChange_Nvariable = (event: any) => {
@@ -178,14 +182,13 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
     });
 
     return (
-    <>
         <Layoutadmindetil>
             <MemoNavBreadcrumb />
             <MemoAppbarku />
             <div className="p-4">
                 <h1 className='hidden'>Halaman Tambah Variabel Baru | Admin</h1>
                 <Box component="form"
-                    sx={{ '& > :not(style)': { marginTop: 2, p: 0, width: '100%' } }}
+                    sx={{ '& > :not(style)': { marginTop: 2, width: '100%' } }}
                     onSubmit={(e) => submit(e)}
                     noValidate
                     autoComplete="off">
@@ -200,12 +203,12 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
                                 onChange={handleChange_Nvalues}
                                 defaultValue={nvalues} />
                     <Box>
-                        <Button variant="contained" size="large" fullWidth color="primary" type="submit">
+                        <Button variant="contained" size="large" fullWidth color="primary" type="submit" sx={styledButton}>
                             Simpan
                         </Button>
                     </Box>
                     <Box>
-                        <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e) => cancel(e)} rel='follow' title='Kembali' href='/admin/variabel' type="button">
+                        <Button variant="contained" size="large" fullWidth color="secondary" onClick={(e) => cancel(e)} rel='follow' title='Kembali' href='/admin/variabel' type="button" sx={styledButton}>
                             Batal
                         </Button>
                     </Box>
@@ -213,6 +216,5 @@ export default function AdminVariabelBaru(props: AdminVariabelBaru) {
             </div>
             <MemoFooter />
         </Layoutadmindetil>
-    </>
     )
 }

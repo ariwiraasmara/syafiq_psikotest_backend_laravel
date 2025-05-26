@@ -1,0 +1,24 @@
+/* untuk layar desktop */
+body {
+    background-color: rgba(200, 200, 255, 0.9);
+    background-image: url('https://images.pexels.com/photos/16837430/pexels-photo-16837430/free-photo-of-a-sunrise-over-a-valley-with-fog-and-mist.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    font-family: Georgia, Helvetica, sans-serif;
+}
+
+/* untuk layar desktop */
+@media (min-width: 1024px) {
+    body {
+        background-size: cover;
+    }
+}
+
+/* untuk layar mobile */
+@media (max-width: 767px) {
+    body {
+        background-size: 100% 100%;
+    }
+}

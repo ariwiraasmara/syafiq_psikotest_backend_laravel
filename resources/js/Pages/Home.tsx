@@ -5,7 +5,6 @@ import Layout from '@/Layouts/layout.tsx';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
-import Myhelmet from '@/components/Myhelmet.tsx';
 import NavBreadcrumb from '@/components/NavBreadcrumb.tsx';
 import Footer from '@/components/Footer.tsx';
 import FooterLinkSEORel from '@/components/FooterLinkSEORel.tsx';
@@ -40,21 +39,6 @@ Home.propTypes = {
 };
 
 export default function Home(props: Home) {
-    const MemoMyhelmet = React.memo(function Memo() {
-        return(
-            <Myhelmet
-                title={props.title}
-                pathURL={props.pathURL}
-                robots={props.robots}
-                onetime={props.onetime}
-                token={props.csrf_token}
-                unique={props.unique}
-                path={props.path}
-                domain={props.domain}
-            />
-        );
-    });
-
     const MemoNavBreadcrumb = React.memo(function Memo() {
         return(
             <NavBreadcrumb content={`Homepage`} hidden={`hidden`} />

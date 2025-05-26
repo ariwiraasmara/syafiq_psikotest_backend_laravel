@@ -142,16 +142,17 @@ class as1001_peserta_profilService {
     public function setUpPesertaTes(array $val) {
         try {
             $cek1 = $this->repo1->get(['no_identitas' => $val['no_identitas']]);
-            $encrypted_user_data = [
+            $encrypted_user_data = collect([
                 'nama'         => fun::enval($val['nama'], true),
                 'no_identitas' => fun::enval($val['no_identitas'], true),
                 'email'        => fun::enval($val['email'], true),
                 'tgl_lahir'    => fun::enval($val['tgl_lahir'], true),
                 'asal'         => fun::enval($val['asal'], true),
-            ];
+            ]);
             if($cek1 != '' || $cek1 != null || !empty($cek1)) {
                 //? Apakah peserta sudah terdaftar
                 $cek2 = $this->repo2->getCheckTesDate($cek1[0]['id'], $val['tgl_tes']);
+                $encrypted_user_data->put('id', fun::enval($cek1[0]['id'], true));
                 if($cek2) {
                     //? Apakah peserta sudah mengambil tes hari ini
                     return collect([

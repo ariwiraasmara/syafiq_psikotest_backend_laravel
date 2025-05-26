@@ -22,23 +22,17 @@ TabelHasilPsikotestKecermatan.propTypes = {
 export default function TabelHasilPsikotestKecermatan(props) {
 
     const headerColumns = [
-        { id: 'kolom_1', label: 'Kolom 1', minWidth: 80, align: 'center' },
-        { id: 'kolom_2', label: 'Kolom 2', minWidth: 80, align: 'center' },
-        { id: 'kolom_3', label: 'Kolom 3', minWidth: 80, align: 'center' },
-        { id: 'kolom_4', label: 'Kolom 4', minWidth: 80, align: 'center' },
-        { id: 'kolom_5', label: 'Kolom 5', minWidth: 80, align: 'center' },
+        { id: 'kolom_1', label: 'Kolom 1', minWidth: 100, align: 'center' },
+        { id: 'kolom_2', label: 'Kolom 2', minWidth: 100, align: 'center' },
+        { id: 'kolom_3', label: 'Kolom 3', minWidth: 100, align: 'center' },
+        { id: 'kolom_4', label: 'Kolom 4', minWidth: 100, align: 'center' },
+        { id: 'kolom_5', label: 'Kolom 5', minWidth: 100, align: 'center' },
     ];
-
-    const headerColumnsStyle = {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        minWidth: 120
-    }
 
     return (
         <React.StrictMode>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <div className='bg-white rounded-lg shadow-xl'>
+                <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
                             <TableCell colSpan="5" align='center'>
@@ -50,7 +44,6 @@ export default function TabelHasilPsikotestKecermatan(props) {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
                                 >
                                     <span className='font-bold'>{column.label}</span>
                                 </TableCell>
@@ -67,7 +60,7 @@ export default function TabelHasilPsikotestKecermatan(props) {
                         </TableRow>
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </div>
         </React.StrictMode>
     );
 }

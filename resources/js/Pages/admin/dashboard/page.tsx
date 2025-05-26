@@ -13,7 +13,6 @@ import NavBreadcrumb from '@/components/NavBreadcrumb.tsx';
 import ListPeserta from '@/components/admin/ListPeserta.tsx';
 import Footer from '@/components/Footer.tsx';
 
-import { readable, random } from '@/libraries/myfunction';
 import DOMPurify from 'dompurify';
 
 interface AdminDashboard {
@@ -35,13 +34,13 @@ AdminDashboard.propTypes = {
 };
 
 export default function AdminDashboard(props: AdminDashboard) {
-    const textColor: string = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: string = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: string = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: string = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [nama, setNama] = React.useState<string>('');
     const [loading, setLoading] = React.useState<boolean>(false);
-
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     React.useEffect(() => {

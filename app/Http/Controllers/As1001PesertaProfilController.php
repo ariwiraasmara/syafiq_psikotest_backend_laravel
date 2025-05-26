@@ -25,25 +25,7 @@ class As1001PesertaProfilController extends Controller {
     public function all(Request $request, String $sort, String $by, String $search = null): Response|JsonResponse|String|int|null {
         try {
             if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = null;
-            // if(Cache::has('page-pesertaprofil-all')) {
-            //     $data = Cache::get('page-pesertaprofil-all');
-            //     /*
-            //     *Logicnya harus diubah dan improvisasi
-            //     *Untuk sementara begini dulu
-            //     *Logicnya cache dan database validasi apakah sama atau tidak
-            //     *Jika tidak maka cache terupdate
-            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-            //     */
-            //     $database = $this->service->allProfil($sort, $by, $search);
-            //     if(json_encode($data) !== json_encode($database)) {
-            //         Cache::put('page-pesertaprofil-all', $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
-            //         $data = Cache::get('page-pesertaprofil-all');
-            //     }
-            // }
-            // else {
-            //     Cache::put('page-pesertaprofil-all', $this->service->allProfil($sort, $by, $search), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
-            //     $data = Cache::get('page-pesertaprofil-all');
-            // }
+
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Semua Data Peserta Tes!',
@@ -68,25 +50,6 @@ class As1001PesertaProfilController extends Controller {
     #url '/api/peserta/{id}'
     public function get(Request $request, string $id): Response|JsonResponse|String|int|null {
         try {
-            // if(Cache::has('page-pesertaprofil-get-'.$id)) {
-            //     $data = Cache::get('page-pesertaprofil-get-'.$id);
-            //     /*
-            //     *Logicnya harus diubah dan improvisasi
-            //     *Untuk sementara begini dulu
-            //     *Logicnya cache dan database validasi apakah sama atau tidak
-            //     *Jika tidak maka cache terupdate
-            //     *Selain itu agar database tidak meload data lagi dan lagi supaya tidak menurunkan beban performa
-            //     */
-            //     $database = $this->service->get($id);
-            //     if(json_encode($data) !== json_encode($database)) {
-            //         Cache::put('page-pesertaprofil-get'.$id, $database, 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
-            //         $data = Cache::get('page-pesertaprofil-get'.$id);
-            //     }
-            // }
-            // else {
-            //     Cache::put('page-pesertaprofil-get-'.$id, $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
-            //     $data = Cache::get('page-pesertaprofil-get-'.$id);
-            // };
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Data Detil Peserta',
@@ -127,7 +90,6 @@ class As1001PesertaProfilController extends Controller {
                     'asal'          => fun::readable($request->asal),
                 ]);
                 if($data > 0) {
-                    // Cache::put('page-pesertaprofil-all', $this->service->allProfil('nama', 'asc'), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Menyimpan Data Peserta Tes!',
@@ -175,7 +137,6 @@ class As1001PesertaProfilController extends Controller {
                     'asal'          => fun::readable($request->asal),
                 ]);
                 if($data > 0) {
-                    // Cache::put('page-pesertaprofil-get-'.$id, $this->service->get($id), 30*24*60*60); // 30 hari x 24 jam x 60 menit x 60 detik
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Peserta Tes!',
@@ -210,7 +171,6 @@ class As1001PesertaProfilController extends Controller {
     #url = '/api/peserta/setup/'
     public function setUpPesertaTes(Request $request) {
         try {
-            // return $request->no_identitas;
             $data = $this->service->setUpPesertaTes([
                 'nama'         => fun::readable($request->nama),
                 'no_identitas' => fun::readable($request->no_identitas),
@@ -255,8 +215,6 @@ class As1001PesertaProfilController extends Controller {
         try {
             $data = $this->service->delete($id);
             if($data > 0) {
-                // Cache::forget('page-pesertaprofil-get-'.$id);
-                // Cache::put('page-pesertaprofil-all', $this->service->allProfil('nama', 'asc', null), 1*6*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
                 return jsr::print([
                     'success' => 1,
                     'pesan'   => 'Berhasil Menghapus Data Peserta Tes!',

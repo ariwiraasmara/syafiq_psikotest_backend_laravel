@@ -88,7 +88,7 @@ export default function Layoutadmin({ children, navvar }: LayoutadminProps) {
                     <p className='mt-4 uppercase font-bold'>Tidak diperkenankan untuk mengakses halaman ini!</p>
                     <div className='mt-6'>
                         <Box sx={{ '& button': {width: '100%' } }}>
-                            <Button variant="contained" size="large" onClick={() => window.location.href = '/admin'}>
+                            <Button variant="contained" size="large" onClick={() => window.location.href = '/logout'}>
                                 Kembali
                             </Button>
                         </Box>

@@ -48,10 +48,11 @@ AdminPesertaEdit.propTypes = {
 };
 
 export default function AdminPesertaEdit(props: AdminPesertaEdit) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState<boolean>(false);
     const [idpeserta, setIdpeserta] = React.useState<number>(0);
     const [nama, setNama] = React.useState<string>('');
@@ -59,28 +60,38 @@ export default function AdminPesertaEdit(props: AdminPesertaEdit) {
     const [email, setEmail] = React.useState<string>('');
     const [tgl_lahir, setTgl_lahir] = React.useState<string>('');
     const [asal, setAsal] = React.useState<string>('');
-    const urltoPesertaDetil: string = `/admin/peserta-detil/${idpeserta}`;
+    const urltoPesertaDetil: string = `/admin/peserta-detil/-/-/${idpeserta}`;
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid ${borderColor}`,
-            color: textColor,
+            color: 'rgba(255, 255, 255, 1)',
+            borderRadius: 3,
         },
-        '& .MuiInputLabel-root': {
-            color: textColor,
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: 'rgba(255, 255, 255, 1)',
         },
         '& .MuiOutlinedInput-input': {
-            color: textColor,
+            color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColor,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: borderColor, // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
-            color: textColor, // warna hover
+            color: '#fff', // warna hover
         },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        color: '#fff',
+        background: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const getData = () => {
@@ -225,36 +236,34 @@ export default function AdminPesertaEdit(props: AdminPesertaEdit) {
                     <p><span className='font-bold'>Nomor Identitas</span>: {no_identitas}</p>
                 </div>
                 <Box component="form"
-                    sx={{ '& > :not(style)': { marginTop: 4, width: '100%' } }}
+                    sx={{ '& > :not(style)': { marginTop: 2, width: '100%' } }}
                     onSubmit={(e: any) => submit(e)}
                     noValidate
                     autoComplete="off">
-                    <TextField  type="text" id="Email" variant="outlined" focused
+                    <TextField  type="text" id="Email" variant="outlined"
                                 placeholder="Email..." label="Email..."
                                 onChange = {(event: any)=> setEmail(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={email}
                                 fullWidth sx={styledTextField} />
-                    <TextField  type="date" id="tgl_lahir" variant="outlined" required focused
+                    <TextField  type="date" id="tgl_lahir" variant="outlined" required
                                 placeholder="Tanggal Lahir..." label="Tanggal Lahir..."
                                 onChange = {(event: any)=> setTgl_lahir(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={tgl_lahir}
                                 fullWidth sx={styledTextField} />
-                    <TextField  type="text" id="asal" variant="outlined" focused
+                    <TextField  type="text" id="asal" variant="outlined"
                                 placeholder="Asal..." label="Asal..."
                                 onChange = {(event: any)=> setAsal(DOMPurify.sanitize(event.target.value))}
                                 defaultValue={asal}
                                 fullWidth sx={styledTextField} />
                     <Box>
-                        <div>
-                            <Button variant="contained" size="large" color="primary" fullWidth type="submit" >
-                                Simpan
-                            </Button>
-                        </div>
-                        <div className="mt-2">
-                            <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e: any) => cancel(e)} sx={{marginTop: 2}} type="button">
-                                Batal
-                            </Button>
-                        </div>
+                        <Button variant="contained" size="large" color="primary" fullWidth type="submit" sx={styledButton}>
+                            Simpan
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e: any) => cancel(e)} sx={{marginTop: 2}} type="button" sx={styledButton}>
+                            Batal
+                        </Button>
                     </Box>
                 </Box>
             </div>

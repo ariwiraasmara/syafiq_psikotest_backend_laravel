@@ -64,10 +64,11 @@ AdminPesertaDetil.propTypes = {
 };
 
 export default function AdminPesertaDetil(props: AdminPesertaDetil) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     // const [sessionID, setSessionID] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_id_peserta')));
     const safeID: number = parseInt(props.id.toString());
 
@@ -115,7 +116,7 @@ export default function AdminPesertaDetil(props: AdminPesertaDetil) {
         getData();
     }, []);
     // console.info('peserta-detil: id peserta', data.id);
-    console.table('tabel peserta detil', props.dataprofil);
+    // console.table('tabel peserta detil', props.dataprofil);
 
     if(loading) {
         return (
@@ -147,7 +148,7 @@ export default function AdminPesertaDetil(props: AdminPesertaDetil) {
 
     const MemoAppbarku = React.memo(function Memo() {
         return(
-            <Appbarku user={props.nama} headTitle={'Detil Peserta'} isback={true} url={`/admin/peserta/1`} />
+            <Appbarku user={props.nama} headTitle={'Detil Peserta'} isback={true} url={`/admin/peserta/-/-/-?page=1`} />
         );
     });
 
@@ -180,24 +181,28 @@ export default function AdminPesertaDetil(props: AdminPesertaDetil) {
                     </h2>
                 ) : (
                     <div className={`text-${textColor}`}>
-                        <div>
-                            <p>
-                                <span className='mr-2'>
-                                    <Link follow="nofollow" title={`Edit Data Peserta ${data.nama}`} href='#' onClick={(e: any) => toEdit(e, data.id)}>
-                                        <EditIcon />
-                                    </Link>
-                                </span>
+                        <div className='p-2 rounded-t-xl rounded-l-xl bg-white shadow-xl w-auto'>
+                            <p className='p-1 border-b-2 border-gray-200'>
                                 <span className="font-bold">Nama :</span> {DOMPurify.sanitize(data.nama)}
                             </p>
-                            <p><span className="font-bold">No. Identitas :</span> {DOMPurify.sanitize(data.no_identitas)}</p>
-                            <p><span className="font-bold">Email :</span> {DOMPurify.sanitize(data.email)}</p>
-                            <p><span className="font-bold">Tanggal Lahir :</span> {DOMPurify.sanitize(data.tgl_lahir)}</p>
-                            <p><span className="font-bold">Usia :</span> {DOMPurify.sanitize(data.usia)}</p>
-                            <p><span className="font-bold">Asal : </span> {DOMPurify.sanitize(data.asal)}</p>
+                            <p className='p-1 border-b-2 border-gray-200'><span className="font-bold">No. Identitas :</span> {DOMPurify.sanitize(data.no_identitas)}</p>
+                            <p className='p-1 border-b-2 border-gray-200'><span className="font-bold">Email :</span> {DOMPurify.sanitize(data.email)}</p>
+                            <p className='p-1 border-b-2 border-gray-200'><span className="font-bold">Tanggal Lahir :</span> {DOMPurify.sanitize(data.tgl_lahir)}</p>
+                            <p className='p-1 border-b-2 border-gray-200'><span className="font-bold">Usia :</span> {DOMPurify.sanitize(data.usia)}</p>
+                            <p className='p-1 '><span className="font-bold">Asal : </span> {DOMPurify.sanitize(data.asal)}</p>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-0">
                             <div className='text-right'>
+                                <Link   rel='nofollow'
+                                        title={`Edit Data Peserta ${data.nama}`}
+                                        href='#'
+                                        onClick={(e: any) => toEdit(e, parseInt(data.id))}
+                                        sx={{marginRight: 1}}>
+                                    <Button variant="outlined" color="info" size="small" sx={buttonStyle}>
+                                        <EditIcon />
+                                    </Button>
+                                </Link>
                                 <Button variant="outlined" color="info" size="small" onClick={handleOpenModalInfo} sx={buttonStyle}>
                                     <InfoIcon />
                                 </Button>

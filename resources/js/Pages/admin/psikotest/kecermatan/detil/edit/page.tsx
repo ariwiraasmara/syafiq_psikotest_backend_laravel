@@ -51,10 +51,11 @@ AdminPsikotestKecermatanDetilEdit.propTypes = {
 };
 
 export default function AdminPsikotestKecermatanDetilEdit(props: AdminPsikotestKecermatanDetilEdit) {
-    const textColor: any = DOMPurify.sanitize(localStorage.getItem('text-color'));
-    const textColorRGB: any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
-    const borderColor: any = DOMPurify.sanitize(localStorage.getItem('border-color'));
-    const borderColorRGB: any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    const textColor: string|any = DOMPurify.sanitize(localStorage.getItem('text-color'));
+    const textColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('text-color-rgb'));
+    const borderColor: string|any = DOMPurify.sanitize(localStorage.getItem('border-color'));
+    const borderColorRGB: string|any = DOMPurify.sanitize(localStorage.getItem('border-color-rgb'));
+    
     const [loading, setLoading] = React.useState<boolean>(false);
     // const [pkid, setPkid] = React.useState(DOMPurify.sanitize(sessionStorage.getItem('admin_psikotest_kecermatan_id')));
     const pkid: number = parseInt(props.id1);
@@ -89,24 +90,33 @@ export default function AdminPsikotestKecermatanDetilEdit(props: AdminPsikotestK
 
     const styledTextField = {
         '& .MuiOutlinedInput-notchedOutline': {
-            border: `2px solid ${borderColor}`,
-            color: textColorRGB,
+            color: 'rgba(255, 255, 255, 1)',
+            borderRadius: 3,
         },
-        '& .MuiInputLabel-root': {
-            color: textColorRGB,
+        '& .MuiInputLabel-root.MuiInputLabel-shrink': {
+            color: 'rgba(255, 255, 255, 1)',
         },
         '& .MuiOutlinedInput-input': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '& .MuiOutlinedInput-placeholder': {
-            color: textColorRGB,
+            color: '#fff',
         },
         '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: borderColor, // warna hover
+            // borderColor: 'rgba(255, 255, 255, 0.8)', // warna hover
         },
         '&:hover .MuiInputLabel-root': {
-            color: textColorRGB, // warna hover
+            color: '#fff', // warna hover
         },
+        '& .MuiFormHelperText-root': {
+            color: '#fff',  // Warna helper text
+        },
+        background: 'rgba(0, 0, 0, 0.6)',
+        borderRadius: 3,
+    }
+
+    const styledButton = {
+        borderRadius: 3
     }
 
     const getData = () => {
@@ -278,7 +288,7 @@ export default function AdminPsikotestKecermatanDetilEdit(props: AdminPsikotestK
                     </h3>
                 </div>
                 <Box component="form"
-                    sx={{ '& > :not(style)': { marginTop: 2, p: 0, width: '100%' } }}
+                    sx={{ '& > :not(style)': { marginTop: 2, width: '100%' } }}
                     onSubmit={(e: any) => submit(e)}
                     noValidate
                     autoComplete="off">
@@ -303,12 +313,12 @@ export default function AdminPsikotestKecermatanDetilEdit(props: AdminPsikotestK
                                 defaultValue={jawaban} variant="outlined"
                                 sx={styledTextField} />
                     <Box>
-                        <Button variant="contained" size="large" color="primary" fullWidth type="submit" >
+                        <Button variant="contained" size="large" color="primary" fullWidth type="submit" sx={styledButton}>
                             Simpan
                         </Button>
                     </Box>
                     <Box>
-                        <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e: any) => cancel(e)} type="button">
+                        <Button variant="contained" size="large" color="secondary" fullWidth onClick={(e: any) => cancel(e)} type="button" sx={styledButton}>
                             Batal
                         </Button>
                     </Box>

@@ -8,11 +8,15 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
+interface Layoutadmindetil {
+    children: React.ReactNode;
+}
+
 Layoutadmindetil.propTypes = {
     children: PropTypes.any,
 };
 
-export default function Layoutadmindetil({ children }) {
+export default function Layoutadmindetil({ children }: Layoutadmindetil) {
     const [loading, setLoading] = React.useState<boolean>(true);
     const [islogin, setIslogin] = React.useState<boolean>(false);
     const [isadmin, setIsadmin] = React.useState<boolean>(false);

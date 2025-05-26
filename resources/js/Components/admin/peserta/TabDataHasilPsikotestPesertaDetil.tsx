@@ -8,15 +8,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import SearchIcon from '@mui/icons-material/Search';
-import CircularProgress from '@mui/material/CircularProgress';
-
-// import TabTabelHasilPsikotestPesertaDetil from './TabTabelHasilPsikotestPesertaDetil.tsx';
-// import TabGrafikHasilPsikotestPesertaDetil from './TabGrafikHasilPsikotestPesertaDetil.tsx';
 import HasilPsikotestKecermatan_Peserta from './HasilPsikotestKecermatan_Peserta.tsx';
 
 CustomTabPanel.propTypes = {
@@ -81,18 +72,20 @@ export default function TabDataHasilPsikotestPesertaDetil(props: TabDataHasilPsi
     };
 
     const TabStyle = {
-        color: props.textColor
+        color: '#000',
+        background:  '#E6E6FF',
     };
 
     // console.info('peserta-detil-TabDataHasilPsikotestPesertaDetil: id peserta', props.peserta_id);
     return (
         <React.StrictMode>
-            <Box sx={{ width: '100%' }}>
+            <Box sx={{ width: '100%', marginTop: 2, }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value}
                         onChange={handleChange}
                         aria-label="Detil Data Hasil Psikotest Peserta"
                         variant="fullWidth" centered
+                        className='shadow-xl rounded-t-xl'
                     >
                         {/* <Tab label="Tabel" {...a11yProps(0)} wrapped sx={TabStyle} /> */}
                         <Tab label="Kecermatan" {...a11yProps(0)} wrapped sx={TabStyle} />
