@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Repositories\as1001_peserta_profilRepository;
 use App\Repositories\as1002_peserta_hasilnilai_teskecermatanRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use App\Libraries\myfunction as fun;
 use Exception;
@@ -142,13 +143,14 @@ class as1001_peserta_profilService {
     public function setUpPesertaTes(array $val) {
         try {
             $cek1 = $this->repo1->get(['no_identitas' => $val['no_identitas']]);
-            $encrypted_user_data = collect([
+            $arrdata = [
                 'nama'         => fun::enval($val['nama'], true),
                 'no_identitas' => fun::enval($val['no_identitas'], true),
                 'email'        => fun::enval($val['email'], true),
                 'tgl_lahir'    => fun::enval($val['tgl_lahir'], true),
                 'asal'         => fun::enval($val['asal'], true),
-            ]);
+            ];
+            $encrypted_user_data = collect($arrdata);
             if($cek1 != '' || $cek1 != null || !empty($cek1)) {
                 //? Apakah peserta sudah terdaftar
                 $cek2 = $this->repo2->getCheckTesDate($cek1[0]['id'], $val['tgl_tes']);
@@ -180,7 +182,8 @@ class as1001_peserta_profilService {
                         'success'             => 1,
                         'status'              => 'Unnecessary Update',
                         'res'                 => $cek1[0]['id'],
-                        'encrypted_user_data' => $encrypted_user_data
+                        'encrypted_user_data' => $encrypted_user_data,
+                        'user' => Crypt::encrypt($arrdata)
                     ]);
                 }
             }

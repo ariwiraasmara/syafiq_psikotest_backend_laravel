@@ -9,6 +9,12 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Allow access to specific XML files
+    RewriteCond %{REQUEST_URI} ^/sitemap\.xml$ [OR]
+    RewriteCond %{REQUEST_URI} ^/sitemap_index\.xml$ [OR]
+    RewriteCond %{REQUEST_URI} ^/sitemap_hasil_psikotest_kecermatan_peserta\.xml$
+    RewriteRule .* - [L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

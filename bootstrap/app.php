@@ -30,12 +30,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // ]);
 
         $middleware->encryptCookies(except: [
-            'isadmin',
-            'islogin',
-            'isauth',
-            'expire_at',
-            'csrf_token',
-            'XSRF-TOKEN'
+            // 'isadmin',
+            // 'islogin',
+            // 'isauth',
+            // 'expire_at',
+            // 'csrf_token',
+            // 'XSRF-TOKEN'
         ]);
         //
     })

@@ -8,23 +8,29 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\IsWebAdminAuth;
+use App\Http\Middleware\SecurityHeaders;
 use App\Libraries\myroute;
 use App\Libraries\myfunction as fun;
 
-Route::get('/', myroute::view('Home', 'reactView'))->name('home');
-
-Route::get('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}', myroute::view('Peserta\Psikotest\Kecermatan\Hasil\Page', 'reactView'))->name('peserta_psikotest_kecermatan_hasil');
-Route::get('/generate-sitemap', myroute::view('MySitemapController', 'generate'))->name('generate_sitemap');
+Route::middleware(
+    SecurityHeaders::class
+)->group(function () {
+    Route::get('/', myroute::view('Home', 'bladeView'))->name('home');
+    Route::get('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}', myroute::view('Peserta\Psikotest\Kecermatan\Hasil\Page', 'bladeView'))->name('peserta_psikotest_kecermatan_hasil');
+    Route::get('/generate-sitemap', myroute::view('MySitemapController', 'generate'))->name('generate_sitemap');
+    Route::get('/security/hall-of-fame', myroute::view('SecurityController', 'bladeView_halloffame'))->name('hall_of_fame');
+});
 
 Route::middleware(
     'throttle:250,1', // 200 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    SecurityHeaders::class
 )->group(function () {
-    Route::get('/peserta', myroute::view('Peserta\Page', 'reactView'))->name('peserta');
+    Route::get('/peserta', myroute::view('Peserta\Page', 'bladeView'))->name('peserta');
     
     Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))
                 ->name('peserta_setup');
     if( fun::getRawCookie('ispeserta') ) {
-        Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'reactView'))->name('peserta_psikotest_kecermatan');
+        Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'bladeView'))->name('peserta_psikotest_kecermatan');
         Route::post('/peserta-psikotest-kecermatan/{id}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'store'))->name('peserta_psikotest_kecermatan_store');
         Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'))->name('psikotest_kecermatan_pertanyaan');
         Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'))->name('psikotest_kecermatan_soaljawaban');
@@ -34,43 +40,45 @@ Route::middleware(
 Route::middleware(
     'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     // 'customThrottle:50,1'
+    SecurityHeaders::class
 )->group(function () {
-    Route::get('admin', myroute::view('Admin\Page', 'reactView'))->name('admin');
+    Route::get('admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
     Route::post('admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
-    Route::get('logout', myroute::view('Logout', 'reactView'))->name('admin_logout');
+    Route::get('logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
 });
 
 Route::middleware([
     'auth',
     'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    IsWebAdminAuth::class
+    IsWebAdminAuth::class,
+    SecurityHeaders::class
 ])->group(function () {
-    Route::get('/admin/dashboard', myroute::view('Admin\Dashboard\Page', 'reactView'))->name('admin_dashboard');
+    Route::get('/admin/dashboard', myroute::view('Admin\Dashboard\Page', 'bladeView'))->name('admin_dashboard');
 
-    Route::get('/admin/peserta/{sort}/{by}/{search}', myroute::view('Admin\Peserta\Page', 'reactView'))->name('admin_peserta');
-    Route::get('/admin/peserta-edit/{id}', myroute::view('Admin\Peserta\Edit\Page', 'reactView'))->name('admin_peserta_edit');
+    Route::get('/admin/peserta/{sort}/{by}/{search}', myroute::view('Admin\Peserta\Page', 'bladeView'))->name('admin_peserta');
+    Route::get('/admin/peserta-edit/{id}', myroute::view('Admin\Peserta\Edit\Page', 'bladeView'))->name('admin_peserta_edit');
     Route::put('/admin/peserta-edit/{id}', myroute::view('Admin\Peserta\Edit\Page', 'update'))->name('admin_peserta_update');
-    Route::get('/admin/peserta-detil/{tgl1}/{tgl2}/{id}', myroute::view('Admin\Peserta\Detil\Page', 'reactView'))->name('admin_peserta_detil');
+    Route::get('/admin/peserta-detil/{tgl1}/{tgl2}/{id}', myroute::view('Admin\Peserta\Detil\Page', 'bladeView'))->name('admin_peserta_detil');
 
-    Route::get('/admin/psikotest', myroute::view('Admin\Psikotest\Page', 'reactView'))->name('admin_psikotest');
-    Route::get('/admin/psikotest/kecermatan', myroute::view('Admin\Psikotest\Kecermatan\Page', 'reactView'))->name('admin_psikotest_kecermatan');
-    Route::get('/admin/psikotest/kecermatan-baru', myroute::view('Admin\Psikotest\Kecermatan\Baru\Page', 'reactView'))->name('admin_psikotest_kecermatan_baru');
+    Route::get('/admin/psikotest', myroute::view('Admin\Psikotest\Page', 'bladeView'))->name('admin_psikotest');
+    Route::get('/admin/psikotest/kecermatan', myroute::view('Admin\Psikotest\Kecermatan\Page', 'bladeView'))->name('admin_psikotest_kecermatan');
+    Route::get('/admin/psikotest/kecermatan-baru', myroute::view('Admin\Psikotest\Kecermatan\Baru\Page', 'bladeView'))->name('admin_psikotest_kecermatan_baru');
     Route::post('/admin/psikotest/kecermatan-baru', myroute::view('Admin\Psikotest\Kecermatan\Baru\Page', 'store'))->name('admin_psikotest_kecermatan_store');
-    Route::get('/admin/psikotest/kecermatan-edit/{id}', myroute::view('Admin\Psikotest\Kecermatan\Edit\Page', 'reactView'))->name('admin_psikotest_kecermatan_edit');
+    Route::get('/admin/psikotest/kecermatan-edit/{id}', myroute::view('Admin\Psikotest\Kecermatan\Edit\Page', 'bladeView'))->name('admin_psikotest_kecermatan_edit');
     Route::put('/admin/psikotest/kecermatan-edit/{id}', myroute::view('Admin\Psikotest\Kecermatan\Edit\Page', 'update'))->name('admin_psikotest_kecermatan_update');
     Route::delete('/admin/psikotest/kecermatan-delete/{id}', myroute::view('Admin\Psikotest\Kecermatan\Page', 'delete'))->name('admin_psikotest_kecermatan_delete');
     
-    Route::get('/admin/psikotest/kecermatan/detil/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'reactView'))->name('admin_psikotest_kecermatan_detil');
-    Route::get('/admin/psikotest/kecermatan/detil-baru/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Baru\Page', 'reactView'))->name('admin_psikotest_kecermatan_detil_baru');
+    Route::get('/admin/psikotest/kecermatan/detil/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'bladeView'))->name('admin_psikotest_kecermatan_detil');
+    Route::get('/admin/psikotest/kecermatan/detil-baru/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Baru\Page', 'bladeView'))->name('admin_psikotest_kecermatan_detil_baru');
     Route::post('/admin/psikotest/kecermatan/detil-baru/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Baru\Page', 'store'))->name('admin_psikotest_kecermatan_detil_store');
-    Route::get('/admin/psikotest/kecermatan/detil-edit/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Edit\Page', 'reactView'))->name('admin_psikotest_kecermatan_detil_edit');
+    Route::get('/admin/psikotest/kecermatan/detil-edit/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Edit\Page', 'bladeView'))->name('admin_psikotest_kecermatan_detil_edit');
     Route::put('/admin/psikotest/kecermatan/detil-edit/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Edit\Page', 'update'))->name('admin_psikotest_kecermatan_detil_update');
     Route::delete('/admin/psikotest/kecermatan/detil-delete/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'delete'))->name('admin_psikotest_kecermatan_detil_delete');
 
-    Route::get('/admin/variabel-setting/{sort}/{by}/{search}', myroute::view('Admin\Variabel\Page', 'reactView'))->name('admin_variabel_setting');
-    Route::get('/admin/variabel-baru',  myroute::view('Admin\Variabel\Baru\Page', 'reactView'))->name('admin_variabel_baru');
+    Route::get('/admin/variabel-setting/{sort}/{by}/{search}', myroute::view('Admin\Variabel\Page', 'bladeView'))->name('admin_variabel_setting');
+    Route::get('/admin/variabel-baru',  myroute::view('Admin\Variabel\Baru\Page', 'bladeView'))->name('admin_variabel_baru');
     Route::post('/admin/variabel-baru', myroute::view('Admin\Variabel\Baru\Page', 'store'))->name('admin_variabel_store');
-    Route::get('/admin/variabel-edit/{id}', myroute::view('Admin\Variabel\Edit\Page', 'reactView'))->name('admin_variabel_edit');
+    Route::get('/admin/variabel-edit/{id}', myroute::view('Admin\Variabel\Edit\Page', 'bladeView'))->name('admin_variabel_edit');
     Route::put('/admin/variabel-edit/{id}', myroute::view('Admin\Variabel\Edit\Page', 'update'))->name('admin_variabel_update');
     Route::delete('/admin/variabel-delete/{id}', myroute::view('Admin\Variabel\Page', 'delete'))->name('admin_variabel_delete');
 });

@@ -1,7 +1,7 @@
 // ! Copyright @
 // ! Syafiq
 // ! Syahri Ramadhan Wiraasmara (ARI)
-import Layout from '@/Layouts/layout';
+import Layout from '@/Layouts/layout.tsx';
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
@@ -45,12 +45,6 @@ export default function Sitemap(props: Sitemap) {
             <Footer hidden={''} otherCSS={``} />
         );
     });
-
-    const IfError = () => {
-        if(props.error) {
-            return props.error;
-        }
-    }
 
     return(
         <Layout>

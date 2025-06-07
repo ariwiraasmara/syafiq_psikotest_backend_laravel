@@ -1,0 +1,42 @@
+# To prevent access to .env and other files
+<Files .*>
+    # Apache 2.2
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+    
+    # Apache 2.4
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</Files>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Mencegah akses ke file sensitif
+    <FilesMatch "\.(env|gitignore|git|editorconfig|gitattributes|lock|md|json|yml|xml)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+
+    # Exclude sitemap files from being redirected
+	RewriteCond %{REQUEST_URI} !^/public/sitemap(_index|_hasil_psikotest_kecermatan_peserta)?\.xml$
+
+    # Mengalihkan akses ke subdirektori public
+    # RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{REQUEST_URI} !^/
+    RewriteRule ^(.*)$ /public/$1 [L]
+    
+    RedirectMatch 301 ^/$ http://psikotesasyik.com/public
+    # RedirectMatch 301 ^/$ http://psikotesasyik.com
+</IfModule>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php83” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php83 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

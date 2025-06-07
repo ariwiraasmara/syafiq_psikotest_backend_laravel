@@ -23,6 +23,8 @@
         <meta property="og:type" content="application, website" />
         <meta property="og:locale" content="id_ID" />
         <meta name="theme-color" content="rgba(200, 200, 255, 0.9)" />
+        <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+        <meta name="referrer" content="no-referrer" />
 
         <meta property="og:url" content="{{ $pathURL }}" />
         <link rel="canonical" href="{{ $pathURL }}" />
@@ -42,7 +44,7 @@
 
         <link rel="stylesheet" href="{{ asset('/css/additional.css') }}">
         <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        
     </head>
     <body class="">
         <nav aria-label="breadcrumb" id="nav-breadcrumb" class="font-bold bg-black {{ $is_breadcrumb_hidden; }}">
@@ -52,14 +54,14 @@
 
         <script type="module" src="{{ asset('/js/myfunction.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/cryptojs@2.5.3/lib/Crypto.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/cryptojs@2.5.3/lib/Crypto.min.js"></script> --}}
+        <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+        <script src="https://cdn.jsdelivr.net/npm/validator/validator.min.js"></script>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.6/dist/purify.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/validator@13.7.0/validator.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/javascript-obfuscator@4.1.1/dist/index.browser.min.js"></script>
     </body>
 </html>

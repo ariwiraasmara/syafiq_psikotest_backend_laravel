@@ -161,18 +161,6 @@ export default function Admin(props: Admin) {
                 });
                 console.info('response', response.data);
                 if(response.data.success) {
-                    const cookieRules = {
-                        path: props.path,
-                        domain: props.domain,
-                        expires : 1,
-                        sameSite : 'strict',
-                        secure : true,
-                    };
-
-                    Cookies.set('islogin', true, cookieRules);
-                    Cookies.set('isadmin', true, cookieRules);
-                    Cookies.set('isauth', true, cookieRules);
-
                     localStorage.setItem('islogin', '1');
                     localStorage.setItem('isadmin', '1');
                     localStorage.setItem('isauth', '1');

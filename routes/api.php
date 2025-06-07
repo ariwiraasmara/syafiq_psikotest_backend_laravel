@@ -10,6 +10,7 @@ use App\Http\Middleware\LogRequest;
 use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\XRobotTags;
 use App\Http\Middleware\XRobotUntags;
 use Illuminate\Http\Request;

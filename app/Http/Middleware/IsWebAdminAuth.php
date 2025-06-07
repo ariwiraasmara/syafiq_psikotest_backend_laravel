@@ -16,16 +16,22 @@ class IsWebAdminAuth
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response {
-        if( $request->cookie('islogin') &&
-            $request->cookie('isadmin') &&
-            $request->cookie('isauth') &&
-            $request->cookie('__sysauth__') &&
-            $request->cookie('__token__') &&
-            $request->cookie('__unique__') &&
-            $request->cookie('XSRF-TOKEN')
+    public function handle(Request $request, Closure $next) {
+        if( isset($_COOKIE['islogin']) &&
+            isset($_COOKIE['isadmin']) &&
+            isset($_COOKIE['isauth']) &&
+            isset($_COOKIE['__sysauth__']) &&
+            isset($_COOKIE['__token__']) &&
+            isset($_COOKIE['__unique__']) &&
+            isset($_COOKIE['XSRF-TOKEN'])
         ) {
-            return $next($request);
+            if($request->cookie('islogin') == 1) {
+                if($request->cookie('isadmin') == 1) {
+                    if($request->cookie('isauth') == 1) {
+                        return $next($request);
+                    }
+                }
+            }
         }
         else {
             return redirect()->route('admin_logout');

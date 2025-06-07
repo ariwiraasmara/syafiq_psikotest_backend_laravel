@@ -16,8 +16,8 @@ return [
 
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
-    // 'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
+    // 'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'DELETE'],
 
     'allowed_origins' => [
         '*',
@@ -25,27 +25,29 @@ return [
     
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
-    // 'allowed_headers' => [
-    //     'Content-Type',
-    //     'XSRF-TOKEN',
-    //     'Authorization',
-    //     'Accept',
-    //     'User-Agent',
-    //     'tokenlogin',
-    //     'remember-token',
-    //     'email',
-    //     'isadmin',
-    //     'islogin',
-    //     '--unique--',
-    //     'isvalid',
-    //     'key',
-    //     'values',
-    //     'isdumb',
-    //     'challenger',
-    //     'pranked',
-    //     'isallowed',
-    // ],
+    // 'allowed_headers' => ['*'],
+    'allowed_headers' => [
+        '_token',
+        '--unique--',
+        'Content-Type',
+        'XSRF-TOKEN',
+        'Authorization',
+        'Accept',
+        'User-Agent',
+        'tokenlogin',
+        'remember-token',
+        'email',
+        'isadmin',
+        'islogin',
+        'isauth',
+        'isvalid',
+        'key',
+        'values',
+        'isdumb',
+        'challenger',
+        'pranked',
+        'isallowed',
+    ],
 
     'exposed_headers' => [],
 

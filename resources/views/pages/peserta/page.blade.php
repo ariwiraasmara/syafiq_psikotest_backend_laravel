@@ -156,6 +156,7 @@
                     axios.defaults.withCredentials = true;
                     axios.defaults.withXSRFToken = true;
                     const response = await axios.post(`{{ route('peserta_setup') }}`, {
+                        _token: '{{ csrf_token(); }}',
                         unique: '{{ $unique; }}',
                         nama: nama,
                         no_identitas: no_identitas,
@@ -198,7 +199,7 @@
                         localStorage.setItem('sesi_psikotest_kecermatan', 1);
                         sessionStorage.setItem('nilai_total_psikotest_kecermatan_kolom1', 0);
                         sessionStorage.setItem('waktupengerjaan_kolom_1', 0);
-                        window.location.href = `/public/peserta/psikotest/kecermatan/1`;
+                        // window.location.href = `/public/peserta/psikotest/kecermatan/1`;
                     }
                     else if(response.data.success === 'datex') {
                         document.getElementById('formpeserta').classList.add('hidden');
