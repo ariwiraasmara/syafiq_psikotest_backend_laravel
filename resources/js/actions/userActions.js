@@ -1,5 +1,6 @@
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 export const FETCH_USERS = 'FETCH_USERS';
 export const ADD_USER = 'ADD_USER';

@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\PersonalAccessTokens;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class personalaccesstokensRepository {
 
-    protected PersonalAccessTokens $model;
+    protected PersonalAccessTokens|null $model;
     public function __construct() {
         $this->model = new PersonalAccessTokens();
     }
@@ -31,9 +32,26 @@ class personalaccesstokensRepository {
         }
     }
 
+    public function store(array $values): array|Collection|String|int|null {
+        try {
+            $res = $this->model->create($values);
+            if($res->id > 0) return $res->id;
+            return 0;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->store!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
     public function update(int $id, array $values): array|Collection|String|int|null {
         try {
-            $res = $this->model->where(['id' => $id])->update($values);
+            $res = $this->model->where(['email' => $id])->update($values);
             if($res > 0) return $res;
             else return 0;
         }
@@ -46,5 +64,9 @@ class personalaccesstokensRepository {
             ]);
             return -11;
         }
+    }
+
+    public function __destruct() {
+        $this->model = null;
     }
 }

@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
 use App\Repositories\as0001_variabelsettingRepository;
@@ -11,19 +12,14 @@ use App\Libraries\myfunction as fun;
 use Exception;
 class as0001_variabelsettingService {
 
-    protected as0001_variabelsettingRepository $repo;
+    protected as0001_variabelsettingRepository|null $repo;
     public function __construct(as0001_variabelsettingRepository $repo) {
         $this->repo = $repo;
     }
 
     public function all(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            $data = $this->repo->all($sort, $by, $search);
-            return $data;
-            // return $data->map(function ($item) {
-            //     // return $item['id'] = fun::enval($item['id'], true);
-            //     return $item['id'];
-            // });
+            return $this->repo->all($sort, $by, $search);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->all!', [
@@ -109,5 +105,9 @@ class as0001_variabelsettingService {
             ]);
             return -12;
         }
+    }
+
+    public function __destruct() {
+        $this->repo = null;
     }
 }

@@ -1,6 +1,7 @@
 <?php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 $title = "405! Method Not Allowed!";
 $pathURL = url()->current();

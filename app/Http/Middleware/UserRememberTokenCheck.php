@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Middleware;
 
 use Closure;

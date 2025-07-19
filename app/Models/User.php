@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,6 +14,9 @@ class User extends Authenticatable {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
+    protected $guarded = [];
+    protected $table = 'users';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +26,10 @@ class User extends Authenticatable {
         'name',
         'email',
         'password',
+        'roles',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**
@@ -30,7 +38,7 @@ class User extends Authenticatable {
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        // 'password',
         // 'remember_token',
     ];
 
@@ -46,6 +54,11 @@ class User extends Authenticatable {
             'password' => 'hashed',
         ];
     }
+
+    public $timestamps = true;
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+    const DELETED_AT = 'deleted_at';
 
     //? Punya satu data di table PersonalAccessTokens
     public function PersonalAccessTokens() {

@@ -1,6 +1,7 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @php
@@ -23,6 +24,7 @@
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
         'link_back'    => route('admin_psikotest_kecermatan'),
         'appbar_title' => $appbar_title,
     ]) @endcomponent

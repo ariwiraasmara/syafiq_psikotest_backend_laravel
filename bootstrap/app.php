@@ -18,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
-            \Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class,
+            // \Tonysm\TailwindCss\Http\Middleware\AddLinkHeaderForPreloadedAssets::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\CustomThrottleRequests::class,

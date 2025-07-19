@@ -1,6 +1,7 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
 <!DOCTYPE html>
@@ -9,8 +10,8 @@
         <meta charSet="utf-8" />
         <title>{{ $title }}</title>
         <meta property="og:title" content="{{ $title }}" />
-        <meta name="description" content="Syafiq Psikotest Online App, adalah aplikasi psikotest berbasis online web, dimana dapat diakses di perangkat manapun." />
-        <meta property="og:description" content="Syafiq Psikotest Online App, adalah aplikasi psikotest berbasis online web, dimana dapat diakses di perangkat manapun." />
+        <meta name="description" content="Psikotes Online App adalah aplikasi psikotest berbasis online web, dimana dapat diakses di perangkat manapun." />
+        <meta property="og:description" content="Psikotes Online App, adalah aplikasi psikotest berbasis online web, dimana dapat diakses di perangkat manapun." />
         <meta name="keywords" content="Syafiq, PT. Solusi, Syafiq Psikotest, PHP, Laravel" />
         <meta name="author" content="Syafiq. Syahri Ramadhan Wiraasmara (ARI)" />
         <meta name="publisher" content="Syafiq. Syahri Ramadhan Wiraasmara (ARI)" />
@@ -32,19 +33,19 @@
         <meta name="robots" content="{{ $robots }}" />
 
         {{-- Nanti url href diubah dan disesuaikan --}}
-        <link rel="icon" href="/favicon.ico?favicon.45db1c09.ico" sizes="256x256" type="image/x-icon" />
-        <link rel="apple-touch-icon" href="/favicon.ico?favicon.45db1c09.ico" />
-        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/favicon.ico?favicon.45db1c09.ico" />
-        <meta property="og:image" content="/favicon.ico?favicon.45db1c09.ico" />
+        <link rel="icon" href="{{ asset('images/logo1.jpeg') }}" sizes="256x256" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="{{ asset('images/logo1.jpeg') }}" />
+        <link rel="apple-touch-icon-precomposed" sizes="180x180" href="{{ asset('images/logo1.jpeg') }}" />
+        <meta property="og:image" content="{{ asset('images/logo1.jpeg') }}" />
 
         @if($onetime)
         <meta name="XSRF-TOKEN" content="{{ csrf_token() }}" />
-        <meta name="__unique__" content="{{ $unique }}" />
+        <meta name="X-UNIQUE" content="{{ $unique }}" />
         @endif
 
-        <link rel="stylesheet" href="{{ asset('/css/additional.css') }}">
-        <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}">
-        
+        <link rel="stylesheet" href="{{ asset('/css/additional.css') }}" />
+        {{-- <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}" /> --}}
+        <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}" />
     </head>
     <body class="">
         <nav aria-label="breadcrumb" id="nav-breadcrumb" class="font-bold bg-black {{ $is_breadcrumb_hidden; }}">

@@ -1,6 +1,7 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @php
@@ -10,19 +11,24 @@
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
+        'sidebar'      => false,
         'link_back'    => route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']).'?page=1',
         'appbar_title' => $appbar_title,
+        'roles'        => $roles
     ]) @endcomponent
 
     <div class="p-4 text-black" style="margin-bottom: 10px; ">
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
         <div>
             <p>
-                <span class='mr-4' style="font-size: 20px;">
-                    <a href="{{ route('admin_peserta_edit', ['id' => $id]); }}" rel="nofollow" title="Edit Data Peserta {{ $dataprofil['nama'] }}">
-                        <ion-icon name="pencil-outline"></ion-icon>
-                    </a>
-                </span>
+                @if( $roles == 1 )
+                    <span class='mr-4' style="font-size: 20px;">
+                        <a href="{{ route('admin_peserta_edit', ['id' => $id]); }}" rel="nofollow" title="Edit Data Peserta {{ $dataprofil['nama'] }}">
+                            <ion-icon name="pencil-outline"></ion-icon>
+                        </a>
+                    </span>
+                @endif
                 <span class="font-bold">Nama :</span> {{ $dataprofil['nama'] }}
             </p>
             <p><span class="font-bold">No. Identitas :</span> {{ $dataprofil['no_identitas'] }}</p>

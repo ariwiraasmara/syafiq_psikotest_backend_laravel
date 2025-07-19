@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 use App\Http\Middleware\BearerTokenCheck;
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;

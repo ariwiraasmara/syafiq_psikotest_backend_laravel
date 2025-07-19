@@ -1,40 +1,53 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
     use App\Libraries\myfunction;
-    $page = @$_GET['page'];
+
+    $style_content = 'margin-bottom: 60px;';
+    $style_fab = 'margin-bottom: 23px;';
+    $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
+
+    if($roles > 1) {
+        $style_content = 'margin-bottom: 130px;';
+        $style_fab = 'margin-bottom: 90px;';
+        $style_paging = 'bottom: 1px; margin-bottom: 70px; padding: 10px;';
+    }
 @endphp
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
+        'sidebar'      => true,
         'link_back'    => null,
         'appbar_title' => $appbar_title,
+        'roles'        => $roles
     ]) @endcomponent
 
-    <div class="p-4 text-black" style="margin-bottom: 130px;">
+    <div class="p-4 text-black" style="{{ $style_content; }}">
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
-        <div class="p-2 container mx-auto flex justify-between items-center w-full">
+        <div class="p-2 mx-auto flex justify-between items-center w-full">
             <div class="w-full">
-                <button type="button" id="btn-refresh" class="rounded-lg text-white w-full" style="padding: 5px; background-color: #0a0;" onclick="refresh()">
+                <button type="button" id="btn-refresh" class="rounded-lg text-white w-full shadow-xl" style="padding: 5px; background-color: #0a0;" onclick="refresh()">
                     <ion-icon name="refresh-outline"></ion-icon>
                 </button>
             </div>
             <div class="w-full">
-                <button type="button" id="btn-togglesearch" class="rounded-lg text-white w-full" onclick="toggleSearch()" style="padding: 5px; background-color: #55f;">
+                <button type="button" id="btn-togglesearch" class="rounded-lg text-white w-full shadow-xl" onclick="toggleSearch()" style="padding: 5px; background-color: #55f;">
                     <ion-icon name="search-outline"></ion-icon>
                 </button>
             </div>
             <div class="w-full">
-                <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg border-2 border-black bg-white w-full" style="padding: 5px;" onchange="sortChange();">
+                <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg bg-white w-full shadow-xl" style="padding: 5px;" onchange="sortChange();">
                     <option value="" disabled>Pilih Berdasarkan...</option>
                     <option value="variabel" @if($sort == 'variabel') selected @endif >Nama Variabel</option>
                     <option value="values" @if($sort == 'values') selected @endif >Nilai Variabel</option>
                 </select>
             </div>
             <div class="w-full">
-                <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg border-2 border-black bg-white w-full" style="padding: 5px;" onchange="byChange();">
+                <select id="select-by" title="Urutkan Berdasarkan..." class="rounded-lg bg-white w-full shadow-xl" style="padding: 5px;" onchange="byChange();">
                     <option value="" disabled>Urutkan Berdasarkan...</option>
                     <option value="asc" @if($by == 'asc') selected @endif>A - Z</option>
                     <option value="desc" @if($by == 'desc') selected @endif>Z - A</option>
@@ -43,16 +56,16 @@
         </div>
         <div id="searchArea" class="mt-2 p-2 flex hidden">
             <div class="w-80 flex-1">
-                <input type="text" id="txt-search" placeholder="Cari..." class="bg-white border-2 border-black rounded-lg p-2 w-full" value="{{ $search }}" />
+                <input type="text" id="txt-search" placeholder="Cari..." class="bg-white rounded-lg p-2 w-full shadow-xl" value="{{ $search }}" />
             </div>
             <div class="w-20 flex-1">
-                <button type="button" id="btn-search" class="text-white border-2 border-black rounded-lg w-full" onclick="search()" style="background-color: #0a0; padding: 8px;">Cari</button>
+                <button type="button" id="btn-search" class="text-white rounded-lg w-full shadow-xl" onclick="search()" style="background-color: #0a0; padding: 8px;">Cari</button>
             </div>
         </div>
         <div style="margin-top: 30px">
             <div id="data-container">
                 @foreach($data as $data)
-                    <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 border-black">
+                    <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 border-black shadow-xl">
                         <div class="static">
                             <div>
                                 <span>
@@ -74,14 +87,14 @@
                 @endforeach
             </div>
         </div>
-        <button type="button" class="fab bg-blue-700" style="margin-bottom: 90px;" onclick="window.location.href = '{{ route('admin_variabel_baru') }}'">
+        <button type="button" class="fab bg-blue-700" style="{{ $style_fab }}" onclick="window.location.href = '{{ route('admin_variabel_baru') }}'">
             <a href="#" rel="nofollow" title="Variabel Baru">
                 +
             </a>
         </button>
     </div>
 
-    <div class="text-center fixed w-full bg-black text-white" style="bottom: 1px; margin-bottom: 70px; padding: 10px;">
+    <div class="text-center fixed w-full bg-black text-white" style="{{ $style_paging; }}">
         <span class='mr-2'>Halaman </span>
         <select id="select-page" class="border-2 border-white bg-white rounded-md text-black text-right" onchange="pageChange()" style="width 80px; height: 30px;">
             @for($x = 1; $x <= $lastpage; $x++)
@@ -91,7 +104,12 @@
         <span class='ml-2'>/ {{ $lastpage }}</span>
     </div>
 
-    @component('components.admin.navigasibawah', ['navval' => $navval]) @endcomponent
+    @if($roles > 1)
+        @component('components.admin.navigasibawah', ['navval' => $navval, 'roles'=>$roles]) @endcomponent
+    @endif
+    @if($roles == 1)
+        @component('components.admin.menusidebar', ['navval' => $navval, 'email' => $email, 'roles' => $roles]) @endcomponent
+    @endif
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
@@ -124,7 +142,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/public/admin/variabel-delete/${id}`, {
+                            const response = await axios.delete(`/admin/variabel-delete/${id}`, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -132,6 +150,7 @@
                                     'tokenlogin': '{{ $unique; }}',
                                 }
                             });
+                            console.info(response);
                             if(response.data.success) {
                                 setTimeout(() => {
                                     refresh();

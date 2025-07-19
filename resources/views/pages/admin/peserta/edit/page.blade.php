@@ -1,21 +1,25 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
-        'link_back'    => route('admin_peserta_detil', ['id' => $id]),
+        'email'        => $email,
+        'link_back'    => route('admin_peserta_detil', ['id' => $id_data]),
         'appbar_title' => $appbar_title,
+        'sidebar'      => true,
+        'roles'        => $roles
     ]) @endcomponent
 
     <div class="p-4 text-black" style="margin-bottom: 120px;">
         <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
         <div class="">
-            <form action="{{ route('admin_peserta_edit', ['id' => $id]); }}" method="POST">
+            <form action="{{ route('admin_peserta_edit', ['id' => $id_data]); }}" method="POST">
                 @method('PUT')
                 @csrf()
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" readonly />

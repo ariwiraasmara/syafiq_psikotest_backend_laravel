@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\as2002_kecermatan_soaljawaban;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as2002_kecermatan_soaljawabanRepository {
 
-    protected as2002_kecermatan_soaljawaban $model;
+    protected as2002_kecermatan_soaljawaban|null $model;
     public function __construct(as2002_kecermatan_soaljawaban $model) {
         $this->model = $model;
     }
@@ -94,9 +95,25 @@ class as2002_kecermatan_soaljawabanRepository {
         }
     }
 
-    public function get(int $id): array|Collection|String|int|null {
+    public function getOne(int $id): array|Collection|String|int|null {
         try {
             if($this->model->where(['id' => $id])->first()) return $this->model->where(['id' => $id])->get();
+            return null;
+        }
+        catch(Exception $err) {
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada as2002_kecermatan_soaljawabanRepository->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -11;
+        }
+    }
+
+    public function getOneRootForDetail(int $id): array|Collection|String|int|null {
+        try {
+            if($this->model->where(['id2001' => $id])->first()) return $this->model->where(['id' => $id])->get();
             return null;
         }
         catch(Exception $err) {
@@ -160,5 +177,8 @@ class as2002_kecermatan_soaljawabanRepository {
             return -11;
         }
     }
+
+    public function __destruct() {
+        $this->model = null;
+    }
 }
-?>

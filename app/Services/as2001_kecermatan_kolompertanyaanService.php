@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
 use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as2001_kecermatan_kolompertanyaanService {
 
-    protected as2001_kecermatan_kolompertanyaanRepository $repo;
+    protected as2001_kecermatan_kolompertanyaanRepository|null $repo;
     public function __construct(as2001_kecermatan_kolompertanyaanRepository $repo) {
         $this->repo = $repo;
     }
@@ -69,8 +70,7 @@ class as2001_kecermatan_kolompertanyaanService {
                 'nilai_C'    => $val['nilai_C'],
                 'nilai_D'    => $val['nilai_D'],
                 'nilai_E'    => $val['nilai_E'],
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $res;
             return 0;
@@ -94,7 +94,7 @@ class as2001_kecermatan_kolompertanyaanService {
                 'nilai_C'    => $val['nilai_C'],
                 'nilai_D'    => $val['nilai_D'],
                 'nilai_E'    => $val['nilai_E'],
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $res;
             return 0;
@@ -125,5 +125,9 @@ class as2001_kecermatan_kolompertanyaanService {
             ]);
             return -12;
         }
+    }
+
+    public function __destruct() {
+        $this->repo = null;
     }
 }

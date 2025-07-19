@@ -1,86 +1,53 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
 <div class="bg-black shadow-md max-w-screen w-full fixed" style="bottom: 0px; padding: 5px;">
-    <div class="container mx-auto flex justify-between items-center text-white">
-        <a href="{{ route('admin_dashboard') }}" id="nav-admin-dashboard" class="text-center" rel='follow' title="Halaman Dashboard | Admin" style="padding: 5px">
-            <span class="text-xl">
-                <ion-icon name="home-outline"></ion-icon>
-            </span><br/>
-            <span class="text-base">Dashboard</span>
-        </a>
-        <a href="{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']) }}?page=1" id="nav-admin-peserta" class="text-center" rel='follow' title="Halaman Peserta | Admin" style="padding: 5px">
-            <span class="text-xl">
-                <ion-icon name="people-outline"></ion-icon>
-            </span><br/>
-            <span class="text-base">Peserta</span>
-        </a>
-        <a href="{{ route('admin_psikotest') }}" id="nav-admin-psikotest" class="text-center" rel='follow' title="Halaman Psikotest | Admin" style="padding: 5px">
-            <span class="text-xl">
-                <ion-icon name="folder-open-outline"></ion-icon>
-            </span><br/>
-            <span class="text-base">Psikotest</span>
-        </a>
-        <a href="{{ route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']) }}?page=1" id="nav-admin-variabel" class="text-center" rel='follow' title="Halaman Variabel | Admin" style="padding: 5px">
-            <span class="text-xl">
-                <ion-icon name="settings-outline"></ion-icon>
-            </span><br/>
-            <span class="text-base">Variabel</span>
-        </a>
+    <div class="container mx-auto flex flex-row justify-items-center text-center text-white">
+        <div class="basis-1/2 w-full" id="nav-admin-dashboard" class="text-center">
+            <a href="{{ route('admin_dashboard') }}" rel='follow' title="Halaman Dashboard | Admin" style="padding: 5px">
+                <span class="text-xl">
+                    <ion-icon name="home-outline"></ion-icon>
+                </span><br/>
+                <span class="text-base">Dashboard</span>
+            </a>
+        </div>
+        <div class="basis-1/2 w-full" id="nav-admin-peserta" class="text-center">
+            <a href="{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']) }}?page=1" rel='follow' title="Halaman Peserta | Admin" style="padding: 5px">
+                <span class="text-xl">
+                    <ion-icon name="people-outline"></ion-icon>
+                </span><br/>
+                <span class="text-base">Peserta</span>
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
+    function active(theid) {
+        document.getElementById(theid).classList.add('bg-blue-700');
+        document.getElementById(theid).classList.add('rounded-lg');
+        document.getElementById(theid).classList.add('font-bold');
+    }
+
+    function inactive(theid) {
+        document.getElementById(theid).classList.remove('bg-white');
+        document.getElementById(theid).classList.remove('rounded-lg');
+        document.getElementById(theid).classList.remove('font-bold');
+    }
+
     if("{{ $navval }}" == 'nav-admin-dashboard') {
-        document.getElementById('nav-admin-dashboard').classList.add('bg-blue-700');
-        document.getElementById('nav-admin-dashboard').classList.add('rounded-lg');
-        document.getElementById('nav-admin-peserta').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-peserta').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-psikotest').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-psikotest').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-variabel').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-variabel').classList.remove('rounded-lg');
+        active('{{ $navval }}');
+        inactive('nav-admin-peserta');
     }
     else if("{{ $navval }}" == 'nav-admin-peserta') {
-        document.getElementById('nav-admin-dashboard').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-dashboard').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-peserta').classList.add('bg-blue-700');
-        document.getElementById('nav-admin-peserta').classList.add('rounded-lg');
-        document.getElementById('nav-admin-psikotest').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-psikotest').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-variabel').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-variabel').classList.remove('rounded-lg');
-    }
-    else if("{{ $navval }}" == 'nav-admin-psikotest') {
-        document.getElementById('nav-admin-dashboard').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-dashboard').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-peserta').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-peserta').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-psikotest').classList.add('bg-blue-700');
-        document.getElementById('nav-admin-psikotest').classList.add('rounded-lg');
-        document.getElementById('nav-admin-variabel').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-variabel').classList.remove('rounded-lg');
-    }
-    else if("{{ $navval }}" == 'nav-admin-variabel') {
-        document.getElementById('nav-admin-dashboard').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-dashboard').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-peserta').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-peserta').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-psikotest').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-psikotest').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-variabel').classList.add('bg-blue-700');
-        document.getElementById('nav-admin-variabel').classList.add('rounded-lg');
+        active('{{ $navval }}');
+        inactive('nav-admin-dashboard');
     }
     else {
-        document.getElementById('nav-admin-dashboard').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-dashboard').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-peserta').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-peserta').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-psikotest').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-psikotest').classList.remove('rounded-lg');
-        document.getElementById('nav-admin-variabel').classList.remove('bg-blue-700');
-        document.getElementById('nav-admin-variabel').classList.remove('rounded-lg');
+        inactive('nav-admin-dashboard');
+        inactive('nav-admin-peserta');
     }
 </script>

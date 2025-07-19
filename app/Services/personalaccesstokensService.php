@@ -1,12 +1,14 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
 use App\Repositories\personalaccesstokensRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use App\Libraries\myfunction as fun;
 use Exception;
 class personalaccesstokensService {
@@ -18,14 +20,7 @@ class personalaccesstokensService {
 
     public function get(array $where): array|Collection|String|int|null {
         try {
-            $data = $this->repo->get($where);
-            // cek tanggal kadaluarsa
-            if($data[0]['expires_at'] ==  date('Y-m-d 00:00:00')) {
-                $this->update($data[0]['id'],[
-                    'expires_at' => fun::daysLater('+7 days')
-                ]);
-            }
-            return $data;
+            return $this->repo->get($where);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada personalaccesstokensService->get!', [
@@ -38,15 +33,26 @@ class personalaccesstokensService {
         }
     }
 
+    public function store(array $val) {
+        $res = $this->repo->store([
+            'tokenable_type' => 'App\Models\User',
+            'tokenable_id'   => $val['user_id'],
+            'name'           => $val['email'],
+            'token'          => Str::random(64),
+            'abilities'      => $val['abilities'],
+            'created_at'     => now(),
+        ]);
+        if($res > 0) return $res;
+        return 0;
+    }
+
     public function update(int $id, array $val): String|int|null {
         try {
             $res = $this->repo->update($id, $val);
             if($res > 0) {
                 $data = $this->repo->get(['id' => $id]);
-                Log::channel('debugging')->debug('Token Telah Diupdate!', [
-                    'tanggal' => date('Y-m-d H:i:s')
-                ]);
-                return (String)$id.'|'.$data[0]['token'];
+                // return (String)$id.'|'.$data[0]['token'];
+                return $id.'|'.$data[0]['token'];
             }
             else {
                 return 0;

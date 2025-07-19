@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,7 @@ class PersonalAccessTokens extends Model {
     protected $table = 'personal_access_tokens';
     // protected $primaryKey = 'id';
     protected $fillable = [
-        // 'id',
+        'id',
         'tokenable_type',
         'tokenable_id',
         'name',

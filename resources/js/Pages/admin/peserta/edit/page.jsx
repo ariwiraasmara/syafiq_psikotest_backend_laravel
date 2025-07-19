@@ -1,5 +1,6 @@
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 'use client';
 import Layoutadmindetil from '@/Layouts/Layoutadmindetil.jsx';

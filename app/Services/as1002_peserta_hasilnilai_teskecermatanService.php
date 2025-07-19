@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
 use App\Repositories\as1001_peserta_profilRepository;
@@ -11,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as1002_peserta_hasilnilai_teskecermatanService {
 
-    protected as1001_peserta_profilRepository $repo1;
-    protected as1002_peserta_hasilnilai_teskecermatanRepository $repo2;
+    protected as1001_peserta_profilRepository|null $repo1;
+    protected as1002_peserta_hasilnilai_teskecermatanRepository|null $repo2;
     public function __construct(
         as1001_peserta_profilRepository $repo1,
         as1002_peserta_hasilnilai_teskecermatanRepository $repo2
@@ -141,5 +142,10 @@ class as1002_peserta_hasilnilai_teskecermatanService {
             ]);
             return -12;
         }
+    }
+
+    public function __destruct() {
+        $this->repo1 = null;
+        $this->repo2 = null;
     }
 }

@@ -1,5 +1,6 @@
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 import * as React from 'react';
 import PropTypes from 'prop-types';

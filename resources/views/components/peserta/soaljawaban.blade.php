@@ -1,6 +1,7 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
 <div class="border-4 mt-4 rounded-lg w-full border-black p-2 content-center bg-gray-400" id="{{ 'soalgroup-'.$id }}">

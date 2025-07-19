@@ -412,6 +412,15 @@ class myfunction {
         }
     }
 
+    public static function formatTimestamp($timestamp) {
+        try {
+            $date = new \DateTime($timestamp);
+            return $date->format('Y-m-d, h:i:s');
+        } catch (Exception $e) {
+            return "Invalid timestamp";
+        }
+    }
+
     // NOTIFICATION
     public static function Notrifger($id, $idtrigger, $txt) {
         try { ?>
@@ -451,9 +460,9 @@ class myfunction {
                 'numb' => str_split('01234567890123456789012345678901234567890123456789'),
                 'numbat' => str_split('123456789123456789123456789123456789123456789'),
                 'pass' => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[{]}|;:,<.>?'),
-                'spec' => str_split('`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/'),
+                'spec' => str_split('`~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/'),
                 'combwisp' => str_split('abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789'),
-                default => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\'\"|;:,<.>/?/')
+                default => str_split('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()-_=+[{]}\'"|;:,<.>/?/')
             };
 
             shuffle($seed); // probably optional since array_is randomized; this may be redundant

@@ -1,6 +1,7 @@
 /*
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI) 
 */
 body {
@@ -10,23 +11,59 @@ body {
 
 .background-header {
     background-image: url('https://images.pexels.com/photos/55787/pexels-photo-55787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-attachment: fixed;
     background-position: center top;
     background-repeat: repeat;
+    background-size: cover;
 }
 
 .background-welcome {
-    background-image: url('https://images.pexels.com/photos/158063/bellingrath-gardens-alabama-landscape-scenic-158063.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    /* background-image: url('https://images.pexels.com/photos/158063/bellingrath-gardens-alabama-landscape-scenic-158063.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); */
+    background-image: url('../images/bg5.jpg');
+    background-attachment: fixed;
     background-position: right center;
     background-repeat: repeat;
-    height: 50vh;
+    background-size: cover;
+    height: auto;
+    color: #fff;
 }
 
 .background-about {
-    background-image: url('https://images.pexels.com/photos/2325447/pexels-photo-2325447.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-image: url('https://images.pexels.com/photos/245219/pexels-photo-245219.jpeg?_gl=1*kcp87o*_ga*MTA1MjgzNjQwNC4xNzQyMTk0Mzg0*_ga_8JE65Q40S6*czE3NTAyMTg0MjckbzYkZzEkdDE3NTAyMTg0NTgkajI5JGwwJGgw');
+    background-attachment: fixed;
     background-position: right center;
     background-repeat: repeat;
-    height: 75vh;
+    background-size: cover;
+    height: auto;
 }
+
+.bg-aboutus {
+    background-image: url('../images/album/Psikotes-Masal-2.jpg');
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: repeat;
+    background-size: cover;
+    height: auto;
+}
+
+.bg-artikel {
+    background-image: url('../images/bg9.jpeg');
+    background-attachment: fixed;
+    background-position: center center;
+    background-repeat: repeat;
+    background-size: cover;
+    height: auto;
+}
+
+.bg-kontak {
+    background-image: url('../images/bg13.jpeg');
+    background-attachment: fixed;
+    background-position: center bottom;
+    background-repeat: repeat;
+    background-size: cover;
+    height: auto;
+}
+
 
 /* untuk layar desktop */
 @media (min-width: 1024px) {
@@ -38,10 +75,14 @@ body {
 
 }
 
+.navbar-sticky {
+    position: sticky !important;
+}
+
 .form-entry {
     padding: 25px;
     border-radius: 15px;
-    background-color: rgba(189, 222, 236, 0.5);
+    background-color: rgba(189, 222, 236, 0.8);
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1), 0 10px 25px 0 rgba(0, 0, 0, 0.5);
 }
 
@@ -60,6 +101,28 @@ body {
     transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transition */
     z-index: 9;
     cursor: pointer;
+}
+
+.paging-area {
+    background: #000;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar {
+    width: max-content; /* Adjust width based on content */
+    height: 100vh; /* Full height */
+    border-right: 3px solid #aaa;
+}
+
+.sidebar #head {
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.sidebar #body {
+    background-color: rgba(200, 200, 255, 1);
+    height: 100vh; /* Full height */
 }
 
 .btn-sm {
@@ -110,6 +173,11 @@ body {
     transition: background-color 0.3s ease;
 }
 
+.section-line {
+    border-bottom: 1px solid #000;
+    padding-bottom: 20px;
+}
+
 /* Style the radio button when checked */
 input[type="radio"]:checked {
     background-color: #007bff; /* Change color when checked */
@@ -119,6 +187,10 @@ input[type="radio"]:checked {
 /* Optional: Add a hover effect */
 input[type="radio"]:hover {
     border-color: #007bff;
+}
+
+.list-alpha {
+    list-style-type: upper-alpha;
 }
 
 .loader {
@@ -140,4 +212,32 @@ input[type="radio"]:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.bg-lp-white-glasses {
+    background-color: rgba(255,255,255, 0.9);
+    color: #000;
+    border-radius: 10px;
+
+}
+
+.whatsapp {
+    background:#25D366;
+    color:#fff;
+}
+
+.zigzag {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 100px);
+    gap: 10px;
+}
+.zigzag div:nth-child(1) {
+    grid-column: 1 / span 3;
+}
+.zigzag div:nth-child(2) {
+    grid-column: 3;
+}
+.zigzag div:nth-child(3) {
+    grid-column: 1 / span 3;
 }

@@ -1,14 +1,18 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
         'link_back'    => route('admin_psikotest_kecermatan'),
         'appbar_title' => $appbar_title,
+        'sidebar'      => true,
+        'roles'        => $roles
     ]) @endcomponent
 
     <div class="p-4 text-black" style="margin-bottom: 0px;">
@@ -20,34 +24,34 @@
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" readonly />
 
                 <div>
-                    <input  type="text" id="kolom_x" name="kolom_x" required focused
+                    <input  type="text" id="kolom_x" name="kolom_x" required
                             placeholder="Kolom..." label="Kolom..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
-                    <input  type="number" id="nilai_A" name="nilai_A" required focused
+                    <input  type="number" id="nilai_A" name="nilai_A" required
                             placeholder="Nilai A..." label="Nilai A..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full mt-4 p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
-                    <input  type="number" id="nilai_B" name="nilai_B" required focused
+                    <input  type="number" id="nilai_B" name="nilai_B" required
                             placeholder="Nilai B..." label="Nilai B..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full mt-4 p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
-                    <input  type="number" id="nilai_C" name="nilai_C" required focused
+                    <input  type="number" id="nilai_C" name="nilai_C" required
                             placeholder="Nilai C..." label="Nilai C..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full mt-4 p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
-                    <input  type="number" id="nilai_D" name="nilai_D" required focused
+                    <input  type="number" id="nilai_D" name="nilai_D" required
                             placeholder="Nilai D..." label="Nilai D..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full mt-4 p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
-                    <input  type="number" id="nilai_E" name="nilai_E" required focused
+                    <input  type="number" id="nilai_E" name="nilai_E" required
                             placeholder="Nilai E..." label="Nilai E..."
-                            class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                            class="w-full mt-4 p-2 rounded-lg text-white shadow-xl"
                             style="background-color: rgba(0, 0, 0, 0.5)"
                     />
                 </div>

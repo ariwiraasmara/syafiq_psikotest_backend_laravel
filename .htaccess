@@ -17,10 +17,14 @@
     RewriteBase /
 
     # Mencegah akses ke file sensitif
-    <FilesMatch "\.(env|gitignore|git|editorconfig|gitattributes|lock|md|json|yml|xml)$">
+    <FilesMatch "\.(env|gitignore|git|editorconfig|gitattributes|lock|json|yml)$">
         Order allow,deny
         Deny from all
     </FilesMatch>
+    <Files .env>
+        Order allow,deny
+        Deny from all
+    </Files>
 
     # Exclude sitemap files from being redirected
 	RewriteCond %{REQUEST_URI} !^/public/sitemap(_index|_hasil_psikotest_kecermatan_peserta)?\.xml$

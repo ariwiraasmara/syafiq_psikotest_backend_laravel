@@ -1,14 +1,18 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
         'link_back'    => route('admin_variabel_setting', ['sort' => 'variabel', 'by' => 'asc', 'search' => '-']).'?page=1',
         'appbar_title' => $appbar_title,
+        'sidebar'      => true,
+        'roles'        => $roles
     ]) @endcomponent
 
     <div class="p-4 text-black" style="margin-bottom: 120px;">
@@ -20,13 +24,13 @@
                 <input type="hidden" id="unique" name="unique" value="{{ $unique }}" readonly />
                 <input  type="text" id="txt-variabel" name="variabel" required focused
                         placeholder="Variabel..." label="Variabel..."
-                        class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                        class="w-full shadow-xl p-2 rounded-lg text-white"
                         style="background-color: rgba(0, 0, 0, 0.5)"
                 />
 
                 <input  type="text" id="txt-values" name="values" required focused
                         placeholder="Nilai..." label="Nilai..."
-                        class="w-full mt-4 border-white border-2 p-2 rounded-lg text-white"
+                        class="w-full mt-4 shadow-xl p-2 rounded-lg text-white"
                         style="background-color: rgba(0, 0, 0, 0.5)"
                 />
 

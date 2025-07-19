@@ -1,6 +1,7 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
 <div class="bg-black p-4 shadow-md max-w-screen fixed w-full z-50 text-white">

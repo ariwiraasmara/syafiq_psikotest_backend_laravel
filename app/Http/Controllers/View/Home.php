@@ -1,63 +1,133 @@
 <?php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers\View;
 use Inertia\Inertia;
 use Inertia\Response as Inar;
 use App\Http\Controllers\Controller;
-use App\Libraries\myfunction as fun;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\View\View;
+use App\Services\userdeviceloggingService;
+use App\Services\as5001_blogService;
+use App\Libraries\branding;
 use App\Libraries\jsr;
+use App\Libraries\myfunction as fun;
 use Exception;
 use Meta;
 
 class Home extends Controller {
     //
-    protected $path, $domain;
-    public function __construct() {
+    protected userdeviceloggingService $udl;
+    protected as5001_blogService|null $blogService;
+    protected branding $brand;
+    protected $titlepage, $path, $domain, $unique, $robots, $data;
+    protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
+    public function __construct(
+        Request $request,
+        as5001_blogService $blogservice,
+        branding $brand
+    ) {
+        $this->blogService = $blogservice;
+        $this->brand = $brand;
+
+        $this->titlepage = $this->brand->homepage();
         $this->path = env('SESSION_PATH', '/');
         $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
+        $this->unique = fun::random('combwisp', 50);
+        $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
+
+        if($request->session()->has('id')) $this->id = $request->session()->get('id');
+        else $this->id = 0;
+
+        if($request->session()->has('nama')) $this->nama = $request->session()->get('nama');
+        else $this->nama = null;
+
+        if($request->session()->has('email')) $this->email = $request->session()->get('email');
+        else $this->email = 0;
+
+        if($request->session()->has('roles')) $this->roles = $request->session()->get('roles');
+        else $this->roles = null;
+
+        if($request->session()->has('fileUDH')) $this->filename = $request->session()->has('fileUDH');
+        else $this->filename = date('Ymd');
+
+        $this->udl = new userdeviceloggingService(
+            $this->id, $this->filename,
+            [
+                'tanggal'       => date('Y-m-d H:i:s'),
+                'host'          => $request->host(),
+                'id_user'       => $this->id,
+                'nama'          => $this->nama,
+                'email'         => $this->email,
+                'roles_user'    => $this->roles,
+                'ip_address'    => $request->ip(),
+            ],
+            [
+                'last_path'     => $request->path(),
+                'last_url'      => $request->fullUrl(),
+                'last_page'     => $this->titlepage,
+                'method_page'   => $request->method(),
+                'ngapain'       => 'read',
+                'body_content'  => json_encode($request->all())
+            ]
+        );
     }
 
     public function reactView(Request $request): Inar|Response|JsonResponse|Collection|array|String|int|null {
-        $unique = fun::random('combwisp', 50);
-
-        meta()->title('Psikotest Online App')
-            ->set('og:title', 'Psikotest Online App')
+        meta()->title($this->titlepage)
+            ->set('og:title', $this->titlepage)
             ->set('canonical', url()->current())
             ->set('og:url', url()->current())
-            ->set('robots', 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate')
+            ->set('robots', $this->robots)
             ->set('XSRF-TOKEN', csrf_token())
-            ->set('__unique__', $unique);
+            ->set('__unique__', $this->unique);
 
         return Inertia::render('Home', [
-            'title'      => 'Psikotest Online App',
+            'title'      => $this->titlepage,
             'pathURL'    => url()->current(),
-            'robots'     => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'robots'     => $this->robots,
             'onetime'    => 1,
             'csrf_token' => csrf_token(),
-            'unique'     => fun::random('combwisp', 50),
+            'unique'     => $this->unique,
             'path'       => $this->path,
             'domain'     => $this->domain
         ]);
     }
 
     public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
+        $data_blog = $this->blogService->publicRecent(3);
         return view('home', [
-            'title'                => 'Psikotest Online App',
+            'title'                => $this->titlepage,
             'pathURL'              => url()->current(),
             'breadcrumb'           => '/',
             'is_breadcrumb_hidden' => 'hidden',
-            'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+            'robots'               => $this->robots,
             'onetime'              => true,
-            'unique'               => fun::random('combwisp', 50),
-            'ispeserta'            => 'null'
+            'unique'               => $this->unique,
+            'ispeserta'            => 'null',
+            'path'                 => $this->path,
+            'domain'               => $this->domain,
+            'data_blog'            => $data_blog
         ]);
+    }
+
+    public function __destruct() {
+        $this->udl->print();
+        $this->blogService = null;
+        $this->titlepage = null;
+        $this->path = null;
+        $this->domain = null;
+        $this->unique = null;
+        $this->robots = null;
+        $this->id = null;
+        $this->nama = null;
+        $this->email = null;
+        $this->roles = null;
     }
 }

@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\as1002_peserta_hasilnilai_teskecermatan;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as1002_peserta_hasilnilai_teskecermatanRepository {
 
-    protected as1002_peserta_hasilnilai_teskecermatan $model;
+    protected as1002_peserta_hasilnilai_teskecermatan|null $model;
     public function __construct(as1002_peserta_hasilnilai_teskecermatan $model) {
         $this->model = $model;
     }
@@ -141,5 +142,8 @@ class as1002_peserta_hasilnilai_teskecermatanRepository {
             return -11;
         }
     }
+
+    public function __destruct() {
+        $this->model = null;
+    }
 }
-?>

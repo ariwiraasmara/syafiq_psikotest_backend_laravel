@@ -1,11 +1,14 @@
 <?php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers\View;
 
 use App\Http\Controllers\Controller;
 use App\Services\as1001_peserta_profilService;
+use App\Libraries\branding;
+use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,19 +20,41 @@ use Exception;
 
 class MySitemapController extends Controller {
     //
-    protected $sitemap, $sitemap_hasil_psikotest_peserta, $sitemap_admin_peserta_detil, $sitemapindex;
     protected as1001_peserta_profilService $profilpesertaService;
-    protected $path, $domain;
+    protected branding $brand;
+    protected $titlepage, $path, $domain, $unique, $robots;
+    protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
+    protected $sitemap, $sitemap_hasil_psikotest_peserta, $sitemap_admin_peserta_detil, $sitemapindex;
     public function __construct(
-        as1001_peserta_profilService $profilpesertaService
+        Request $request,
+        as1001_peserta_profilService $profilpesertaService,
+        branding $brand
     ) {
+        $this->profilpesertaService = $profilpesertaService;
+        $this->brand = $brand;
+
+        $this->titlepage = 'Sitemap'.$this->brand->getTitlepage();
+        $this->path = env('SESSION_PATH', '/');
+        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
+        $this->unique = fun::random('combwisp', 50);
+        $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
+
+        if($request->session()->has('id')) $this->id = $request->session()->get('id');
+        else $this->id = null;
+
+        if($request->session()->has('nama')) $this->nama = $request->session()->get('nama');
+        else $this->nama = null;
+
+        if($request->session()->has('email')) $this->email = $request->session()->get('email');
+        else $this->email = null;
+
+        if($request->session()->has('roles')) $this->roles = $request->session()->get('roles');
+        else $this->roles = null;
+
         $this->sitemap = Sitemap::create('https://psikotesasyik.com');
         $this->sitemap_hasil_psikotest_peserta = Sitemap::create('https://psikotesasyik.com');
         $this->sitemap_admin_peserta_detil = Sitemap::create('https://psikotesasyik.com');
         $this->sitemapindex = SitemapIndex::create();
-        $this->profilpesertaService = $profilpesertaService;
-        $this->path = env('SESSION_PATH', '/');
-        $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
     }
 
     public function generate(Request $request) {
@@ -137,5 +162,17 @@ class MySitemapController extends Controller {
                 'error'                => $error->getMessage()
             ]);
         }
+    }
+
+    public function __destruct() {
+        $this->titlepage = null;
+        $this->path = null;
+        $this->domain = null;
+        $this->unique = null;
+        $this->robots = null;
+        $this->id = null;
+        $this->nama = null;
+        $this->email = null;
+        $this->roles = null;
     }
 }

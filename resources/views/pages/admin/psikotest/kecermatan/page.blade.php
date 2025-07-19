@@ -1,26 +1,40 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @php
     use App\Libraries\myfunction;
+
+    $style_content = 'margin-bottom: 60px;';
+    $style_fab = 'margin-bottom: 20px;';
+    $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
+
+    if($roles > 1) {
+        $style_content = 'margin-bottom: 130px;';
+        $style_fab = 'margin-bottom: 75px;';
+        $style_paging = 'bottom: 1px; margin-bottom: 70px; padding: 10px;';
+    }
 @endphp
 @extends('layouts.app')
 @section('content')
     @component('components.appbarku', [
         'nama'         => $nama,
+        'email'        => $email,
+        'sidebar'      => true,
         'link_back'    => null,
         'appbar_title' => $appbar_title,
+        'roles'        => $roles
     ]) @endcomponent
 
-    <div class="p-4 text-black" style="margin-bottom: 130px;">
+    <div class="p-4 text-black" style="{{ $style_content; }}">
         <div class="mb-14 text-black">
             <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
             <div id="data-container">
                 @foreach($data as $data)
-                    <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 text-black border-black">
+                    <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 mb-4 text-black border-black shadow-xl">
                         <div class="static">
                             <div>
                                 <a href="{{ route('admin_psikotest_kecermatan_detil', ['id' => myfunction::enval($data['id'], true)]).'?page=1'}}">
@@ -42,7 +56,7 @@
                 @endforeach
             </div>
 
-            <button type="button" class="fab bg-blue-700" style="margin-bottom: 75px;" onclick="window.location.href = `{{ route('admin_psikotest_kecermatan_baru') }}`">
+            <button type="button" class="fab bg-blue-700 shadow-xl" style="{{ $style_fab; }}" onclick="window.location.href = `{{ route('admin_psikotest_kecermatan_baru') }}`">
                 <a href="#" rel="nofollow" title="Psikotest Kecermatan Baru">
                     +
                 </a>
@@ -50,7 +64,12 @@
         </div>
     </div>
 
-    @component('components.admin.navigasibawah', ['navval' => $navval]) @endcomponent
+    @if($roles > 1)
+        @component('components.admin.navigasibawah', ['navval' => $navval, 'roles'=>$roles]) @endcomponent
+    @endif
+    @if($roles == 1)
+    @component('components.admin.menusidebar', ['navval' => $navval, 'email' => $email, 'roles' => $roles]) @endcomponent
+    @endif
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
@@ -71,6 +90,11 @@
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
                             const response = await axios.delete(`/public/admin/psikotest/kecermatan-delete/${DOMPurify.sanitize(id)}`, {
+                                _token: `{{ csrf_token() }}`,
+                                unique: '{{ $unique; }}',
+                                id: id,
+                                deleted_at: `{{ date('Y-m-d H:i:s') }}`,
+                            }, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',

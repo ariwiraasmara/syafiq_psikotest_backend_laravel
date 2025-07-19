@@ -1,7 +1,8 @@
-<?php 
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+<?php
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\as2001_kecermatan_kolompertanyaan;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as2001_kecermatan_kolompertanyaanRepository {
 
-    protected as2001_kecermatan_kolompertanyaan $model;
+    protected as2001_kecermatan_kolompertanyaan|null $model;
     public function __construct(as2001_kecermatan_kolompertanyaan $model) {
         $this->model = $model;
     }
@@ -123,5 +124,8 @@ class as2001_kecermatan_kolompertanyaanRepository {
             return -11;
         }
     }
+
+    public function __destruct() {
+        $this->model = null;
+    }
 }
-?>

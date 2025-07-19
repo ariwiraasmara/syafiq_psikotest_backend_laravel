@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Middleware;
 
 use Closure;
@@ -17,18 +18,26 @@ class IsWebAdminAuth
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next) {
-        if( isset($_COOKIE['islogin']) &&
-            isset($_COOKIE['isadmin']) &&
-            isset($_COOKIE['isauth']) &&
-            isset($_COOKIE['__sysauth__']) &&
-            isset($_COOKIE['__token__']) &&
-            isset($_COOKIE['__unique__']) &&
+        if( isset($_COOKIE['_pas-g1']) &&
+            isset($_COOKIE['_pas-m2']) &&
+            isset($_COOKIE['_pas-t3']) &&
+            isset($_COOKIE['_pas-sys']) &&
+            isset($_COOKIE['_pas-kn']) &&
+            isset($_COOKIE['_pas-nq']) &&
             isset($_COOKIE['XSRF-TOKEN'])
         ) {
-            if($request->cookie('islogin') == 1) {
-                if($request->cookie('isadmin') == 1) {
-                    if($request->cookie('isauth') == 1) {
-                        return $next($request);
+            if($request->cookie('_pas-g1') == 1) {
+                if($request->cookie('_pas-m2') == 1) {
+                    if($request->cookie('_pas-t3') == 1) {
+                        if($request->session()->has('id')) {
+                            if($request->session()->has('nama')) {
+                                if($request->session()->has('email')) {
+                                    if($request->session()->has('roles')) {
+                                        return $next($request);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

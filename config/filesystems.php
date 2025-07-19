@@ -45,6 +45,28 @@ return [
             'throw' => false,
         ],
 
+        'download' => [
+            'driver' => 'local',
+            'root' => public_path('download'),
+            'url' => env('APP_URL').'/download',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'user_admin' => [
+            'driver' => 'local',
+            'root' => storage_path('logs/user_admin'),
+            'serve' => true,
+            'throw' => false,
+        ],
+
+        'guest' => [
+            'driver' => 'local',
+            'root' => storage_path('logs/guest'),
+            'serve' => true,
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
@@ -72,6 +94,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('download') => storage_path('app/public/download'),
     ],
 
 ];

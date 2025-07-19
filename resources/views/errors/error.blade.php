@@ -1,6 +1,7 @@
 <?php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 $title = "Error!";
 $pathURL = url()->current();

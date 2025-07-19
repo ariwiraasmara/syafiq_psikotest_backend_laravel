@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Services;
 
 use App\Repositories\as2001_kecermatan_kolompertanyaanRepository;
@@ -11,8 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as2002_kecermatan_soaljawabanService {
 
-    protected as2001_kecermatan_kolompertanyaanRepository $repo1;
-    protected as2002_kecermatan_soaljawabanRepository $repo2;
+    protected as2001_kecermatan_kolompertanyaanRepository|null $repo1;
+    protected as2002_kecermatan_soaljawabanRepository|null $repo2;
     public function __construct(
         as2001_kecermatan_kolompertanyaanRepository $repo1,
         as2002_kecermatan_soaljawabanRepository $repo2
@@ -125,7 +126,22 @@ class as2002_kecermatan_soaljawabanService {
 
     public function getOne(int $id) {
         try {
-            return $this->repo2->get($id);
+            return $this->repo2->getOne($id);
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
+    public function getOneRootForDetail(int $id) {
+        try {
+            return $this->repo2->getOne($id);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada as0001_variabelsettingService->get!', [
@@ -214,5 +230,10 @@ class as2002_kecermatan_soaljawabanService {
             ]);
             return -12;
         }
+    }
+
+    public function __destruct() {
+        $this->repo1 = null;
+        $this->repo2 = null;
     }
 }

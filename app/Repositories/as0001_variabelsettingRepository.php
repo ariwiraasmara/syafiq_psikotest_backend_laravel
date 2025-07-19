@@ -1,7 +1,8 @@
 <?php 
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\as0001_variabelsetting;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as0001_variabelsettingRepository {
 
-    protected as0001_variabelsetting $model;
+    protected as0001_variabelsetting|null $model;
     public function __construct(as0001_variabelsetting $model) {
         $this->model = $model;
     }
@@ -27,7 +28,7 @@ class as0001_variabelsettingRepository {
                 }
                 else {
                     return $this->model
-                            ->where('variabel', 'LIKE', "%{$search}%")
+                            ->where($sort, 'LIKE', "%{$search}%")
                             ->orderBy($sort, $by)
                             ->limit(10)
                             ->paginate(10)
@@ -136,5 +137,8 @@ class as0001_variabelsettingRepository {
             return -11;
         }
     }
+
+    public function __destruct() {
+        $this->model = null;
+    }
 }
-?>

@@ -1,15 +1,18 @@
 {{--
 ! Copyright @
-! Syafiq
+! PT. Solusi Psikologi Banten
+! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 @extends('layouts.app')
 <style>
 body {
     background-color: rgba(200, 200, 255, 0.9);
-    background-image: url(https://fruitthemes.com/demo/impressive-wordpress-theme/wp-content/uploads/sites/2/2018/06/pexels-photo-247474.jpeg);
+    background-image: url('./images/bg19.png');
     background-attachment: fixed;
     font-family: Georgia, Helvetica, sans-serif;
+    background-size: cover;
+    background-position: center bottom;
 }
 </style>
 @section('content')

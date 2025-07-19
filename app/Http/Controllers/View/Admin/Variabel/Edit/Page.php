@@ -1,57 +1,100 @@
 <?php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Http\Controllers\View\Admin\Variabel\Edit;
 use Inertia\Inertia;
 use Inertia\Response as Inar;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
-use App\Http\Controllers\Controller;
-use App\Services\as0001_variabelsettingService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use App\Services\useractivitiesService;
+use App\Services\as0001_variabelsettingService;
+use App\Libraries\branding;
+use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
 use Exception;
 use Meta;
 
 class Page extends Controller {
     //
-    protected as0001_variabelsettingService $service;
-    protected $titlepage, $path, $domain;
-    public function __construct(as0001_variabelsettingService $service) {
+    protected as0001_variabelsettingService|null $service;
+    protected useractivitiesService|null $activity;
+    protected branding $brand;
+    protected $titlepage, $path, $domain, $unique, $data;
+    protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
+    protected $robots;
+    public function __construct(
+        Request $request,
+        branding $brand,
+        as0001_variabelsettingService $service,
+        useractivitiesService $activity
+    ) {
+        // ?
         $this->service = $service;
-        $this->titlepage = 'Edit Variabel | Admin | Psikotest Online App';
+        $this->brand = $brand;
+        $this->activity = $activity;
+
+        // ?
+        $this->titlepage = 'Edit Variabel | Admin'.$this->brand->getTitlepage();
         $this->path = env('SESSION_PATH', '/');
         $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
+        $this->unique = fun::random('combwisp', 50);
+        $this->robots = 'none, nosnippet, noarchive, notranslate, noimageindex';
+
+        // ?
+        $this->id = $request->session()->get('id');
+        $this->nama = $request->session()->get('nama');
+        $this->email = $request->session()->get('email');
+        $this->roles = $request->session()->get('roles');
+        $this->pat = $request->session()->get('pat');
+        $this->rtk = $request->session()->get('rtk');
+        $this->filename = $request->session()->get('fileUDH');
+
+        $this->activity->store([
+            'id_user'    => $this->id,
+            'ip_address' => $request->ip(),
+            'path'       => $request->path(),
+            'url'        => $request->fullUrl(),
+            'page'       => $this->titlepage,
+            'event'      => 'Web - '.$request->method(),
+            'deskripsi'  => 'read : sepertinya mau mengubah data variabel setting?',
+            'properties' => json_encode($request->all())
+        ]);
     }
 
     public function reactView(Request $request, $id): Inar|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get($id);
-
-        $unique = fun::random('combwisp', 50);
         meta()->title($this->titlepage)
             ->set('og:title', $this->titlepage)
             ->set('canonical', url()->current())
             ->set('og:url', url()->current())
-            ->set('robots', 'none, nosnippet, noarchive, notranslate, noimageindex')
+            ->set('robots', $this->robots)
             ->set('XSRF-TOKEN', csrf_token())
-            ->set('__unique__', $unique);
+            ->set('__unique__', $this->unique);
 
-        Cookie::queue('__unique__', $unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
+        Cookie::queue('__unique__', $this->unique, 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
         Cookie::queue('XSRF-TOKEN', csrf_token(), 1 * 24 * 60 * 60, $this->path, $this->domain, true, true, false, 'None');
         
         return Inertia::render('admin/variabel/edit/page', [
             'title'   => $this->titlepage,
             'token'   => csrf_token(),
-            'unique'  => $unique,
-            'nama'    => $request->session()->get('nama'),
-            'pat'     => $request->session()->get('pat'),
-            'rtk'     => $request->session()->get('rtk'),
-            'id'      => $id,
+            'unique'  => $this->unique,
+            'id'      => $this->id,
+            'nama'    => $this->nama,
+            'email'   => $this->email,
+            'roles'   => $this->roles,
+            'pat'     => $this->pat,
+            'rtk'     => $this->rtk,
+            'path'    => $this->path,
+            'domain'  => $this->domain,
+            'id_data' => $id,
             'data'    => $data[0],
         ]);
     }
@@ -65,12 +108,15 @@ class Page extends Controller {
             'breadcrumb'           => '/admin/variabel-edit',
             'navval'               => 'nav-admin-variabel',
             'is_breadcrumb_hidden' => 'hidden',
-            'robots'               => 'none, nosnippet, noarchive, notranslate, noimageindex',
+            'robots'               => $this->robots,
             'onetime'              => false,
-            'unique'               => fun::random('combwisp', 50),
-            'id'                   => $id,
+            'unique'               => $this->unique,
+            'id'                   => $this->id,
+            'nama'                 => $this->nama,
+            'email'                => $this->email,
+            'roles'                => $this->roles,
+            'id_data'              => $id,
             'data'                 => $data,
-            'nama'                 => $request->session()->get('nama'),
         ]);
     }
 
@@ -87,7 +133,17 @@ class Page extends Controller {
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {
-                    if($type == 'php') return redirect('/admin/variabel-setting/variabel/asc/-?page=1');
+                    $this->activity->store([
+                        'id_user'    => $this->id,
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $this->titlepage,
+                        'event'      => $request->method(),
+                        'deskripsi'  => 'edit and update : mengubah data variabel setting yang sudah ada?',
+                        'properties' => json_encode($request->all())
+                    ]);
+                    if($type == 'php') return redirect()->route('admin_variabel_setting', ['sort'=>'variabel', 'by'=>'asc', 'search'=>'-', 'page'=>1]);
                     else if($type == 'js') {
                         return new Response([
                             'success' => 1,
@@ -96,19 +152,36 @@ class Page extends Controller {
                     }
                 }
                 else {
-                    return redirect('/admin/variabel-edit/'.$id)->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                    return redirect()->route('admin_variabel_edit', ['id' => $id])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
                 }
             }
-            return redirect('/admin/variabel-edit/'.$id)->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+            return redirect()->route('admin_variabel_edit', ['id' => $id])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
         }
         catch(Exception $err) {
-            Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->update!', [
+            Log::channel('error-controllers')->error('Terjadi kesalahan pada Admin/Variabel/Page => update!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),
                 'trace' => $err->getTraceAsString(),
             ]);
-            return redirect('/admin/variabel-edit/'.$id)->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+            return redirect()->route('admin_variabel_edit', ['id' => $id])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
         }
+    }
+
+    public function __destruct() {
+        $this->activity = null;
+        $this->service   = null;
+        $this->data      = null;
+        $this->titlepage = null;
+        $this->path      = null;
+        $this->domain    = null;
+        $this->unique    = null;
+        $this->robots    = null;
+        $this->data      = null;
+        $this->id        = null;
+        $this->nama      = null;
+        $this->email     = null;
+        $this->roles     = null;
+        $this->filename  = null;
     }
 }

@@ -1,9 +1,35 @@
 @php
 // ! Copyright @
-// ! Syafiq
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
 @extends('layouts.app')
+<style>
+/* untuk layar desktop */
+@media (min-width: 1024px) {
+    body {
+        background-color: rgba(200, 200, 255, 0.9);
+        background-image: url('./images/bg21.jpeg');
+        background-attachment: fixed;
+        font-family: Georgia, Helvetica, sans-serif;
+        background-size: cover;
+        background-position: center bottom;
+    }
+}
+
+/* untuk layar mobile */
+@media (max-width: 767px) {
+    body {
+        background-color: rgba(200, 200, 255, 0.9);
+        background-image: url('./images/bg20.jpeg');
+        background-attachment: fixed;
+        font-family: Georgia, Helvetica, sans-serif;
+        background-size: cover;
+        background-position: center bottom;
+    }
+}
+</style>
 @section('content')
     <h1 class="hidden">Halaman Formulir Peserta Psikotest</h1>
 
@@ -237,7 +263,7 @@
                 sessionStorage.removeItem(`waktupengerjaan_kolom3`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom4`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom5`);
-                window.location.href = `/public/peserta/psikotest/kecermatan/1`;
+                window.location.href = `{{ route('peserta_psikotest_kecermatan', ['sesi'=>1]) }}`;
             }
             catch(err) {
                 console.info('Terjadi Error Peserta-continueSession:', err);

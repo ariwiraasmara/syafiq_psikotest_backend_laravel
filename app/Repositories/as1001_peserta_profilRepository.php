@@ -1,7 +1,8 @@
 <?php
-//! Copyright @
-//! Syafiq
-//! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Repositories;
 
 use App\Models\as1001_peserta_profil;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 class as1001_peserta_profilRepository {
 
-    protected as1001_peserta_profil $model;
+    protected as1001_peserta_profil|null $model;
     public function __construct(as1001_peserta_profil $model) {
         $this->model = $model;
     }
@@ -27,9 +28,9 @@ class as1001_peserta_profilRepository {
                 }
                 else {
                     return $this->model->select('id', 'nama', 'no_identitas', 'email', 'asal')
-                            ->where('nama','LIKE',"%{$search}%")
-                            ->orWhere('no_identitas', $search)
-                            ->orWhere('asal','LIKE',"%{$search}%")
+                            ->where($sort, 'LIKE',"%{$search}%")
+                            // ->orWhere('no_identitas', $search)
+                            // ->orWhere('asal','LIKE',"%{$search}%")
                             ->orderBy($sort, $by)
                             ->limit(10)
                             ->paginate(10)
@@ -157,5 +158,9 @@ class as1001_peserta_profilRepository {
             ]);
             return -11;
         }
+    }
+
+    public function __destruct() {
+        $this->model = null;
     }
 }
