@@ -118,6 +118,59 @@ class Page extends Controller {
         ]);
     }
 
+    public function updateFoto(Request $request, $type, $id): Response|JsonResponse|String|int|null {
+        try {
+            $credentials = $request->validate([
+                'unique' => 'required',
+                'foto'   => 'required',
+            ]);
+            if($credentials) {
+                $data = $this->service->get($id);
+                $foto = $request->file('avatar')->storeAs(
+                    'private_admin_foto',
+                    $data[0]['id'].'.'.$data[0]['email'].'.'.$request->file('foto')->extension(),
+                    'public'
+                );
+                $res = $this->service->updateFoto($id, [
+                    'foto' => $foto,
+                ]);
+
+                if($res > 0) {
+                    $this->activity->store([
+                        'id_user'    => $id,
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $this->titlepage,
+                        'event'      => $request->method(),
+                        'deskripsi'  => 'edit and update : data admin yang sudah ada.',
+                        'properties' => json_encode($request->all())
+                    ]);
+                    if($request['type'] == 'php') return redirect()->route('admin_myprofil', ['email' => $this->email]);
+                    return jsr::print([
+                        'success' => 1,
+                        'pesan' => 'Password Berhasil Diperbaharui!'
+                    ], 'ok');
+                }
+                else {
+                    return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                }
+            }
+            else {
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+            }
+        }
+        catch(Exception $err) {
+            Log::channel('error-controllers')->error('Terjadi kesalahan pada UserController->updateFoto!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+        }
+    }
+
     public function updatePassword(Request $request, $id) {
         try {
             $credentials = $request->validate([

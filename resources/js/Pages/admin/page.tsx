@@ -55,7 +55,7 @@ export default function Admin(props: Admin) {
     const [emaillogin, setEmaillogin] = React.useState('');
     const [passlogin, setPasslogin] = React.useState('');
     const [loading, setLoading] = React.useState(true);
-    const [sessionAdmin, setSessionAdmin] = React.useState<any>(new Date(localStorage.getItem('sesi_admin')));
+    const [sessionAdmin, setSessionAdmin] = React.useState<any>(new Date(localStorage.getItem('__pas-isis__')));
     const [cdate, setCdate] = React.useState(new Date(currentDate(null)));
 
     const styledTextField = {
@@ -91,8 +91,8 @@ export default function Admin(props: Admin) {
     React.useEffect(() => {
         setLoading(true);
         setCdate(new Date(currentDate(null)));
-        if(localStorage.getItem('sesi_admin')) {
-            setSessionAdmin(new Date(localStorage.getItem('sesi_admin')));
+        if(localStorage.getItem('__pas-isis__')) {
+            setSessionAdmin(new Date(localStorage.getItem('__pas-isis__')));
         }
         setLoading(false);
     }, []);
@@ -162,11 +162,15 @@ export default function Admin(props: Admin) {
                 });
                 console.info('response', response.data);
                 if(response.data.success) {
-                    localStorage.setItem('islogin', '1');
-                    localStorage.setItem('isadmin', '1');
-                    localStorage.setItem('isauth', '1');
-                    localStorage.setItem('ispeserta', '0');
-                    localStorage.setItem('sesi_admin', response.data.sesi.expire_at);
+                    localStorage.setItem('__pas-bah__', response.data.data.pas_bah);
+                    localStorage.setItem('__pas-tit__', response.data.data.pas_tit);
+                    localStorage.setItem('__pas-tek__', response.data.data.pas_tek);
+
+                    localStorage.setItem('__pas-sihlo__', '1');
+                    localStorage.setItem('__pas-minimbaju__', '1');
+                    localStorage.setItem('__pas-tuhkyknya__', '1');
+                    localStorage.setItem('__pas-reseklu__', '0');
+                    localStorage.setItem('__pas-isis', response.data.sesi.expire_at);
 
                     sessionStorage.setItem('issession', '1');
                     window.location.href = '/admin/dashboard';
@@ -188,8 +192,8 @@ export default function Admin(props: Admin) {
         e.preventDefault();
         setLoading(true);
         try {
-            if(!localStorage.getItem('ispeserta') || localStorage.getItem('ispeserta') === '0') {
-                if(localStorage.getItem('sesi_admin')) {
+            if(!localStorage.getItem('__pas-reseklu__') || localStorage.getItem('__pas-reseklu__') === '0') {
+                if(localStorage.getItem('__pas-isis__')) {
                     if( cdate > sessionAdmin ) {
                         sendDataLogin(e);
                         setLoading(false);

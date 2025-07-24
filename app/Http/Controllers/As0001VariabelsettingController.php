@@ -10,15 +10,33 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Services\useractivitiesService;
 use App\Services\as0001_variabelsettingService;
+use App\Libraries\branding;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
+use App\Libraries\session_reader as msr;
 use Exception;
 class As0001VariabelsettingController extends Controller {
     //
-    protected as0001_variabelsettingService $service;
-    public function __construct(as0001_variabelsettingService $service) {
+    protected as0001_variabelsettingService|null $service;
+    protected useractivitiesService|null $activity;
+    protected branding $brand;
+    protected $titlepage, $path, $domain, $unique;
+    public function __construct(
+        Request $request,
+        as0001_variabelsettingService $service,
+        branding $brand
+    ) {
+        // ?
         $this->service = $service;
+        $this->brand = $brand;
+
+        // ?
+        $this->titlepage = $this->brand->getTitlepage();
+        $this->path      = env('SESSION_PATH', '/');
+        $this->domain    = env('SESSION_DOMAIN', 'localhosthost:8000');
+        $this->unique    = fun::random('combwisp', 50);
     }
 
     #GET
@@ -29,6 +47,17 @@ class As0001VariabelsettingController extends Controller {
             if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
             if($search == 'null' || $search == '' || $search == ' ' || $search == null) $search = null;
 
+            $token = msr::read($request->bearerToken());
+            $this->activity->store([
+                'id_user'    => $token['id'],
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'event'      => 'API - '.$request->method(),
+                'deskripsi'  => 'read : membaca semua data variabel setting.',
+                'properties' => json_encode($request->all())
+            ]);
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Semua Data Setting Variabel',
@@ -53,6 +82,17 @@ class As0001VariabelsettingController extends Controller {
     #url = '/api/variabel-setting/{id}'
     public function get(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
+            $token = msr::read($request->bearerToken());
+            $this->activity->store([
+                'id_user'    => $token['id'],
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'event'      => 'API - '.$request->method(),
+                'deskripsi'  => 'read : membaca satu data variabel setting.',
+                'properties' => json_encode($request->all())
+            ]);
             return jsr::print([
                 'success'   => 1,
                 'pesan'     => 'Data Setting Variabel',
@@ -87,6 +127,17 @@ class As0001VariabelsettingController extends Controller {
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'create and store : data variabel setting baru.',
+                        'properties' => json_encode($request->all())
+                    ]);
                     return jsr::print([
                         'success'   => 1,
                         'pesan'     => 'Berhasil Menyimpan Data Setting Variabel',
@@ -99,10 +150,12 @@ class As0001VariabelsettingController extends Controller {
                     'data'   => $data
                 ], 'bad request');
             }
-            return jsr::print([
-                'error'=> -13,
-                'pesan' => 'Is Not Valid!'
-            ]);
+            else {
+                return jsr::print([
+                    'error'=> -13,
+                    'pesan' => 'Invalid Credentials!'
+                ]);
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->store!', [
@@ -132,22 +185,37 @@ class As0001VariabelsettingController extends Controller {
                     'values'   => fun::readable($request->values),
                 ]);
                 if($data > 0) {
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'edit and update : data variabel setting yang sudah ada.',
+                        'properties' => json_encode($request->all())
+                    ]);
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Setting Variabel',
                         'data'    => $data
                     ], 'ok');
                 }
-                return jsr::print([
-                    'error'   => 2,
-                    'pesan'   => 'Gagal Memperbaharui Data Setting Variabel',
-                    'data'    => $data
-                ], 'bad request');
+                else {
+                    return jsr::print([
+                        'error'   => 1,
+                        'pesan'   => 'Gagal Memperbaharui Data Setting Variabel',
+                        'data'    => $data
+                    ], 'bad request');
+                }
             }
-            return jsr::print([
-                'error'  => 1,
-                'pesan'  => 'Is Not Valid!',
-            ], 'not acceptable');
+            else {
+                return jsr::print([
+                    'error'  => 2,
+                    'pesan'  => 'Invalid Credentials!',
+                ], 'not acceptable');
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->update!', [
@@ -167,19 +235,45 @@ class As0001VariabelsettingController extends Controller {
     #url = '/api/variabel-setting/{id}'
     public function delete(Request $request, $id): Response|JsonResponse|String|int|null {
         try {
-            $data = $this->service->delete($id);
-            if($data > 0) {
-                return jsr::print([
-                    'success' => 1,
-                    'pesan'   => 'Berhasil Menghapus Data Setting Variabel',
-                    'data'    => $data
-                ], 'ok');
+            if($id) {
+                $data = $this->service->get($id);
+                $res = $this->service->delete($id);
+                if($res > 0) {
+                    $properties = collect([
+                        'data'       => $data,
+                        'deteled_at' => date('Y-m-d H:i:s')
+                    ])->toJson();
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'delete : data variabel setting.',
+                        'properties' => json_encode($properties)
+                    ]);
+                    return jsr::print([
+                        'success' => 1,
+                        'pesan'   => 'Berhasil Menghapus Data Setting Variabel',
+                        'data'    => $res
+                    ], 'ok');
+                }
+                else {
+                    return jsr::print([
+                        'error' => 1,
+                        'pesan' => 'Gagal Menghapus Data Setting Variabel',
+                        'data'  => $res
+                    ], 'bad request');
+                }
             }
-            return jsr::print([
-                'error' => 1,
-                'pesan' => 'Gagal Menghapus Data Setting Variabel',
-                'data'  => $data
-            ], 'bad request');
+            else {
+                return jsr::print([
+                    'error' => 2,
+                    'pesan' => 'Invalid Credentials',
+                ], 'bad request');
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->delete!', [
@@ -193,5 +287,14 @@ class As0001VariabelsettingController extends Controller {
                 'pesan' => 'Terjadi Kesalahan! Lihat Log!'
             ]);
         }
+    }
+
+    public function __destruct() {
+        $this->service   = null;
+        $this->activity  = null;
+        $this->titlepage = null;
+        $this->path      = null;
+        $this->domain    = null;
+        $this->unique    = null;
     }
 }

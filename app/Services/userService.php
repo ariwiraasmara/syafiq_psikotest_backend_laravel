@@ -50,7 +50,7 @@ class userService {
 
     public function allWithSearch(String $sort, String $by, String $search = null): array|Collection|String|int|null {
         try {
-            return $this->repo1->all($sort, $by, $search);
+            return $this->repo1->allWithSearch($sort, $by, $search);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada userService->all!', [
@@ -101,7 +101,7 @@ class userService {
                 'password'       => Hash::make('Psi0@'),
                 'roles'          => $val['roles'],
                 'remember_token' => fun::random('combwisp', 10),
-                'created_at'     => now(),
+                'created_at'     => date('Y-m-d H:i:s'),
             ];
 
             $res1 = $this->repo1->storeAccount($valAccount);
@@ -129,7 +129,7 @@ class userService {
                         'token'         => fun::random('combwisp', 64),
                         'abilities'     => $abilities,
                         'expires_at'    => fun::daysLater('+7 days'),
-                        'created_at'    => now()
+                        'created_at'    => date('Y-m-d H:i:s')
                     ];
 
                     $res3 = $this->repo2->store($valPAT);
@@ -158,7 +158,7 @@ class userService {
         try {
             $res = $this->repo1->updateAccount($id, [
                 'roles'      => $val['roles'],
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $res;
             return 0;
@@ -178,7 +178,7 @@ class userService {
         try {
             $res = $this->repo1->updateAccount($id, [
                 'password'   => Hash::make($password),
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $res;
             return 0;
@@ -199,7 +199,7 @@ class userService {
             $token = Str::random(100);
             $res = $this->repo1->updateAccount($id, [
                 'remember_token' => $token,
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $token;
             return 0;
@@ -221,7 +221,7 @@ class userService {
             $res = $this->repo2->update($email, [
                 'token'      => $token,
                 'expires_at' => fun::daysLater('+7 days'),
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
             if($res > 0) return $token;
             return 0;
@@ -248,7 +248,7 @@ class userService {
             ]);
 
             $res2 = $this->repo1->updateAccount($id, [
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
             return $res2;
@@ -269,7 +269,7 @@ class userService {
     public function updateFoto(int $id, array $val): array|Collection|String|int|null {
         try {
             $res1 = $this->repo1->updateAccount($id, [
-                'updated_at' => now(),
+                'updated_at' => date('Y-m-d H:i:s'),
             ]);
 
             $res2 = $this->repo1->updateProfil($id, [
@@ -338,7 +338,7 @@ class userService {
                 'id_user'    => $cekUser[0]['id'],
                 'ip_address' => $val['ip_address'],
                 'user_agent' => $val['user_agent'],
-                'last_login' => now(),
+                'last_login' => date('Y-m-d H:i:s'),
             ]);
 
             return collect([

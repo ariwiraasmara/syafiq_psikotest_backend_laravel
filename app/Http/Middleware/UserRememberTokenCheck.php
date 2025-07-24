@@ -9,6 +9,7 @@ use Closure;
 Use App\Models\User;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Crypt;
 use App\Libraries\myfunction as fun;
 class UserRememberTokenCheck
 {
@@ -20,7 +21,7 @@ class UserRememberTokenCheck
     public function handle(Request $request, Closure $next): Response {
         if($request->hasHeader('islogin') && $request->hasHeader('isadmin')) {
             if($request->hasHeader('remember-token')) {
-                $remember_token = $request->header()['remember-token'][0];
+                $remember_token = fun::denval($request->header()['remember-token'][0], true);
                 $cek = User::where(['remember_token' => $remember_token])->first();
                 if (!$cek) return response()->json(['message' => 'I cannot remember your token. '.$request->header()['remember-token'][0]], 404);
                 return $next($request);

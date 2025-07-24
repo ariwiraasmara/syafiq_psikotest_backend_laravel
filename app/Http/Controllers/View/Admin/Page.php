@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Models\User;
@@ -167,6 +168,7 @@ class Page extends Controller {
                         if(Auth::attempt($credentials, true)) {
                             $user = Auth::user();
                             Auth::login($user, true);
+                            $userDetil = $this->service->detail('id', $data['data'][0]['id']);
                             // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
                             $pat = $this->patService->get(['name' => $request->email]);
                             $tokenExpire = $pat[0]['expires_at'];
@@ -188,22 +190,34 @@ class Page extends Controller {
                             $sysauth = fun::random('combwisp', 100);
                             $expirein = 6 * 60; // jam * menit
 
+                            $profil = [
+                                'id'           => $data['data'][0]['id'],
+                                'nama'         => $data['data'][0]['name'],
+                                'email'        => $data['data'][0]['email'],
+                                'roles'        => $data['data'][0]['roles'],
+                                'no_identitas' => $userDetil[0]['no_identitas'],
+                                'foto'         => $userDetil[0]['foto'],
+                                'admin'        => 1,
+                            ];
+    
+                            $jwt =  Crypt::encrypt(fun::enval(Crypt::encrypt($pat), true));
+                            $rememberToken = fun::enval($data['data'][0]['remember_token'], true);
+    
                             $rfdt = [
                                 'success' => 1,
                                 'pesan'   => 'Yehaa! Berhasil Login!',
                                 'data'    => [
-                                    'nama'    => $data['data'][0]['name'],
-                                    'email'   => $request->email,
-                                    '__pas-tyv__' => fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']),
-                                    '__pas-qpv' => $data['data'][0]['remember_token'],
+                                    'pas_bah' => fun::enval(Crypt::encrypt($profil), true),
+                                    'pas_tit' => $jwt,
+                                    'pas_tek' => $rememberToken,
                                 ],
                                 'sesi'    => [
-                                    'expire_at' => $tokenExpire,
-                                    'sysel'     => fun::encrypt($request->email),
-                                    'sysauth'   => $unique,
-                                    'token1'    => $token,
-                                    'token2'    => csrf_token(),
-                                    'unique'    => $unique,
+                                    'expire_at'   => $tokenExpire,
+                                    'pas_sisis'   => fun::encrypt($request->email),
+                                    'pas_ukulele' => $unique,
+                                    'pas_tkesdeh' => $token,
+                                    'pas_tkempeh' => csrf_token(),
+                                    'pas_qiqi'    => $unique,
                                 ]
                             ];
 
@@ -211,7 +225,7 @@ class Page extends Controller {
                             $request->session()->put('email', $request->email);
                             $request->session()->put('nama', $data['data'][0]['name']);
                             $request->session()->put('roles', $data['data'][0]['roles']);
-                            $request->session()->put('pat', fun::encrypt($pat[0]['id'].'|'.$pat[0]['token']));
+                            $request->session()->put('pat', $jwt);
                             $request->session()->put('rtk', $data['data'][0]['remember_token']);
                             $request->session()->put('fileUDH', $data['data'][0]['id'].'.'.$request->email.'/'.$filename);
 

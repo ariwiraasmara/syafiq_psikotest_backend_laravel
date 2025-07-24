@@ -42,7 +42,7 @@ class Page extends Controller {
         $this->activity = $activity;
         
         // ?
-        $this->titlepage = 'Dashboard'.$this->brand->getTitlepage();
+        $this->titlepage = 'Dashboard | Admin'.$this->brand->getTitlepage();
         $this->path = env('SESSION_PATH', '/');
         $this->domain = env('SESSION_DOMAIN', 'localhosthost:8000');
         $this->unique = fun::random('combwisp', 50);

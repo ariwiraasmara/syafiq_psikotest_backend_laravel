@@ -10,16 +10,34 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Services\useractivitiesService;
 use App\Services\as1002_peserta_hasilnilai_teskecermatanService;
+use App\Libraries\branding;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
+use App\Libraries\session_reader as msr;
 use Exception;
 
 class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     //
-    protected as1002_peserta_hasilnilai_teskecermatanService $service;
-    public function __construct(as1002_peserta_hasilnilai_teskecermatanService $service) {
+    protected as1002_peserta_hasilnilai_teskecermatanService|null $service;
+    protected useractivitiesService|null $activity;
+    protected branding $brand;
+    protected $titlepage, $path, $domain, $unique;
+    public function __construct(
+        Request $request,
+        as1002_peserta_hasilnilai_teskecermatanService $service,
+        branding $brand
+    ) {
+        // ?
         $this->service = $service;
+        $this->brand = $brand;
+
+        // ?
+        $this->titlepage = $this->brand->getTitlepage();
+        $this->path      = env('SESSION_PATH', '/');
+        $this->domain    = env('SESSION_DOMAIN', 'localhosthost:8000');
+        $this->unique    = fun::random('combwisp', 50);
     }
 
     #GET
@@ -45,6 +63,17 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
             //     Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
             //     $data = Cache::get('page-pesertahasilnilaipsikotestkecermatan-all-'.$id);
             // }
+            $token = msr::read($request->bearerToken());
+            $this->activity->store([
+                'id_user'    => $token['id'],
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'event'      => 'API - '.$request->method(),
+                'deskripsi'  => 'read : membaca semua data hasil nilai peserta ujian.',
+                'properties' => json_encode($request->all())
+            ]);
             return jsr::print([
                 'success'   => 1,
                 'for'       => 1,
@@ -71,6 +100,17 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
     public function get(Request $request, int $id, String $tgl): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->get($id, $tgl);
+            $token = msr::read($request->bearerToken());
+            $this->activity->store([
+                'id_user'    => $token['id'],
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'event'      => 'API - '.$request->method(),
+                'deskripsi'  => 'read : membaca data hasil nilai peserta '.$data['peserta'][0]['nama'],
+                'properties' => json_encode($request->all())
+            ]);
             return jsr::print([
                 'success' => 1,
                 'for'     => 2,
@@ -97,6 +137,17 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
      public function search(Request $request, int $id, String $tgl_1, String $tgl_2): Response|JsonResponse|String|int|null {
         try {
             $data = $this->service->search($id, $tgl_1, $tgl_2);
+            $token = msr::read($request->bearerToken());
+            $this->activity->store([
+                'id_user'    => $token['id'],
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'event'      => 'API - '.$request->method(),
+                'deskripsi'  => 'read : membaca data hasil nilai peserta '.$data['peserta'][0]['nama'],
+                'properties' => json_encode($request->all())
+            ]);
             return jsr::print([
                 'success' => 1,
                 'for'     => 3,
@@ -149,6 +200,17 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 ]);
                 if($data > 0) {
                     // Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'create and store : data hasil nilai peserta tes baru',
+                        'properties' => json_encode($request->all())
+                    ]);
                     return jsr::print([
                         'success'      => 1,
                         'pesan'        => 'Berhasil Menyimpan Data Hasil Nilai Peserta Tes!',
@@ -156,16 +218,20 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                         'no_identitas' => fun::denval($nid, true),
                     ], 'created');
                 }
-                return jsr::print([
-                    'error' => 1,
-                    'pesan' => 'Gagal Menyimpan Data Hasil Nilai Peserta Tes!',
-                    'data'  => $data
-                ], 'bad request');
+                else {
+                    return jsr::print([
+                        'error' => 1,
+                        'pesan' => 'Gagal Menyimpan Data Hasil Nilai Peserta Tes!',
+                        'data'  => $data
+                    ], 'bad request');
+                }
             }
-            return jsr::print([
-                'error'  => 1,
-                'pesan'  => 'Is Not Valid!',
-            ], 'not acceptable');
+            else {
+                return jsr::print([
+                    'error'  => 2,
+                    'pesan'  => 'Invalid Credentials!',
+                ], 'not acceptable');
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As1002PesertaHasilnilaiTesKecermatanController->store!', [
@@ -211,22 +277,37 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                     'waktupengerjaan_kolom_5' => $request->waktupengerjaan_kolom_5,
                 ]);
                 if($data > 0) {
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'edit and update : data hasil nilai peserta tes yang sudah ada.',
+                        'properties' => json_encode($request->all())
+                    ]);
                     return jsr::print([
                         'success' => 1,
                         'pesan'   => 'Berhasil Memperbaharui Data Hasil Nilai Peserta Tes!',
                         'data'    => $data
                     ], 'ok');
                 }
-                return jsr::print([
-                    'error' => 1,
-                    'pesan' => 'Gagal Memperbaharui Data Hasil Nilai Peserta Tes!',
-                    'data'  => $data
-                ], 'bad request');
+                else {
+                    return jsr::print([
+                        'error' => 1,
+                        'pesan' => 'Gagal Memperbaharui Data Hasil Nilai Peserta Tes!',
+                        'data'  => $data
+                    ], 'bad request');
+                }
             }
-            return jsr::print([
-                'error'  => 1,
-                'pesan'  => 'Is Not Valid!',
-            ], 'not acceptable');
+            else {
+                return jsr::print([
+                    'error'  => 1,
+                    'pesan'  => 'Invalid Credentials!',
+                ], 'not acceptable');
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As1002PesertaHasilnilaiTesKecermatanController->update!', [
@@ -244,22 +325,43 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
 
     #DELETE
     #url = '/api/peserta/hasil/psikotest/kecermatan/{id}'
-    public function delete(int $id): Response|JsonResponse|String|int|null {
+    public function delete(Request $request, int $id): Response|JsonResponse|String|int|null {
         try {
-            $data = $this->service->delete($id);
-            if($data > 0) {
-                // Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
-                return jsr::print([
-                    'success'   => 1,
-                    'pesan'     => 'Berhasil Menghapus Data Hasil Nilai Peserta Tes!',
-                    'data'   => $data
-                ], 'ok');
+            if($id) {
+                $data = $this->service->delete($id);
+                if($data > 0) {
+                    // Cache::put('page-pesertahasilnilaipsikotestkecermatan-all-'.$id, $this->service->all($id), 1*24*60*60); // 1 hari x 6 jam x 60 menit x 60 detik
+                    $token = msr::read($request->bearerToken());
+                    $this->activity->store([
+                        'id_user'    => $token['id'],
+                        'ip_address' => $request->ip(),
+                        'path'       => $request->path(),
+                        'url'        => $request->fullUrl(),
+                        'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                        'event'      => 'API - '.$request->method(),
+                        'deskripsi'  => 'delete : data hasil nilai peserta tes',
+                        'properties' => json_encode($request->all())
+                    ]);
+                    return jsr::print([
+                        'success'   => 1,
+                        'pesan'     => 'Berhasil Menghapus Data Hasil Nilai Peserta Tes!',
+                        'data'   => $data
+                    ], 'ok');
+                }
+                else {
+                    return jsr::print([
+                        'error' => 1,
+                        'pesan' => 'Gagal Menghapus Data Hasil Nilai Peserta Tes!',
+                        'data'  => $data
+                    ], 'bad request');
+                }
             }
-            return jsr::print([
-                'error' => 1,
-                'pesan' => 'Gagal Menghapus Data Hasil Nilai Peserta Tes!',
-                'data'  => $data
-            ], 'bad request');
+            else {
+                return jsr::print([
+                    'error' => 1,
+                    'pesan' => 'Invalid Credentials!',
+                ], 'not acceptable');
+            }
         }
         catch(Exception $err) {
             Log::channel('error-controllers')->error('Terjadi kesalahan pada As1002PesertaHasilnilaiTesKecermatanController->delete!', [
@@ -273,5 +375,14 @@ class As1002PesertaHasilnilaiTesKecermatanController extends Controller {
                 'pesan' => 'Terjadi Kesalahan! Lihat Log!'
             ]);
         }
+    }
+
+    public function __destruct() {
+        $this->service   = null;
+        $this->activity  = null;
+        $this->titlepage = null;
+        $this->path      = null;
+        $this->domain    = null;
+        $this->unique    = null;
     }
 }
