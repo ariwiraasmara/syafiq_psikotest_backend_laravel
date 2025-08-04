@@ -21,9 +21,9 @@ class userdevicehistoryRepository {
             if($this->model->first()) {
                 if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null || empty($search) || is_null($search)) {
                     return $this->model
-                            ->join('Users', 'Users.id', '=', 'UserDeviceHistory.id_user')
+                            ->join('Users', 'Users.id', '=', 'users_device_history.id_user')
                             ->select('Users.id', 'Users.name', 'Users.email',
-                                    'UserDeviceHistory.ip_address', 'UserDeviceHistory.user_agent', 'UserDeviceHistory.last_login')
+                                    'users_device_history.ip_address', 'users_device_history.user_agent', 'users_device_history.last_login')
                             ->orderBy($sort, $by)
                             ->limit(10)
                             ->paginate(10)
@@ -31,9 +31,9 @@ class userdevicehistoryRepository {
                 }
                 else {
                     return $this->model
-                            ->join('Users', 'Users.id', '=', 'UserDeviceHistory.id_user')
+                            ->join('Users', 'Users.id', '=', 'users_device_history.id_user')
                             ->select('Users.id', 'Users.name', 'Users.email',
-                                    'UserDeviceHistory.ip_address', 'UserDeviceHistory.user_agent', 'UserDeviceHistory.last_login')
+                                    'users_device_history.ip_address', 'users_device_history.user_agent', 'users_device_history.last_login')
                             ->where($sort, 'LIKE', "%{$search}%")
                             ->orderBy($sort, $by)
                             ->limit(10)
@@ -58,9 +58,9 @@ class userdevicehistoryRepository {
         try {
             if($this->model->where($where)->first()) {
                 return $this->model
-                            ->join('Users', 'Users.id', '=', 'UserDeviceHistory.id_user')
+                            ->join('Users', 'Users.id', '=', 'users_device_history.id_user')
                             ->select('Users.id', 'Users.name', 'Users.email',
-                                    'UserDeviceHistory.ip_address', 'UserDeviceHistory.user_agent', 'UserDeviceHistory.last_login')
+                                    'users_device_history.ip_address', 'users_device_history.user_agent', 'users_device_history.last_login')
                             ->where($where)
                             ->get();
             }

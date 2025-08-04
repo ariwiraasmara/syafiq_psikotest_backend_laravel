@@ -3,6 +3,7 @@
 // ! PT. Solusi Psikologi Banten
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ use App\Libraries\myroute;
 use App\Libraries\myfunction as fun;
 
 Route::middleware(
+    // 'throttle:250,1',
     SecurityHeaders::class
 )->group(function () {
     Route::get('/', myroute::view('Home', 'bladeView'))->name('home');
@@ -99,8 +101,9 @@ Route::middleware([
     Route::put('/admin/psikotest/kecermatan/detil-edit/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Edit\Page', 'update'))->name('admin_psikotest_kecermatan_detil_update');
     Route::delete('/admin/psikotest/kecermatan/detil-delete/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'delete'))->name('admin_psikotest_kecermatan_detil_delete');
 
-    Route::get('admin/monitor-userlog-activities/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'bladeView'))->name('admin_monitor_userlog_activities');
-    Route::get('admin/monitor-userlog-activities/backup/all',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'backup'))->name('admin_monitor_userlog_activities_backup_all');
+    Route::get('admin/monitor/userlog-activities/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'bladeView'))->name('admin_monitor_userlog_activities');
+    Route::get('admin/monitor/guestlog-activities', myroute::view('Admin\Monitor\GuestLogActivities\Page', 'bladeView'))->name('admin_monitor_guestlog_activities');
+    Route::get('admin/monitor/userlog-activities/backup/all',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'backup'))->name('admin_monitor_userlog_activities_backup_all');
     Route::delete('admin/monitor-userlog-activities/truncate',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'truncate'))->name('admin_monitor_userlog_activities_truncate');
     Route::get('admin/monitor-userlog-activities-detil/{type}/{id}/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'bladeView'))->name('admin_monitor_userlog_activities_detil');
     Route::get('admin/monitor-userlog-activities-detil/backup/{id}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'backup'))->name('admin_monitor_userlog_activities_detil_backup');
@@ -117,19 +120,25 @@ Route::middleware([
 Route::get('/mengenai_kami', myroute::view('Aboutus', 'bladeView'))->name('mengenai_kami');
 Route::get('/artikel', myroute::view('Artikel', 'bladeView'))->name('artikel');
 Route::get('/blog', myroute::view('Admin\Blog\Public\Page', 'bladeView'))->name('blog');
-Route::get('/blog-mencari/{cari}', myroute::view('Admin\Blog\Public\Search\Page', 'bladeView'))->name('blog_search');
+// Route::get('/blog-mencari/{cari}', myroute::view('Admin\Blog\Public\Page', 'bladeView'))->name('blog_search');
 Route::get('/blog/{judul}', myroute::view('Admin\Blog\Public\Detil\Page', 'bladeView'))->name('blog_detail');
 Route::get('/kontak', myroute::view('Kontak', 'bladeView'))->name('kontak');
 Route::get('/layanan', myroute::view('Layanan\Page', 'bladeView'))->name('layanan');
 Route::get('/layanan/psikotes-sim', myroute::view('Layanan\PsikotesSIM\Page', 'bladeView'))->name('layanan_psikotessim');
 Route::get('/link-psikotes', myroute::view('LinkPsikotes', 'bladeView'))->name('linkpsikotes');
 
+Route::post('/csp-report', myroute::api('Security\CSPReportController', 'store'))
+        ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
+Route::get('/experiment/read-file-json', myroute::view('Experiment', 'read_file_json_reactview'));
+
 Route::get('hello', function(Request $request){
-    Storage::disk('user_admin')->makeDirectory('coba');
+    // Storage::disk('user_admin')->makeDirectory('coba');
     // return url()->current();
     // return csrf_token();
-    return $request->header();
-    
+    // return $request->header();
+    // return config('app.url');
+    return url(':8000'.route('admin'));
 });
 
 Route::get('hello-auth', function(Request $request){

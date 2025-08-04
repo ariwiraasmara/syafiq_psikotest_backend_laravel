@@ -1,0 +1,61 @@
+{
+    "date": "2025-08-01 18:31:51",
+    "ip": "127.0.0.1",
+    "url": "http:\/\/localhost:8000\/api\/csp-report",
+    "method": "POST",
+    "headers": {
+        "host": [
+            "localhost:8000"
+        ],
+        "connection": [
+            "keep-alive"
+        ],
+        "content-length": [
+            "935"
+        ],
+        "sec-ch-ua-platform": [
+            "\"Windows\""
+        ],
+        "user-agent": [
+            "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36"
+        ],
+        "sec-ch-ua": [
+            "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\""
+        ],
+        "dnt": [
+            "1"
+        ],
+        "content-type": [
+            "application\/csp-report"
+        ],
+        "sec-ch-ua-mobile": [
+            "?0"
+        ],
+        "accept": [
+            "*\/*"
+        ],
+        "origin": [
+            "http:\/\/localhost:8000"
+        ],
+        "sec-fetch-site": [
+            "same-origin"
+        ],
+        "sec-fetch-mode": [
+            "no-cors"
+        ],
+        "sec-fetch-dest": [
+            "report"
+        ],
+        "accept-encoding": [
+            "gzip, deflate, br, zstd"
+        ],
+        "accept-language": [
+            "en-US,en;q=0.9,id;q=0.8"
+        ],
+        "cookie": [
+            "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d=eyJpdiI6ImdoTGRBeWhiYnVuRkRtbDNtejVQWVE9PSIsInZhbHVlIjoid3EvRDZnQUEvTythU09ZQVNlSXlwQmJrK3VJckhuODBiZXcvNmpqWW1lT1Q1TkFDcmdmS0xWVFZTSXJoTHVPKytlQ0UycGM2MURxVmF0SHRhczJ2NWhvdFNsUTVXNWRsMXNBb2YzMlVoU2dpQTA1aUZFVlYyUm9ZSDRGSHVkZFlBdGpGdG1jM3NWNE9GQnBJcTFhRE8rZVJOa2Rmdkg0NzNUU3o0QUs2SVNlaTlEemJqSjFEU2YyK1ZvTFRoMCtIUDdZeGhQSE9kSERSWmtlUUlrY1pwWTloci9xQW82eUFCc0lvNHB5K2Uwdz0iLCJtYWMiOiJjNWRlNjAyMGNiNjVhYzg2OWZhYzQyOWQxMjRhMmU3OGI0ZTNmYjQ4MDYxZDI4MzM1MDg3MDIzNmI0OTY3ODBkIiwidGFnIjoiIn0%3D; XSRF-TOKEN=eyJpdiI6Ik5ZMU5sbmhTdmdNcXpoQ1Yya1dGMnc9PSIsInZhbHVlIjoiMERrMXl2aWUvd2Uwb3BrUnl6b2orNWYxNmJ2aHJPNFBoTE5BN1o4bUh0NVlTdUdSMjE0VlpCdlBBc3Z2MnpZVXhUWXVOTFo5TVpEYWc2cSt2cmc3MnhhVkh0V0ZjVkNBNmFaQURVcjNtdHlmbjVLa3psUWxzWWNMb01sY0NBZGwiLCJtYWMiOiJjYzU3ZDc5M2I0YTZkMmU1ZmE3MGVhNGNlMDExMDBkYTRhYTIwOTA2M2FlYjhhMTY2ZWI3MzM0ODg2MTFlYTA2IiwidGFnIjoiIn0%3D; psikotesonlineapp_session=eyJpdiI6InZZK1Z4MXVaQ2IzbFo4K3VOS1pNS1E9PSIsInZhbHVlIjoiZWhLcEhuS2tNbjBUcXRIVGtCZUt3QWp1Tlo1eDd3ZFJ2Tjk2RVNUQ0hjQ3hDWlQ3NjVRazVMTXNDYWt4ekxmMXB4Z1B3WFpCSkJvRFROZDZGbDk2dEJQOUNESEx5WUhrY3hoSy9wdHkxS2IremhzdmxQMDBGWG1jTDFwNjZHcWgiLCJtYWMiOiIxNTFjM2VmMTZhMDc2NWI3NGYyM2VkMzNlZjQ5YTczYjU3YTBlN2Y5OGY4YjQwM2M2ODcyYzc4MzY4Y2I4MDZjIiwidGFnIjoiIn0%3D"
+        ]
+    },
+    "body": [],
+    "user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/138.0.0.0 Safari\/537.36"
+}

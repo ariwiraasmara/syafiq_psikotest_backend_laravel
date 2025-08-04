@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -124,6 +126,9 @@ class Page extends Controller {
 
     public function update(Request $request, $id) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_peserta_detil', ['tgl1' => '-', 'tgl2' => '-', 'id' => $id])->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'    => 'required',
                 'email'     => 'required|string',
@@ -143,7 +148,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'edit dan update : data peserta yang sudah ada.',
                         'properties' => json_encode($request->all())
                     ]);

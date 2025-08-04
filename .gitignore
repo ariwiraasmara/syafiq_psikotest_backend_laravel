@@ -29,3 +29,8 @@ TODO
 frankenphp
 tailwindcss.exe
 obfuscator.md
+/.note.gitignore
+.env*
+.flaskenv*
+!.env.project
+!.env.vault

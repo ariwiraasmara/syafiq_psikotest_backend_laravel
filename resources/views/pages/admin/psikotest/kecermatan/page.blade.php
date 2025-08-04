@@ -33,7 +33,7 @@
             <h1 class='hidden'>Halaman {{ $appbar_title }} | Admin</h1>
 
             <div id="data-container">
-                @foreach($data as $data)
+                @forelse($data as $data)
                     <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 mb-4 text-black border-black shadow-xl">
                         <div class="static">
                             <div>
@@ -53,7 +53,13 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="mt-2">
+                        <div class="p-4 bg-white text-center text-black text-xl shadow-xl">
+                            Belum Ada Data Psikotes!
+                        </div>
+                    </div>
+                @endforelse
             </div>
 
             <button type="button" class="fab bg-blue-700 shadow-xl" style="{{ $style_fab; }}" onclick="window.location.href = `{{ route('admin_psikotest_kecermatan_baru') }}`">

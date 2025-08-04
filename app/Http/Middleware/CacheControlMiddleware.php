@@ -16,7 +16,17 @@ class CacheControlMiddleware {
      */
     public function handle(Request $request, Closure $next): Response {
         $response = $next($request);
-        $response->headers->set('Cache-Control', 'public, max-age=3600');
+
+        $time = 6 * 60 * 60;
+        // Hanya cache file statis (CSS, JS, gambar)
+        if ($request->is('assets/*') || $request->is('images/*') || $request->is('css/*') || $request->is('js/*')) {
+            $response->headers->set('Cache-Control', "public, max-age={$time}, immutable");
+            $response->headers->set('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + $time));
+        }
+        else {
+            // $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
+            $response->headers->set('Cache-Control', 'public');
+        }
         return $response;
     }
 }

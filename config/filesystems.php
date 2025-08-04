@@ -45,6 +45,13 @@ return [
             'throw' => false,
         ],
 
+        'csp' => [
+            'driver' => 'local',
+            'root' => storage_path('csp'),
+            'serve' => true,
+            'throw' => false,
+        ],
+
         'download' => [
             'driver' => 'local',
             'root' => public_path('download'),

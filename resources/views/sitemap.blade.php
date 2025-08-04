@@ -23,7 +23,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => {
-                window.location.href= "{{ route('admin'); }}";
+                window.location.href= "{{ URL::signedRoute('admin', absolute: true); }}";
             }, 10000);
         });
     </script>

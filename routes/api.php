@@ -3,7 +3,7 @@
 // ! PT. Solusi Psikologi Banten
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
-use App\Http\Middleware\BearerTokenCheck;
+use App\Http\Middleware\SecondBearerTokenCheck;
 use App\Http\Middleware\CacheControlMiddleware;
 use App\Http\Middleware\CheckTokenLogin;
 use App\Http\Middleware\ContentSecurityPolicy;
@@ -12,6 +12,7 @@ use App\Http\Middleware\MatchingUserData;
 use App\Http\Middleware\Pranker;
 use App\Http\Middleware\UserRememberTokenCheck;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -19,21 +20,25 @@ use Illuminate\Support\Facades\Route;
 use App\Libraries\myroute;
 use App\Models\User;
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+// Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+Route::post('/oauth/token', [\Laravel\Passport\Http\Controllers\AccessTokenController::class, 'issueToken']);
+Route::middleware('auth:api')->get('/user', function(Request $request) {
     return $request->user();
 });
 
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
-    // 'auth:api',
-    'throttle:150,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    BearerTokenCheck::class,
-    CheckTokenLogin::class,
-    MatchingUserData::class,
     CacheControlMiddleware::class,
-    UserRememberTokenCheck::class,
+    'auth:api',
+    'throttle:150,1', // 150 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    // 'throttle:pranker',
     Pranker::class,
-    LogRequest::class
+    CheckTokenLogin::class,
+    SecondBearerTokenCheck::class,
+    MatchingUserData::class,
+    UserRememberTokenCheck::class
 ])->group(function () {
     Route::get('/dashboard_admin', myroute::API('UserController', 'dashboard'))
         ->name('api_admin_dashboard');
@@ -55,6 +60,7 @@ Route::middleware([
     //? As0001VariabelsettingController
     Route::get('/variabel-setting/{sort}/{by}/{search}', myroute::API('As0001VariabelsettingController', 'all'))
         ->name('api_admin_variabel_setting_all');
+
     Route::post('/variabel-setting', myroute::API('As0001VariabelsettingController', 'store'))
         ->name('api_admin_variabel_setting_store');
 
@@ -167,10 +173,10 @@ Route::middleware([
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-        Route::post('/login', myroute::API('UserController', 'login'))
+    Route::middleware(['throttle:login'])->post('/login', myroute::API('UserController', 'login'))
         ->name('login');
 
-        Route::get('/logout', myroute::API('UserController', 'logout'))
+    Route::get('/logout', myroute::API('UserController', 'logout'))
         ->name('logout');
 });
 
@@ -216,6 +222,12 @@ Route::middleware([
             ->name('api_peserta_hasil_tes_psikotes_store');
 });
 
+Route::get('/signed-url/{name}', myroute::api('GenerateSignedURLController', 'signedUrl'))->name('api_signedUrl');
+Route::get('/signed-temporary-url/{name}/{minute}', myroute::api('GenerateSignedURLController', 'signedTemporaryURL'))->name('api_signedTemporaryURL');
+
+Route::post('/csp-report', myroute::api('Security\CSPReportController', 'store'))
+        ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
 //? PUBLIC API ROUTE TANPA MIDDLEWARE
 Route::get('/csrf_token', myroute::API('AnyController', 'csrf_token'))
     ->name('csrf_token');
@@ -227,13 +239,13 @@ Route::get('/generate-api-key', myroute::API('AnyController', 'generate_api_key'
     ->name('generate_api_key');
 
 Route::post('/testAdminToken', myroute::API('AnyController', 'testAdminToken'))
-    ->middleware([BearerTokenCheck::class, UserRememberTokenCheck::class]);
+    ->middleware([SecondBearerTokenCheck::class, UserRememberTokenCheck::class]);
 
 Route::get('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwithAnyMiddleware'))
-    ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class]);
+    ->middleware([SecondBearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class]);
 
 Route::post('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwithAnyMiddleware'))
-    ->middleware([BearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
+    ->middleware([SecondBearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
 
 //? PUBLIC API ROUTE PERCOBAAN
 Route::get('hello-auth', function(){

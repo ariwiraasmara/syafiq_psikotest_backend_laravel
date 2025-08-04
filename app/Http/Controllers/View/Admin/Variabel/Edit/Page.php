@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -122,6 +124,9 @@ class Page extends Controller {
 
     public function update(Request $request, String $id, String $type) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_variabel_setting', ['sort'=>'variabel', 'by'=>'asc', 'search'=>'-', 'page'=>1])->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'   => 'required',
                 'variabel' => 'required|string|max:255',
@@ -129,8 +134,8 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->update(fun::denval($id, true), [
-                    'variabel' => fun::readable($request->variabel),
-                    'values'   => fun::readable($request->values),
+                    'variabel' => fun::escape($request->variabel),
+                    'values'   => fun::escape($request->values),
                 ]);
                 if($data > 0) {
                     $this->activity->store([
@@ -139,7 +144,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'edit and update : mengubah data variabel setting yang sudah ada?',
                         'properties' => json_encode($request->all())
                     ]);

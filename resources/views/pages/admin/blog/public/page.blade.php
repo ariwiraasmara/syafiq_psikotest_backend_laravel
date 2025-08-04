@@ -43,7 +43,7 @@
             </form>
         </div>
         <div class="mt-4 p-2 grid max-lg:grid-cols-2 md:max-2xl:grid-cols-3 gap-2" style="margin-bottom: 0px;">
-            @foreach($data as $item)
+            @forelse($data as $item)
                 <a href="{{ route('blog_detail', ['judul' => $item['title']]) }}" class="bg-white p-4 mx-4 mb-4 shadow-xl" rel="follow" title="{{ $item['title']; }}" style="margin-left: 5px; margin-right: 5px;">
                     <h2 class="text-xl font-bold mb-2">{{ $item['title']; }}</h2>
                     <p class="text-black">{{ substr($item['content'], 0, 100).'.....' }}</p>
@@ -53,7 +53,11 @@
                         <h3 class="italic">Dibuat: {{ myfunction::formatTimestamp($item['created_at']); }}</h3>
                     </div>
                 </a>
-            @endforeach
+            @empty
+                <div class="text-center">
+                    Data Kosong
+                </div>
+            @endforelse
         </div>
         <div class="paging-area">
             <span class='mr-2'>Halaman </span>

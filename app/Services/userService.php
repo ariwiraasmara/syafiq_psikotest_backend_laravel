@@ -78,9 +78,31 @@ class userService {
         }
     }
 
+    public function profil(int $id): array|Collection|String|int|null {
+        try {
+            return $this->repo1->detail('id', $id);
+        }
+        catch(Exception $err) {
+            Log::channel('error-services')->error('Terjadi kesalahan pada userService->get!', [
+                'message' => $err->getMessage(),
+                'file' => $err->getFile(),
+                'line' => $err->getLine(),
+                'trace' => $err->getTraceAsString(),
+            ]);
+            return -12;
+        }
+    }
+
     public function detail(String $type, $val): array|Collection|String|int|null {
         try {
-            return $this->repo1->detail($type, $val);
+            $user = $this->repo1->detail($type, $val);
+            $pat = $this->repo2->get(['name' => $val]);
+            $device_history = $this->repo3->get(['id_user' => $user[0]['id']]);
+            return collect([
+                'user' => $user,
+                'pat'  => $pat,
+                'device_history' => $device_history
+            ]);
         }
         catch(Exception $err) {
             Log::channel('error-services')->error('Terjadi kesalahan pada userService->get!', [

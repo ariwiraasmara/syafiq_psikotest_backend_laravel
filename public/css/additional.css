@@ -10,7 +10,10 @@ body {
 }
 
 .background-header {
-    background-image: url('https://images.pexels.com/photos/55787/pexels-photo-55787.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+    background-image: image-set(
+        url('../images/bg22.webp') type('image/webp'),
+        url('../images/bg22.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: center top;
     background-repeat: repeat;
@@ -18,8 +21,10 @@ body {
 }
 
 .background-welcome {
-    /* background-image: url('https://images.pexels.com/photos/158063/bellingrath-gardens-alabama-landscape-scenic-158063.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); */
-    background-image: url('../images/bg5.jpg');
+    background-image: image-set(
+        url('../images/bg5.webp') type('image/webp'),
+        url('../images/bg5.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: right center;
     background-repeat: repeat;
@@ -29,7 +34,10 @@ body {
 }
 
 .background-about {
-    background-image: url('https://images.pexels.com/photos/245219/pexels-photo-245219.jpeg?_gl=1*kcp87o*_ga*MTA1MjgzNjQwNC4xNzQyMTk0Mzg0*_ga_8JE65Q40S6*czE3NTAyMTg0MjckbzYkZzEkdDE3NTAyMTg0NTgkajI5JGwwJGgw');
+    background-image: image-set(
+        url('../images/bg23.webp') type('image/webp'),
+        url('../images/bg23.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: right center;
     background-repeat: repeat;
@@ -38,7 +46,10 @@ body {
 }
 
 .bg-aboutus {
-    background-image: url('../images/album/Psikotes-Masal-2.jpg');
+    background-image: image-set(
+        url('../images/album/Psikotes-Masal-2.webp') type('image/webp'),
+        url('../images/album/Psikotes-Masal-2.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: center center;
     background-repeat: repeat;
@@ -47,7 +58,10 @@ body {
 }
 
 .bg-artikel {
-    background-image: url('../images/bg9.jpeg');
+    background-image: image-set(
+        url('../images/bg9.webp') type('image/webp'),
+        url('../images/bg9.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: center center;
     background-repeat: repeat;
@@ -56,7 +70,10 @@ body {
 }
 
 .bg-kontak {
-    background-image: url('../images/bg13.jpeg');
+    background-image: image-set(
+        url('../images/bg13.webp') type('image/webp'),
+        url('../images/bg13.png') type('image/png')
+    );
     background-attachment: fixed;
     background-position: center bottom;
     background-repeat: repeat;

@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -122,6 +124,12 @@ class Page extends Controller {
 
     public function delete(Request $request, $id) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return jsr::print([
+                    'error' => 3,
+                    'pesan' => 'Unauthorized!',
+                ], 'bad request');
+            }
             if($id) {
                 $data = $this->service->get(fun::denval($id, true));
                 $detail = $this->service2->getOneRootForDetail(fun::denval($id, true));
@@ -138,7 +146,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'delete : menghapus data psikotes kecermatan beserta isi-isinya.',
                         'properties' => $properties
                     ]);
@@ -156,7 +164,7 @@ class Page extends Controller {
             }
             else {
                 return jsr::print([
-                    'error'   => 1,
+                    'error'   => 2,
                     'pesan'   => 'Invalid Credentials!',
                 ], 'bad request');
             }

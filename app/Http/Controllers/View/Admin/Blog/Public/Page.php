@@ -32,6 +32,7 @@ class Page extends Controller {
     protected $titlepage, $path, $domain, $unique, $data;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
     protected $robots;
+    protected $headerLog, $activitiesLog;
     public function __construct(
         Request $request,
         branding $brand,
@@ -77,32 +78,36 @@ class Page extends Controller {
                 'path'       => $request->path(),
                 'url'        => $request->fullUrl(),
                 'page'       => $this->titlepage,
-                'event'      => $request->method(),
+                'event'      => 'Web - '.$request->method(),
                 'deskripsi'  => 'read : melihat semua data blog yang terpublikasi ke seluruh dunia.',
                 'properties' => json_encode($request->all())
             ]);
         }
         else {
             $this->id = 0;
+
+            $this->headerLog = [
+                'tanggal'       => date('Y-m-d H:i:s'),
+                'host'          => $request->host(),
+                'id_user'       => 0,
+                'nama'          => 'Tamu',
+                'email'         => '-',
+                'roles_user'    => 0,
+                'ip_address'    => $request->ip(),
+            ];
+
+            $this->activitiesLog = [
+                'id_user'       => 0,
+                'last_path'     => $request->path(),
+                'last_url'      => $request->fullUrl(),
+                'last_page'     => $this->titlepage,
+                'method_page'   => 'Web - '.$request->method(),
+                'deskripsi'       => 'read : melihat semua data blog yang terpublikasi ke seluruh dunia.',
+                'body_content'  => json_encode($request->all())
+            ];
+
             $this->udl = new userdeviceloggingService(
-                0, date('Ymd'),
-                [
-                    'tanggal'       => date('Y-m-d H:i:s'),
-                    'host'          => $request->host(),
-                    'id_user'       => 0,
-                    'nama'          => 'Tamu',
-                    'email'         => '-',
-                    'roles_user'    => 0,
-                    'ip_address'    => $request->ip(),
-                ],
-                [
-                    'last_path'     => $request->path(),
-                    'last_url'      => $request->fullUrl(),
-                    'last_page'     => $this->titlepage,
-                    'method_page'   => $request->method(),
-                    'ngapain'       => 'read : melihat semua data blog yang terpublikasi ke seluruh dunia.',
-                    'body_content'  => json_encode($request->all())
-                ]
+                0, date('Ymd'), $this->headerLog, $this->activitiesLog
             );
         }
     }
@@ -144,15 +149,15 @@ class Page extends Controller {
         $page = @$_GET['page'];
         if(isset($_GET['cari'])) {
             $data = $this->service->publicSearch('title', @$_GET['cari']);
-            $link_page_change = route('blog').'?cari='.@$_GET['cari'].'&page=';
+            $link_page_change = route('blog').'?cari='.@$_GET['cari'].'&page='.$page;
         }
         else if(isset($_GET['kategori'])) {
             $data = $this->service->publicSearch('category', @$_GET['kategori']);
-            $link_page_change = route('blog').'?kategori='.@$_GET['kategori'].'&page=';
+            $link_page_change = route('blog').'?kategori='.@$_GET['kategori'].'&page='.$page;
         }
         else {
             $data = $this->service->publicAll();
-            $link_page_change = route('blog').'?page=';
+            $link_page_change = route('blog').'?page='.$page;
         }
 
         $lastpage = 0;
@@ -184,8 +189,10 @@ class Page extends Controller {
     }
 
     public function __destruct() {
-        if($this->id > 0) $this->activity = null;
-        else $this->udl->print();
+        if($this->id > 0) {
+            $this->activity = null;
+        }
+        else $this->udl->print($this->activitiesLog);
         $this->service   = null;
         $this->data      = null;
         $this->titlepage = null;

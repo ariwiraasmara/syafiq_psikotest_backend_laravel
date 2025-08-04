@@ -18,7 +18,10 @@
             <h2 class="text-2xl text-center font-bold">Layanan</h2>
 
             <div class="mt-6">
-                <img src="{{ asset('images/bg5.jpg') }}" alt="Gambar 1" title="Gambar 1" class="shadow-xl" />
+                <picture class="block text-center">
+                    <source srcset="{{ asset('images/bg5.webp') }}" type="image/webp" />
+                    <img src="{{ asset('images/bg5.png') }}" loading="lazy" width="300" height="300" alt="Gambar 1" title="Gambar 1" class="shadow-xl w-full block" />
+                </picture>
             </div>
 
             <div class="mt-6">
@@ -42,12 +45,24 @@
                 </p>
                 <div class="flex flex-row mt-4">
                     <div class="basis-1/2 mx-6">
-                        <img src="{{ asset('images/album/IMG-20211002-WA0019.jpg') }}" class="shadow-xl"  />
-                        <div class="text-center text-white" style="margin-top: -30px">Kerjasama dengan HRD Perusahaan</div>
+                        <picture class="block text-center">
+                            <source srcset="{{ asset('images/album/IMG-20211002-WA0019.webp') }}" type="image/webp" />
+                            <img src="{{ asset('images/album/IMG-20211002-WA0019.png') }}" loading="lazy" width="500" height="500" class="shadow-xl" title="Kegiatan 1 : Kerjasama dengan HRD Perusahaan" alt="Kegiatan 1 : Kerjasama dengan HRD Perusahaan" />
+                        </picture>
+                        <div class="text-center font-bold">
+                            Gambar Kegiatan 1 :<br/>
+                            Kerjasama dengan HRD Perusahaan
+                        </div>
                     </div>
                     <div class="basis-1/2 mx-6">
-                        <img src="{{ asset('images/album/IMG-20211130-WA0016.jpg') }}" class="shadow-xl"  />
-                        <div class="text-center text-white" style="margin-top: -30px">Pengarahan Pra Psikotes</div>
+                        <picture class="block text-center">
+                            <source srcset="{{ asset('images/album/IMG-20211130-WA0016.webp') }}" type="image/webp" />
+                            <img src="{{ asset('images/album/IMG-20211130-WA0016.png') }}" loading="lazy" width="500" height="500" class="shadow-xl" title="Kegiatan 2 : Pengarahan Pra Psikotes" alt="Kegiatan 2 : Pengarahan Pra Psikotes" />
+                        </picture>
+                        <div class="text-center font-bold">
+                            Gambar Kegiatan 2 :<br/>
+                            Pengarahan Pra Psikotes
+                        </div>
                     </div>
                 </div>
             </div>

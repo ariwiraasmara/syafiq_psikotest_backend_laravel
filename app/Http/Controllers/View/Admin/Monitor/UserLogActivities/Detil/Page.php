@@ -75,7 +75,7 @@ class Page extends Controller {
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'id';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
-        $page = @$_GET['page'];
+        $page = $request->query('page');
 
         meta()->title($this->titlepage)
             ->set('og:title', $this->titlepage)
@@ -108,7 +108,7 @@ class Page extends Controller {
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'id';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';
-        $page = @$_GET['page'];
+        $page = $request->query('page');
 
         $lastpage = 0;
         $fdata = null;
@@ -182,7 +182,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'backup : mencadangkan data satu admin',
                         'properties' => json_encode($request->all())
                     ]);
@@ -234,7 +234,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'hard delete : menghapus seluruh data satu user activities (hard).',
                         'properties' => $properties
                     ]);

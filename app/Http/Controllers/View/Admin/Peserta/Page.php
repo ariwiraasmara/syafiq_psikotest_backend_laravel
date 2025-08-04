@@ -108,7 +108,6 @@ class Page extends Controller {
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
         $fullUrl = $scheme.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        return $request->fullUrl().'<br/>'.$_SERVER['REQUEST_URI'].' : '.$fullUrl;
         if($sort == 'null' || $sort == '' || $sort == ' ' || $sort == null) $sort = 'variabel';
         if($by == 'null' || $by == '' || $by == ' ' || $by == null) $by = 'asc';
         if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null) $search = '';

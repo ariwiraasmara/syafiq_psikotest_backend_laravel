@@ -22,7 +22,7 @@ class personalaccesstokensRepository {
             return 0;
         }
         catch(Exception $err) {
-            Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->get!', [
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada personalaccesstokensRepository->get!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),
@@ -39,7 +39,7 @@ class personalaccesstokensRepository {
             return 0;
         }
         catch(Exception $err) {
-            Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->store!', [
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada personalaccesstokensRepository->store!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),
@@ -51,12 +51,12 @@ class personalaccesstokensRepository {
 
     public function update(int $id, array $values): array|Collection|String|int|null {
         try {
-            $res = $this->model->where(['email' => $id])->update($values);
+            $res = $this->model->where(['id' => $id])->update($values);
             if($res > 0) return $res;
             else return 0;
         }
         catch(Exception $err) {
-            Log::channel('error-repositories')->error('Terjadi kesalahan pada userRepository->update!', [
+            Log::channel('error-repositories')->error('Terjadi kesalahan pada personalaccesstokensRepository->update!', [
                 'message' => $err->getMessage(),
                 'file' => $err->getFile(),
                 'line' => $err->getLine(),

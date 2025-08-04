@@ -78,7 +78,7 @@ class Page extends Controller {
                 'path'       => $request->path(),
                 'url'        => $request->fullUrl(),
                 'page'       => $this->titlepage,
-                'event'      => $request->method(),
+                'event'      => 'Web - '.$request->method(),
                 'deskripsi'  => 'read : melihat data blog detil yang terpublikasi ke seluruh dunia.',
                 'properties' => json_encode($request->all())
             ]);
@@ -100,8 +100,8 @@ class Page extends Controller {
                     'last_path'     => $request->path(),
                     'last_url'      => $request->fullUrl(),
                     'last_page'     => $this->titlepage,
-                    'method_page'   => $request->method(),
-                    'ngapain'       => 'read : melihat data blog detil yang terpublikasi ke seluruh dunia.',
+                    'method_page'   => 'Web - '.$request->method(),
+                    'deskripsi'     => 'read : melihat data blog detil yang terpublikasi ke seluruh dunia.',
                     'body_content'  => json_encode($request->all())
                 ]
             );

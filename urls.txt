@@ -1,0 +1,14 @@
+http://localhost:8000/
+http://localhost:8000/admin
+http://localhost:8000/peserta
+http://localhost:8000/mengenai_kami
+http://localhost:8000/artikel
+http://localhost:8000/kontak
+http://localhost:8000/blog
+http://localhost:8000/blog?kategori=acara
+http://localhost:8000/blog?kategori=artikel
+http://localhost:8000/blog?kategori=informasi
+http://localhost:8000/blog?kategori=kegiatan
+http://localhost:8000/layanan
+http://localhost:8000/layanan/psikotes-sim
+http://localhost:8000/link-psikotes

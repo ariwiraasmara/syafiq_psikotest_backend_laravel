@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use App\Services\useractivitiesService;
 use App\Services\as2001_kecermatan_kolompertanyaanService;
@@ -132,7 +134,9 @@ class Page extends Controller {
 
     public function update(Request $request, $id1, $id2) {
         try {
-            // return $request;
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_psikotest_kecermatan_detil')->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'  => 'required|string',
                 'soalA'   => 'required|integer',
@@ -161,7 +165,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'edit and update : data psikotes kecermatan detil yang sudah ada.',
                         'properties' => json_encode($request->all())
                     ]);

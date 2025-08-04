@@ -8,7 +8,7 @@
 <style>
 body {
     background-color: rgba(200, 200, 255, 0.9);
-    background-image: url('./images/bg19.png');
+    background-image: url('./images/bg19.webp');
     background-attachment: fixed;
     font-family: Georgia, Helvetica, sans-serif;
     background-size: cover;

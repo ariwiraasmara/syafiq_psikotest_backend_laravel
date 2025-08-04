@@ -29,7 +29,21 @@
                 </tr>
             </thead>
             <tbody id="tabeldetil-content">
-                @if($hasiltes->isEmpty())
+                @forelse($hasiltes as $data)
+                    <tr>
+                        <td class="text-center p-2" style="border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['tgl_ujian']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #f00; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_1']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #0f0; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_2']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #00f; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_3']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #ff0; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_4']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #0ff; border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['hasilnilai_kolom_5']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #f00; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_1']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #0f0; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_2']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #00f; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_3']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #ff0; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_4']; }}</td>
+                        <td class="text-center p-2" style="width: 8%; background: #0ff; border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['waktupengerjaan_kolom_5']; }}</td>
+                    </tr>
+                @empty
                     <tr>
                         <td colspan="11" class="text-center p-2">
                             <h3 class="text-2xl font-bold">
@@ -37,23 +51,7 @@
                             </h3>
                         </td>
                     </tr>
-                @else
-                    @foreach($hasiltes as $data)
-                        <tr>
-                            <td class="text-center p-2" style="border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['tgl_ujian']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #f00; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_1']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #0f0; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_2']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #00f; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_3']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #ff0; border-bottom: 2px solid #000;">{{ $data['hasilnilai_kolom_4']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #0ff; border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['hasilnilai_kolom_5']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #f00; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_1']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #0f0; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_2']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #00f; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_3']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #ff0; border-bottom: 2px solid #000;">{{ $data['waktupengerjaan_kolom_4']; }}</td>
-                            <td class="text-center p-2" style="width: 8%; background: #0ff; border-bottom: 2px solid #000; border-right: 2px solid #000;">{{ $data['waktupengerjaan_kolom_5']; }}</td>
-                        </tr>
-                    @endforeach
-                @endif
+                @endforelse
             </tbody>
         </table>
     </div>

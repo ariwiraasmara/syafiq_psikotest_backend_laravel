@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -135,6 +137,12 @@ class Page extends Controller{
 
     public function delete(Request $request, $id) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return jsr::print([
+                    'error' => 3,
+                    'pesan' => 'Unauthorized!',
+                ], 'bad request');
+            }
             if($id) {
                 $data = $this->service->get(fun::denval($id, true));
                 $res = $this->service->softDelete(fun::denval($id, true));
@@ -149,7 +157,7 @@ class Page extends Controller{
                         'ip_address' => $request->ip(),
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
-                        'page'       => $this->titlepage,
+                        'page'       => 'Web - '.$this->titlepage,
                         'event'      => $request->method(),
                         'deskripsi'  => 'soft delete : menghapus data blog (soft).',
                         'properties' => $properties
@@ -162,7 +170,7 @@ class Page extends Controller{
                 }
                 else {
                     return jsr::print([
-                        'error' => 1,
+                        'error' => 2,
                         'pesan' => 'Gagal Menghapus Data Blog',
                         'data'  => $data
                     ], 'bad request');

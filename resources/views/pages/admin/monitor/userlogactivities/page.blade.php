@@ -10,7 +10,7 @@
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 use App\Libraries\myfunction;
-
+use Illuminate\Support\Facades\URL;
 $style_content = 'margin-bottom: 60px;';
 $style_fab = 'margin-bottom: 23px;';
 $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
@@ -88,13 +88,12 @@ if($roles > 1) {
                     <tr>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">ID</td>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Nama</td>
-                        <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Email</td>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Tanggal</td>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">IP Address</td>
-                        <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">URL</td>
-                        <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Halaman</td>
+                        <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Path</td>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Event</td>
                         <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">Deskripsi</td>
+                        <td class="text-center font-bold" style="padding: 5px; border: 3px solid #000;">User Agent</td>
                     </tr>
                 </thead>
 
@@ -103,14 +102,16 @@ if($roles > 1) {
                         @foreach($data as $item)
                             <tr onclick="onDetil({{ $item['id'] }})">
                                 <td class="text-right" style="padding: 5px; border-left: 3px solid #000; border-right: 3px solid #000; border-bottom: 1px solid #ddd;">{{ $item['id']; }}</td>
-                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['name']; }}</td>
-                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['email']; }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">
+                                    {{ $item['name']; }}<br/>
+                                    <span class="italic">{{ '('.$item['email'].')'; }}</span>
+                                </td>
                                 <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['tanggal']; }}</td>
                                 <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['ip_address']; }}</td>
-                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['url']; }}</td>
-                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['page']; }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['path']; }}</td>
                                 <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['event']; }}</td>
-                                <td class="text-right" style="padding: 5px; border-right: 3px solid #000; border-bottom: 1px solid #aaa;">{{ $item['deskripsi']; }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $item['deskripsi']; }}</td>
+                                <td style="padding: 5px; border-right: 3px solid #000; border-bottom: 1px solid #ddd;">{{ $item['user_agent']; }}</td>
                             </tr>
                         @endforeach
                     @else
@@ -209,7 +210,9 @@ if($roles > 1) {
         }
 
         function backup() {
-            window.open(`{{ route('admin_monitor_userlog_activities_backup_all') }}`, '_blank');
+            const signedUrl = `{{ URL::temporarySignedRoute('admin_monitor_userlog_activities_backup_all', now()->addMinutes(1)) }}`;
+            // window.open(`{{ route('admin_monitor_userlog_activities_backup_all') }}`, '_blank');
+            window.open(signedUrl, '_blank');
         }
 
         function deleteAllActivities() {

@@ -18,14 +18,17 @@
             <h2 class="text-center text-2xl font-bold underline">Artikel</h2>
             <div class="mt-4">
                 <div class="p-2 mb-4 justify-items-center items-center">
-                    <img src="{{ asset('images/album/Psikotes-Masal-2.jpg') }}" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/album/Psikotes-Masal-2.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/album/Psikotes-Masal-2.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                    </picture>
                 </div>
             </div>
             <div class="mt-4">
                 <h3 class="text-center text-lg font-bold">Tujuan dan Manfaat Tes Psikologi</h3>
                 <p class="mt-4">
                     <a href="http://www.konsultanpsikologijakarta.com/software-ist/" class="text-blue-700">Tes Psikologi</a> sebagai salah satu Metode dari Psikodiagnostik, mempunyai tujuan untuk mengadakan Klasifikasi, Deskripsi, Interpretasi dan Prediksi. Klasifikasi bertujuan untuk membantu mengatasi problem-problem yang berhubungan dengan:
-                
+
                     <ol class="ml-6 list-decimal">
                         <li>Pendidikan, menyangkut masalah intelegensi, minat dan bakat, kesukaran belajar dan sebagainya. Tes intelegensi bertujuan un-tuk mengetahui tingkat kecerdasan individu yang merupa kan potensi dasar keberhasilan pendidikan. Tes Minat bakat bertujuan membantu individu menyesuaikan jurusan atau ekstra kurikuler dalam pendidikan sehingga bakat dan potensinya da pat diaktualkan secara optimal. Kesukaran belajar atau ketidakmampuan dalam belajar/Learning Disability (LD).</li>
                         <li>Perkembangan Anak, menyangkut hambatan-hambatan perkembangan baik psikis maupun sosial.</li>

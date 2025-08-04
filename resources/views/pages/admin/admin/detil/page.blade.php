@@ -59,7 +59,7 @@
                 </div>
                 <div class="basis-1/3">
                     <span class='text-center'>
-                        <a href="{{ route('admin_anggota_delete', ['id' => myfunction::enval($data['user'][0]['id'], true)])}}" rel="nofollow" title="Hapus Data Peserta {{ $data['user'][0]['name'] }}" class="p-2 w-full block bg-red-700 text-white rounded-xl shadow-xl">
+                        <a href="{{ route('admin_anggota_softdelete', ['id' => myfunction::enval($data['user'][0]['id'], true)])}}" rel="nofollow" title="Hapus Data Peserta {{ $data['user'][0]['name'] }}" class="p-2 w-full block bg-red-700 text-white rounded-xl shadow-xl">
                             <ion-icon name="trash-outline"></ion-icon>
                         </a>
                     </span>

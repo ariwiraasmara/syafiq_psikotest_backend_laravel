@@ -12,8 +12,11 @@
         <div class="mt-4 grid md:grid-cols-3 gap-2 text-black section-line">
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Psikotes SIM</h3>
-                <div class="mt-2">
-                    <img src="{{ asset('images/bg6.webp') }}" class="rounded-xl" title="Psikotes SIM" alt="Psikotes SIM" />
+                <div class="mt-2 justify-items-center items-center">
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/bg6.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/bg6.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Psikotes SIM" alt="Psikotes SIM" />
+                    </picture>
                 </div>
                 <p class="mt-2">
                     PT. SOLUSI Psikologi Banten membantu pihak pemerintah daerah, khususnya Kepolisian Daerah (POLDA) Banten dalam psikotes pembuatan Surat Izin Mengemudi (SIM) baik untuk pembuatan baru dan perpanjangan SIM.
@@ -22,8 +25,11 @@
 
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Psikotes Online & Offline</h3>
-                <div class="mt-2">
-                    <img src="{{ asset('images/bg7.webp') }}" class="rounded-xl" title="Psikotes Online & Offline" alt="Psikotes Online & Offline" />
+                <div class="mt-2 justify-items-center items-center">
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/bg7.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/bg7.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Psikotes Online & Offline" alt="Psikotes Online & Offline" />
+                    </picture>
                 </div>
                 <p class="mt-2">
                     PT. SOLUSI Psikologi Banten telah bekerja sama dengan banyak sekolah, kampus, dan perusahaan yang ada di wilayah Banten untuk memberikan layanan psikotes untuk pendidikan dan psikotes industri.
@@ -32,8 +38,11 @@
 
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Konsultasi Online & Offline</h3>
-                <div class="mt-2">
-                    <img src="{{ asset('images/bg8.webp') }}" class="rounded-xl" title="Konsultasi Online & Offline" alt="Konsultasi Online & Offline" />
+                <div class="mt-2 justify-items-center items-center">
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/bg8.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/bg8.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Konsultasi Online & Offline" alt="Konsultasi Online & Offline" />
+                    </picture>
                 </div>
                 <p class="mt-2">
                     PT. SOLUSI Psikologi Banten telah banyak membantu klien-klien kami dalam berbagai permasalahan psikologi, baik masalah personal, pernikahan, kelainan, dan perkembangan karir
@@ -44,14 +53,20 @@
         <div class="mt-4 grid grid-cols-2 gap-2 text-black section-line">
             <div class="bg-lp-white-glasses p-2 mx-4 rounded-md shadow-xl">
                 <div class="p-2 justify-items-center items-center">
-                    <img src="{{ asset('images/Syafiq Marzuki.png') }}" class="rounded-full shadow-xl" width="200" height="350" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/Syafiq_Marzuki.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/Syafiq_Marzuki.png') }}" loading="lazy" width="200" height="200" class="rounded-full shadow-xl" width="200" height="350" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                    </picture>
                 </div>
                 <p class="mt-2 text-lg">PT. SOLUSI Psikologi Banten Siap membantu permasalahan Psikologi anda dengan sepenuh hati!</p>
                 <div class="mt-2 text-right">Syafiq Marzuki, Psikolog</div>
             </div>
             <div class="bg-lp-white-glasses p-2 mx-4 rounded-md shadow-xl">
                 <div class="p-2 justify-items-center items-center">
-                    <img src="{{ asset('images/Muhtar.jpg') }}" class="rounded-full shadow-xl" width="200" height="350" title="Muhtar, Marketing dan IT Support" alt="Muhtar, Marketing dan IT Support" />
+                    <picture class="block text-center">
+                        <source srcset="{{ asset('images/Muhtar.webp') }}" type="image/webp" />
+                        <img src="{{ asset('images/Muhtar.png') }}" loading="lazy" width="200" height="200" class="rounded-full shadow-xl" width="200" height="350" title="Muhtar, Marketing dan IT Support" alt="Muhtar, Marketing dan IT Support" />
+                    </picture>
                 </div>
                 <p class="mt-2 text-lg">PT. SOLUSI Psikologi Banten siap membantu anda dengan segala pelayanan terbaik yang kami miliki, baik Online dan Ofline.</p>
                 <div class="mt-2 text-right">Muhtar, Marketing dan IT Support</div>

@@ -11,11 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\Models\User;
 use App\Services\useractivitiesService;
 use App\Services\as0001_variabelsettingService;
+use App\Policies\UserPolicy;
 use App\Libraries\branding;
 use App\Libraries\jsr;
 use App\Libraries\myfunction as fun;
@@ -26,6 +30,7 @@ class Page extends Controller {
     //
     protected as0001_variabelsettingService|null $service;
     protected useractivitiesService|null $activity;
+    protected UserPolicy $policy;
     protected branding $brand;
     protected $titlepage, $path, $domain, $unique, $data;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
@@ -116,6 +121,9 @@ class Page extends Controller {
 
     public function store(Request $request) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_variabel_setting', ['sort'=>'variabel', 'by'=>'asc', 'search'=>'-', 'page'=>1])->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'   => 'required',
                 'variabel' => 'required|string|max:255',
@@ -123,8 +131,8 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->store([
-                    'variabel' => fun::readable($request->variabel),
-                    'values'   => fun::readable($request->values),
+                    'variabel' => fun::escape($request->variabel),
+                    'values'   => fun::escape($request->values),
                 ]);
                 if($data > 0) {
                     $this->activity->store([
@@ -133,7 +141,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'create and store : data variabel setting baru.',
                         'properties' => json_encode($request->all())
                     ]);
@@ -144,7 +152,7 @@ class Page extends Controller {
                 }
             }
             else {
-                return redirect()->route('admin_variabel_baru')->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                return redirect()->route('admin_variabel_baru')->with('error', 'Invalid Credentials!');
             }
         }
         catch(Exception $err) {
@@ -155,64 +163,6 @@ class Page extends Controller {
                 'trace' => $err->getTraceAsString(),
             ]);
             return redirect()->route('admin_variabel_baru')->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
-        }
-    }
-    
-    public function nativeStore(Request $request) {
-        try {
-            // Use environment variables for database credentials
-            // $DB_SERVER = env('DB_SERVER', '103.247.8.134');
-            $DB_SERVER   = '103.247.8.134';
-            $DB_USERNAME = 'psiy1926_superadmin';
-            $DB_PASSWORD = 'Pu5@7-psikotes';
-            $DB_NAME     = 'psiy1926_syafiq_psikotest';
-    
-            // Establish a database connection
-            $link = mysqli_connect($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
-    
-            // Check connection
-            if (!$link) {
-                throw new Exception('Connection failed: ' . mysqli_connect_error());
-            }
-    
-            // Prepare an insert statement
-            $sql = "INSERT INTO as0001_variabelsetting ('variabel', 'values', 'created_at') VALUES (?, ?, ?)";
-            return mysqli_prepare($link, $sql);
-            if ($stmt = mysqli_prepare($link, $sql)) {
-                // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "sss", $param_variabel, $param_values, $param_created_at);
-    
-                // Set parameters
-                $param_variabel = $request->variabel;
-                $param_values = $request->values;
-                $param_created_at = date('Y-m-d H:i:s');
-    
-                // Attempt to execute the prepared statement
-                if (mysqli_stmt_execute($stmt)) {
-                    // Records created successfully. Redirect to landing page
-                    return redirect()->route('admin_variabel_setting');
-                } else {
-                    throw new Exception('Execute failed: ' . mysqli_stmt_error($stmt));
-                }
-            } else {
-                throw new Exception('Prepare failed: ' . mysqli_error($link));
-            }
-        } catch (Exception $e) {
-            Log::channel('error-controllers')->error('Terjadi kesalahan pada As0001VariabelsettingController->nativeStore!', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-            return redirect()->route('admin_variabel_baru')->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
-        } finally {
-            // Close the statement and connection
-            if (isset($stmt)) {
-                mysqli_stmt_close($stmt);
-            }
-            if (isset($link)) {
-                mysqli_close($link);
-            }
         }
     }
 

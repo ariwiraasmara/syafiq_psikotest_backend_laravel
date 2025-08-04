@@ -60,6 +60,22 @@ class User extends Authenticatable {
     const UPDATED_AT = 'updated_at';
     const DELETED_AT = 'deleted_at';
 
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getNama() {
+        return $this->name;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getRoles() {
+        return $this->roles;
+    }
+
     //? Punya satu data di table PersonalAccessTokens
     public function PersonalAccessTokens() {
         //? NamaModel::class, 'foreign_key', 'local_key'

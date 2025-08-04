@@ -3,10 +3,11 @@
 // ! PT. Solusi Psikologi Banten
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
-    use App\Libraries\myfunction;
-    $style_content = 'margin-bottom: 60px;';
-    $style_fab = 'margin-bottom: 23px;';
-    $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
+use App\Libraries\myfunction;
+use Illuminate\Support\Facades\URL;
+$style_content = 'margin-bottom: 60px;';
+$style_fab = 'margin-bottom: 23px;';
+$style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
 @endphp
 @extends('layouts.app')
 @section('content')
@@ -211,6 +212,9 @@
         }
 
         function backup() {
+            const signedUrl = `{{ URL::temporarySignedRoute('admin_monitor_userlog_activities_detil_backup', now()->addMinutes(1)) }}`;
+            // window.open(`{{ route('admin_monitor_userlog_activities_backup_all') }}`, '_blank');
+            window.open(signedUrl, '_blank');
             window.open(`{{ route('admin_monitor_userlog_activities_detil_backup', ['id' => $type_val]); }}`, '_blank');
         }
 

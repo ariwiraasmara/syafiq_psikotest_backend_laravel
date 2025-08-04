@@ -12,23 +12,33 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
+use App\Services\useractivitiesService;
 use App\Services\userdeviceloggingService;
 use App\Libraries\branding;
 use App\Libraries\myfunction as fun;
 use App\Libraries\jsr;
 use Exception;
 use Meta;
+use Stevebauman\Purify\Facades\Purify;
 
 class Aboutus extends Controller {
     //
+    protected useractivitiesService|null $activity;
     protected userdeviceloggingService $udl;
     protected branding $brand;
     protected $titlepage, $path, $domain, $unique, $robots;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
     protected $data, $par1, $par2, $par3, $par4;
-    public function __construct(Request $request, branding $brand) {
+    protected $headerLog, $activitiesLog;
+    public function __construct(
+        Request $request,
+        branding $brand,
+        useractivitiesService $activity
+    ) {
         $this->brand = $brand;
+        $this->activity = $activity;
 
         $this->titlepage = 'Mengenai Kami'.$this->brand->getTitlepage();
         $this->path = env('SESSION_PATH', '/');
@@ -36,7 +46,20 @@ class Aboutus extends Controller {
         $this->unique = fun::random('combwisp', 50);
         $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
 
-        if($request->session()->has('id')) $this->id = $request->session()->get('id');
+        if($request->session()->has('id')) {
+            $this->id = $request->session()->get('id');
+
+            $this->activity->store([
+                'id_user'    => $this->id,
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $this->titlepage,
+                'event'      => 'Web - '.$request->method(),
+                'deskripsi'  => 'read : halaman about us.',
+                'properties' => json_encode($request->all())
+            ]);
+        }
         else $this->id = 0;
 
         if($request->session()->has('nama')) $this->nama = $request->session()->get('nama');
@@ -50,32 +73,32 @@ class Aboutus extends Controller {
 
         if($request->session()->has('fileUDH')) $this->filename = $request->session()->has('fileUDH');
         else $this->filename = date('Ymd');
-        
-        $this->par1 = '<strong>LPT SOLUSI Banten</strong> adalah Lembaga Psikologi Terapan yang sudah terpercaya dan terkenal sejak tahun 2006. Lokasi Kantor dan Klinik Pelayanan Lembaga Psikologi ini berlokasi di Kota Serang Banten.';
-        $this->par2 = '<strong>LPT SOLUSI Banten</strong> di dukung oleh Psikolog yang dilengkapi SIPP dari HIMPSI dan beberapa telah memiliki sertifikat dari BNSP RI. Selain itu juga di bantu oleh Assisten Psikolog serta tenaga ahli berpengalaman dalam bidang psikologi dan human resource management. Saat ini LPT SOLUSI bermitra dengan beberapa Lembaga atau Biro Konsultasi Psikologi lainnya maupun Rumah Sakit yang ada di Banten untuk kasus tertentu.';
-        $this->par3 = '<strong>LPT SOLUSI Banten</strong> telah banyak menangani konseling individual, konseling kelompok, konseling perkawinan, konseling industri, psikotest pendidikan, psikotest industri, workshop, seminar, parenting, outbound, pendampingan individual dan berbagai jenis terapi hingga terapi tumbuh kembang.';
-        $this->par4 = '<strong>LPT SOLUSI Banten</strong> memiliki kantor pusat di Kota Serang Banten, kantor cabang di Depok Jakarta Selatan dan kantor cabang operasional yang ada di kota Serang sendiri.';
-        $this->data = [$this->par1, $this->par2, $this->par3, $this->par4];
+
+        $this->headerLog = [
+            'tanggal'       => date('Y-m-d H:i:s'),
+            'host'          => $request->host(),
+            'id_user'       => $this->id,
+            'nama'          => $this->nama,
+            'email'         => $this->email,
+            'roles_user'    => $this->roles,
+            'ip_address'    => $request->ip(),
+        ];
+
+        $this->activitiesLog = [
+            'id_user'       => $this->id,
+            'last_path'     => $request->path(),
+            'last_url'      => $request->fullUrl(),
+            'last_page'     => $this->titlepage,
+            'method_page'   => 'Web - '.$request->method(),
+            'deskripsi'     => 'read : halaman about us.',
+            'body_content'  => json_encode($request->all())
+        ];
 
         $this->udl = new userdeviceloggingService(
-            $this->id, $this->filename,
-            [
-                'tanggal'       => date('Y-m-d H:i:s'),
-                'host'          => $request->host(),
-                'id_user'       => $this->id,
-                'nama'          => $this->nama,
-                'email'         => $this->email,
-                'roles_user'    => $this->roles,
-                'ip_address'    => $request->ip(),
-            ],
-            [
-                'last_path'     => $request->path(),
-                'last_url'      => $request->fullUrl(),
-                'last_page'     => $this->titlepage,
-                'method_page'   => $request->method(),
-                'ngapain'       => 'read',
-                'body_content'  => json_encode($request->all())
-            ]
+            $this->id,
+            $this->filename,
+            $this->headerLog,
+            $this->activitiesLog
         );
     }
 
@@ -111,13 +134,12 @@ class Aboutus extends Controller {
             'unique'               => $this->unique,
             'ispeserta'            => 'null',
             'path'                 => $this->path,
-            'domain'               => $this->domain,
-            'data'                 => $this->data
+            'domain'               => $this->domain
         ]);
     }
 
     public function __destruct() {
-        $this->udl->print();
+        $this->udl->print($this->activitiesLog);
         $this->titlepage = null;
         $this->path = null;
         $this->domain = null;

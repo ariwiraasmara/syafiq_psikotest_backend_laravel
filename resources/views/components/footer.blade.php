@@ -8,23 +8,23 @@
     <div class="justify-items-center items-center w-full mt-2 pb-2 border-b-2 border-black">
         <h2 class="font-bold text-lg hidden">Sitemap</h2>
         <div class="">
-            <a href="{{ route('home'); }}" class="hover:underline" rel="follow" title="Beranda">
+            <a href="{{ URL::temporarySignedRoute('home', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Beranda">
                 Beranda
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('mengenai_kami') }}" class="hover:underline" rel="follow" title="Mengenai Kami">
+            <a href="{{ URL::temporarySignedRoute('mengenai_kami', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Mengenai Kami">
                 Mengenai Kami
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('layanan') }}" class="hover:underline" rel="follow" title="Layanan">
+            <a href="{{ URL::temporarySignedRoute('layanan', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Layanan">
                 Layanan
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('linkpsikotes') }}" class="hover:underline" rel="follow" title="Link Psikotes">
+            <a href="{{ URL::temporarySignedRoute('linkpsikotes', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Link Psikotes">
                 Link Psikotes
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('kontak') }}" class="hover:underline" rel="follow" title="Kontak">
+            <a href="{{ URL::temporarySignedRoute('kontak', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Kontak">
                 Kontak
             </a>
             <span class="mx-2">▪</span>
@@ -32,11 +32,11 @@
                 Aktifitas
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('artikel') }}" class="hover:underline" rel="follow" title="Artikel">
+            <a href="{{ URL::temporarySignedRoute('artikel', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Artikel">
                 Artikel
             </a>
             <span class="mx-2">▪</span>
-            <a href="{{ route('layanan_psikotessim') }}" class="hover:underline" rel="follow" title="Biro Psikotes SIM">
+            <a href="{{ URL::temporarySignedRoute('layanan_psikotessim', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Biro Psikotes SIM">
                 Biro Psikotes SIM
             </a>
         </div>

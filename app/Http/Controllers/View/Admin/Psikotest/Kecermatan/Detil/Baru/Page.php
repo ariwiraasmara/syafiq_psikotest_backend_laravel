@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -118,6 +120,9 @@ class Page extends Controller {
 
     public function store(Request $request, $id) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_psikotest_kecermatan_detil')->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'  => 'required|string',
                 'soalA'   => 'required|integer',
@@ -148,7 +153,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'create and store : data psikotes kecermatan detil baru.',
                         'properties' => json_encode($request->all())
                     ]);

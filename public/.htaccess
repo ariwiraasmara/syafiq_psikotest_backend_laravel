@@ -24,4 +24,61 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    # Aktifkan Gzip Compression
+    <IfModule mod_deflate.c>
+        AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+    </IfModule>
+
+    # Cache file statis
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresByType image/webp "access plus 1 year"
+        ExpiresByType image/png "access plus 1 year"
+        ExpiresByType image/jpeg "access plus 1 year"
+        ExpiresByType text/css "access plus 1 month"
+        ExpiresByType application/javascript "access plus 1 month"
+
+        # HTML jangan terlalu lama
+        ExpiresByType text/html "access plus 1 minute"
+    </IfModule>
+
+        # Pre-compressed files (jika nanti generate .br / .gz)
+    <IfModule mod_headers.c>
+        # Biarkan browser tau file support gzip
+        Header append Vary Accept-Encoding
+
+        # Tidak boleh di-frame (cegah clickjacking)
+        Header always set X-Frame-Options "SAMEORIGIN"
+
+        # Cegah sniffing MIME (IE lawas sering bahaya)
+        Header always set X-Content-Type-Options "nosniff"
+
+        # Aktifkan HSTS (pastikan SSL aktif dulu di Rumahweb)
+        # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" env=HTTPS
+
+        # Matikan fitur lama browser yang jarang dipakai
+        Header always set X-Permitted-Cross-Domain-Policies "none"
+
+        # Cache super agresif untuk asset statis (CSS, JS, images)
+        <FilesMatch "\.(ico|jpg|jpeg|png|gif|webp|svg|css|js|woff|woff2|ttf|eot)$">
+            Header set Cache-Control "public, max-age=31536000, immutable"
+        </FilesMatch>
+
+        # Cache HTML selama 1 menit (biar gak ganggu dynamic page Laravel)
+        <FilesMatch "\.(html|htm|php)$">
+            Header set Cache-Control "private, no-cache, no-store, must-revalidate"
+            Header set Pragma "no-cache"
+            Header set Expires 0
+        </FilesMatch>
+    </IfModule>
+
+    # Cache untuk font
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+
+    # Cache untuk SVG & icon
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
 </IfModule>

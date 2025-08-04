@@ -28,6 +28,7 @@ class AnyController extends Controller {
             $this->patService = $patService;
     }
 
+    // ? Penggunaan CRSF Token pada API sebetulnya tidak diperlukan, karena API tidak menggunakan session.
     public function csrf_token(Request $request) {
         try {
             $response = new Response([

@@ -3,6 +3,7 @@
 // ! PT. Solusi Psikologi Banten
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
+use Illuminate\Support\Facades\URL;
 @endphp
 <div class="max-md:hidden sticky justify-items-center bg-gradient-to-t from-sky-300 to-sky-700 w-full" style="height: 28px;">
     <h2 id="navbar" class="hidden">Navbar</h2>
@@ -17,26 +18,26 @@
 
             @if(!isset($_COOKIE['ispeserta']))
             <div class="">
-                <a href="#" rel="nofollow, noopener, noreferrer" title="Admin" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white" onclick="window.location.href = '{{ route('admin') }}'">
+                <a href="{{ URL::signedRoute('admin', absolute: true); }}" rel="nofollow, noopener, noreferrer" title="Admin" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Admin
                 </a>
             </div>
             @endif
-            
+
             <div class="">
-                <a href="#" title="Peserta" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white" onclick="submenuToggle('submenupeserta')">
+                <a href="#" id="navbar-desktop-peserta" title="Peserta" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Peserta <ion-icon name="caret-down-outline"></ion-icon>
                 </a>
                 <div class="flex flex-column text-black">
                     <div id="submenupeserta" class="hidden absolute items-center bg-white shadow-lg mt-2 rounded-lg text-left">
-                        <a href="{{ route('peserta') }}" rel="follow" title="Mulai Psikotest" class="px-4 py-2 block border-b-2 border-black hover:bg-gray-300">Mulai Psikotest</a>
+                        <a href="#" id="desktop-peserta" rel="follow" title="Mulai Psikotest" class="px-4 py-2 block border-b-2 border-black hover:bg-gray-300">Mulai Psikotest</a>
                         <a href="#" title="Hasil Tes Psikotest Kecermatan" class="px-4 py-2 block hover:bg-gray-300" onclick="popupHasilTesPsikotestKecermatan()">Hasil Tes Psikotest Kecermatan</a>
                     </div>
                 </div>
             </div>
-            
+
             <div class="">
-                <a href="#" title="Informasi" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white" onclick="submenuToggle('submenuinformasi')">
+                <a href="#" id="navbar-desktop-blog" title="Informasi" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Blog <ion-icon name="caret-down-outline"></ion-icon>
                 </a>
 
@@ -52,35 +53,35 @@
             </div>
 
             <div class="">
-                <a href="{{ route('mengenai_kami') }}" rel="follow" title="Mengenai Kami" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
+                <a href="{{ URL::temporarySignedRoute('mengenai_kami', now()->addMinutes(10)) }}" rel="follow" title="Mengenai Kami" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Mengenai Kami
                 </a>
             </div>
 
             <div class="">
-                <a href="{{ route('artikel') }}" rel="follow" title="Artikel" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">Artikel</a>
+                <a href="{{ URL::temporarySignedRoute('artikel', now()->addMinutes(10)) }}" rel="follow" title="Artikel" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">Artikel</a>
             </div>
 
             <div class="">
-                <a href="{{ route('layanan') }}" rel="follow" title="Layanan" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
+                <a href="{{ URL::temporarySignedRoute('layanan', now()->addMinutes(10)) }}" rel="follow" title="Layanan" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Layanan
                 </a>
             </div>
 
             <div class="">
-                <a href="{{ route('linkpsikotes') }}" rel="follow" title="Link Psikotest" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
+                <a href="{{ URL::temporarySignedRoute('linkpsikotes', now()->addMinutes(10)) }}" rel="follow" title="Link Psikotest" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Link Psikotest
                 </a>
             </div>
 
             <div class="">
-                <a href="{{ route('kontak') }}" rel="follow" title="Kontak" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
+                <a href="{{ URL::temporarySignedRoute('kontak', now()->addMinutes(10)) }}" rel="follow" title="Kontak" class="p-2 bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Kontak
                 </a>
             </div>
 
             <div class="">
-                <a href="{{ route('layanan_psikotessim') }}" rel="follow" title="Biro Psikotes SIM" class="p-2 rounded-r-xl bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
+                <a href="{{ URL::temporarySignedRoute('layanan_psikotessim', now()->addMinutes(10)) }}" rel="follow" title="Biro Psikotes SIM" class="p-2 rounded-r-xl bg-gradient-to-b hover:bg-gradient-to-t from-sky-300 to-sky-700 border-2 border-blue-700 text-white">
                     Biro Psikotes SIM
                 </a>
             </div>
@@ -89,7 +90,7 @@
 </div>
 <!-- Mobile Menu Button -->
 <div class="lg:hidden font-bold bg-gradient-to-t from-sky-300 to-sky-700 text-black" style="height: 30px;">
-    <button type="button" class="w-full text-left font-bold" onclick="toggleMobileMenu()" style="padding: 3px;">
+    <button type="button" id="navbar-mobile-btn-menu" class="w-full text-left font-bold" onclick="toggleMobileMenu()" style="padding: 3px;">
         <ion-icon name="menu-outline"></ion-icon> Menu
     </button>
 </div>
@@ -102,27 +103,27 @@
                 <ion-icon name="return-up-forward-outline"></ion-icon> Beranda
             </a>
         </div>
-    
+
         @if(!isset($_COOKIE['ispeserta']))
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="#" rel="nofollow, noopener, noreferrer" title="Admin" class="p-2 w-full block" onclick="window.location.href = '{{ route('admin') }}'">
+            <a href="{{ URL::signedRoute('admin', absolute: true); }}" rel="nofollow, noopener, noreferrer" title="Admin" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Admin
             </a>
         </div>
         @endif
-        
+
         <div class="mb-2 hover:bg-blue-100">
-            <button type="button" title="Peserta" class="p-2 w-full block text-left" onclick="submenuMobileToggle('mobile-submenupeserta')">
+            <button type="button" id="navbar-mobile-peserta" title="Peserta" class="p-2 w-full block text-left">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Peserta <ion-icon name="caret-down-outline"></ion-icon>
             </button>
             <div id="mobile-submenupeserta" class="ml-6 border-l-2 border-black hidden">
-                <a href="{{ route('peserta') }}" rel="follow" title="Mulai Psikotest" class="px-4 py-2 w-full block border-b-2 border-black hover:bg-blue-300">Mulai Psikotest</a>
+                <a href="#" id="mobile-peserta" rel="follow" title="Mulai Psikotest" class="px-4 py-2 w-full block border-b-2 border-black hover:bg-blue-300">Mulai Psikotest</a>
                 <a href="#" title="Hasil Tes Psikotest Kecermatan" class="px-4 py-2 w-full block hover:bg-blue-300" onclick="popupHasilTesPsikotestKecermatan()">Hasil Tes Psikotest Kecermatan</a>
             </div>
         </div>
-        
+
         <div class="mb-2 hover:bg-blue-100">
-            <button type="button" title="Informasi" class="p-2 w-full block text-left" onclick="submenuMobileToggle('mobile-submenuinformasi')">
+            <button type="button" id="navbar-mobile-blog" title="Informasi" class="p-2 w-full block text-left">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Blog <ion-icon name="caret-down-outline"></ion-icon>
             </button>
             <div id="mobile-submenuinformasi" class="ml-6 border-l-2 border-black hidden">
@@ -135,37 +136,37 @@
         </div>
 
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="{{ route('artikel') }}" rel="follow" title="Artikel" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('artikel', now()->addMinutes(10)); }}" rel="follow" title="Artikel" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Artikel
             </a>
         </div>
-    
+
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="{{ route('mengenai_kami') }}" rel="follow" title="Mengenai Kami" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('mengenai_kami', now()->addMinutes(10)); }}" rel="follow" title="Mengenai Kami" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Mengenai Kami
             </a>
         </div>
-    
+
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="{{ route('layanan') }}" rel="follow" title="Layanan" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('layanan', now()->addMinutes(10)); }}" rel="follow" title="Layanan" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Layanan
             </a>
         </div>
-    
+
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="{{ route('linkpsikotes') }}" rel="follow" title="Link Psikotest" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('linkpsikotes', now()->addMinutes(10)); }}" rel="follow" title="Link Psikotest" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Link Psikotest
             </a>
         </div>
-    
+
         <div class="pb-2 mb-2 hover:bg-blue-100">
-            <a href="{{ route('kontak') }}" rel="follow" title="Kontak" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('kontak', now()->addMinutes(10)); }}" rel="follow" title="Kontak" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Kontak
             </a>
         </div>
-    
+
         <div class="pb-2 hover:bg-blue-100">
-            <a href="{{ route('layanan_psikotessim') }}" rel="follow" title="Biro Psikotes SIM" class="p-2 w-full block">
+            <a href="{{ URL::temporarySignedRoute('layanan_psikotessim', now()->addMinutes(10)); }}" rel="follow" title="Biro Psikotes SIM" class="p-2 w-full block">
                 <ion-icon name="return-up-forward-outline"></ion-icon> Biro Psikotes SIM
             </a>
         </div>
@@ -175,11 +176,11 @@
 <script>
     function toPeserta() {
         try {
-            const path = '{{ $path }}'; // Use a valid path or domain option if needed
-            const domain = '{{ $domain }}';
-            Cookies.set('ispeserta', true, { expires: 1, path: path, secure: true, sameSite: 'strict' });
-            localStorage.setItem('ispeserta', true);
-            window.location.href = "{{ route('peserta') }}";
+            const path = `{{ env('SESSION_PATH') }}`; // Use a valid path or domain option if needed
+            const domain = `{{ env('SESSION_DOMAIN') }}`;
+            Cookies.set('poa-ipt', AES(true), { expires: 1, path: path, secure: true, sameSite: 'strict' });
+            localStorage.setItem('poa-ipt', AES(true));
+            window.location.href = "{{ URL::signedRoute('peserta', absolute: true) }}";
         }
         catch(error) {
             console.error(error);
@@ -235,4 +236,16 @@
             cancelButtonColor: '#d33',
         });
     }
+
+    document.getElementById('desktop-peserta').addEventListener('click', () => toPeserta());
+    document.getElementById('mobile-peserta').addEventListener('click', () => toPeserta());
+
+    document.getElementById('navbar-desktop-peserta').addEventListener('click', () => submenuToggle('submenupeserta'));
+    document.getElementById('navbar-mobile-peserta').addEventListener('click', () => submenuMobileToggle('mobile-submenupeserta'));
+
+    document.getElementById('navbar-desktop-blog').addEventListener('click', () => submenuToggle('submenuinformasi'));
+    document.getElementById('navbar-mobile-blog').addEventListener('click', () => submenuMobileToggle('mobile-submenuinformasi'));
 </script>
+{{-- <script defer nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/sweetalert2" integrity="sha512-rBcqrtFFt2PxFGp3ffb/lECz3pYr2DoF1FWmnMLy6qVdAOnaQg2C4wK84m64K36aK0qxkImFrlb/AKgOoeTvSg==" crossorigin="anonymous"></script> --}}
+{{-- <script defer nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js" integrity="sha512-nlp9/l96/EpjYBx7EP7pGASVXNe80hGhYAUrjeXnu/fyF5Py0/RXav4BBNs7n5Hx1WFhOEOWSAVjGeC3oKxDVQ==" crossorigin="anonymous"></script> --}}
+{{-- <script nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script> --}}

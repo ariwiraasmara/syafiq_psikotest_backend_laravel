@@ -263,7 +263,7 @@
                 sessionStorage.removeItem(`waktupengerjaan_kolom3`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom4`);
                 sessionStorage.removeItem(`waktupengerjaan_kolom5`);
-                window.location.href = `{{ route('peserta_psikotest_kecermatan', ['sesi'=>1]) }}`;
+                window.location.href = `/public/peserta/psikotest/kecermatan/1`;
             }
             catch(err) {
                 console.info('Terjadi Error Peserta-continueSession:', err);

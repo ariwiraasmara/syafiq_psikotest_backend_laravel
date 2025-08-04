@@ -19,17 +19,31 @@
             <div class="mt-4 md:flex md:flex-row">
                 <div class="md:mb-2">
                     <div class="p-2 mb-4 justify-items-center items-center">
-                        <img src="{{ asset('images/Syafiq Marzuki.png') }}" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                        <picture class="block text-center">
+                            <source srcset="{{ asset('images/Syafiq_Marzuki.webp') }}" type="image/webp" />
+                            <img src="{{ asset('images/Syafiq_Marzuki.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
+                        </picture>
                     </div>
                     <div class="p-2 mb-4 justify-items-center items-center">
-                        <img src="{{ asset('images/HPI.jpg') }}" class="border-2 border-black shadow-xl" width="200" height="350" title="HPI" alt="HPI" />
+                        <picture class="block text-center">
+                            <source srcset="{{ asset('images/HPI.webp') }}" type="image/webp" />
+                            <img src="{{ asset('images/HPI.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black shadow-xl" width="200" height="350" title="HPI" alt="HPI" />
+                        </picture>
                     </div>
                 </div>
                 <div class="md:p-4">
-                    <p class="mt-4">{!! $data[0] !!}</p>
-                    <p class="mt-4">{!! $data[1] !!}</p>
-                    <p class="mt-4">{!! $data[2] !!}</p>
-                    <p class="mt-4">{!! $data[3] !!}</p>
+                    <p class="mt-4">
+                        <strong>LPT SOLUSI Banten</strong> adalah Lembaga Psikologi Terapan yang sudah terpercaya dan terkenal sejak tahun 2006. Lokasi Kantor dan Klinik Pelayanan Lembaga Psikologi ini berlokasi di Kota Serang Banten.
+                    </p>
+                    <p class="mt-4">
+                        <strong>LPT SOLUSI Banten</strong> di dukung oleh Psikolog yang dilengkapi SIPP dari HIMPSI dan beberapa telah memiliki sertifikat dari BNSP RI. Selain itu juga di bantu oleh Assisten Psikolog serta tenaga ahli berpengalaman dalam bidang psikologi dan human resource management. Saat ini LPT SOLUSI bermitra dengan beberapa Lembaga atau Biro Konsultasi Psikologi lainnya maupun Rumah Sakit yang ada di Banten untuk kasus tertentu.
+                    </p>
+                    <p class="mt-4">
+                        <strong>LPT SOLUSI Banten</strong> telah banyak menangani konseling individual, konseling kelompok, konseling perkawinan, konseling industri, psikotest pendidikan, psikotest industri, workshop, seminar, parenting, outbound, pendampingan individual dan berbagai jenis terapi hingga terapi tumbuh kembang.
+                    </p>
+                    <p class="mt-4">
+                        <strong>LPT SOLUSI Banten</strong> memiliki kantor pusat di Kota Serang Banten, kantor cabang di Depok Jakarta Selatan dan kantor cabang operasional yang ada di kota Serang sendiri.
+                    </p>
                 </div>
             </div>
         </div>

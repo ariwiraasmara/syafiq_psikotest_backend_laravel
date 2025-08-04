@@ -19,7 +19,7 @@
             <h3 class="mt-6 text-center font-bold">Cek Data Psikotes SIM</h3>
 
             <div class="mt-6 justify-items-center">
-                <iframe title="@hobibaca, 3 Kunci Kesuksesan" width="750" height="422" src="https://www.youtube.com/embed/v9WPF_JOrM4?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="" class="rounded-xl shadow-xl"></iframe>
+                <iframe title="@hobibaca, 3 Kunci Kesuksesan" src="https://www.youtube.com/embed/v9WPF_JOrM4?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="" class="rounded-xl shadow-xl w-full" style="height: 500px;"></iframe>
             </div>
 
             <div class="mt-6">
@@ -41,7 +41,7 @@
                     <li><a href="https://docs.google.com/spreadsheets/d/1maIs5qM-OI6EdwDO292q9j8_qt3Z1FF_y2uBHaPPV3M/edit?usp=sharing" class="text-blue-800 hover:text-blue-500">Data Simling Pandeglang</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/13-EI5VBwQ8GLaec6EfuV4SxkTocA3z5FSb8EsikJhhI/edit?usp=sharing" class="text-blue-800 hover:text-blue-500">Data Simling Kota Serang 1</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/15dBbnqmX91UdccL128Mr6_u0tDrwnraUGl-mmI5FEvM/edit?usp=sharing" class="text-blue-800 hover:text-blue-500">Data Simling Kota Serang 2</a></li>
-                    </ol>
+                </ol>
             </div>
         </div>
     </div>

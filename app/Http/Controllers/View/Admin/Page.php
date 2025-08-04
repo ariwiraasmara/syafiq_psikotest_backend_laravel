@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\View\View;
 use App\Models\User;
 use App\Services\useractivitiesService;
@@ -40,6 +41,7 @@ class Page extends Controller {
     protected $titlepage, $path, $domain, $unique, $data;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
     protected $robots;
+    protected $headerLog, $activitiesLog;
     public function __construct(
         Request $request,
         branding $brand,
@@ -65,32 +67,39 @@ class Page extends Controller {
         $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
 
         // ?
+        $this->headerLog = [
+            'tanggal'       => date('Y-m-d H:i:s'),
+            'host'          => $request->host(),
+            'id_user'       => 0,
+            'nama'          => 'Tamu',
+            'email'         => '-',
+            'roles_user'    => 0,
+            'ip_address'    => $request->ip(),
+        ];
+
+        $this->activitiesLog = [
+            'id_user'       => $this->id,
+            'last_path'     => $request->path(),
+            'last_url'      => $request->fullUrl(),
+            'last_page'     => $this->titlepage,
+            'method_page'   => 'Web - '.$request->method(),
+            'deskripsi'     => 'read : halaman login admin. sepertinya mau login?',
+            'body_content'  => json_encode($request->all())
+        ];
+
         $this->udl = new userdeviceloggingService(
-            0, date('Ymd'),
-            [
-                'tanggal'       => date('Y-m-d H:i:s'),
-                'host'          => $request->host(),
-                'id_user'       => $this->id,
-                'nama'          => 'Tamu',
-                'email'         => '-',
-                'roles_user'    => 0,
-                'ip_address'    => $request->ip(),
-            ],
-            [
-                'last_path'     => $request->path(),
-                'last_url'      => $request->fullUrl(),
-                'last_page'     => $this->titlepage,
-                'method_page'   => $request->method(),
-                'ngapain'       => 'read. sepertinya mau login?',
-                'body_content'  => json_encode($request->all())
-            ]
+            $this->id,
+            date('Ymd'),
+            $this->headerLog,
+            $this->activitiesLog
         );
     }
 
     public function reactView(Request $request): Inar|JsonResponse|Collection|array|String|int|null {
         if( isset($_COOKIE['_pas-g1']) &&
             isset($_COOKIE['_pas-m2']) &&
-            isset($_COOKIE['_pas-t3'])
+            isset($_COOKIE['_pas-t3']) &&
+            $request->session()->has('id')
         ) {
             return redirect()->route('admin_dashboard');
         }
@@ -122,11 +131,12 @@ class Page extends Controller {
     public function bladeView(Request $request): View|Response|JsonResponse|Collection|array|String|int|null {
         if( isset($_COOKIE['_pas-g1']) &&
             isset($_COOKIE['_pas-m2']) &&
-            isset($_COOKIE['_pas-t3'])
+            isset($_COOKIE['_pas-t3']) &&
+            $request->session()->has('id')
         ) {
             return redirect()->route('admin_dashboard');
         }
-        
+
         $date = date('d');
         if( ($date == 1) || ($date == 15) ) {
             if(!$request->session()->has('is_generatate_sitemap') || now()->greaterThanOrEqualTo($request->session()->get('is_generatate_sitemap_expiry'))) {
@@ -154,6 +164,24 @@ class Page extends Controller {
                     'password'  => 'required|string',
                 ]);
                 if($credentials) {
+                    $key = 'login-attempts:' . $request->ip();
+
+                    if (RateLimiter::tooManyAttempts($key, 5)) { // max 5 percobaan
+                        $seconds = RateLimiter::availableIn($key);
+                        return redirect('/admin')->with('error', "Terlalu banyak percobaan login. Coba lagi setelah $seconds detik.");
+                        // return response()->json([
+                        //     'message' => "Terlalu banyak percobaan login. Coba lagi setelah $seconds detik."
+                        // ], 429);
+                    }
+                
+                    // cek kredensial login
+                    if (!Auth::attempt($request->only('email', 'password'))) {
+                        RateLimiter::hit($key, 300); // blok selama 300 detik = 5 menit
+                        return response()->json(['message' => 'Login gagal!'], 401);
+                    }
+                
+                    RateLimiter::clear($key);
+                    
                     $login_at = date('Y-m-d H:i:s');
                     $filename = date('Ymd');
                     $data = $this->service->login([
@@ -168,7 +196,7 @@ class Page extends Controller {
                         if(Auth::attempt($credentials, true)) {
                             $user = Auth::user();
                             Auth::login($user, true);
-                            $userDetil = $this->service->detail('id', $data['data'][0]['id']);
+                            $userDetil = $this->service->profil($data['data'][0]['id']);
                             // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
                             $pat = $this->patService->get(['name' => $request->email]);
                             $tokenExpire = $pat[0]['expires_at'];
@@ -275,7 +303,7 @@ class Page extends Controller {
                     }
                 }
                 else {
-                    return redirect('/admin')->with('error', 'Terjadi Kesalahan!');
+                    return redirect('/admin')->with('error', 'Invalid Credentials!');
                 }
             // }
             // else {
@@ -294,7 +322,7 @@ class Page extends Controller {
     }
 
     public function __destruct() {
-        $this->udl->print();
+        $this->udl->print($this->activitiesLog);
         $this->service   = null;
         $this->data      = null;
         $this->titlepage = null;

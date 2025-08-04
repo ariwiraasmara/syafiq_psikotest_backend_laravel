@@ -61,35 +61,33 @@
                     </thead>
 
                     <tbody id="data-body">
-                        @if(!empty($jawaban))
-                            @foreach($jawaban as $data)
-                                <tr>
-                                    <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">{{ $numbertable; }}</td>
-                                    <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
-                                        {{ $data['soal_jawaban']['soal'][0][0]; }},
-                                        {{ $data['soal_jawaban']['soal'][0][1]; }},
-                                        {{ $data['soal_jawaban']['soal'][0][2]; }},
-                                        {{ $data['soal_jawaban']['soal'][0][3]; }}
-                                    </td>
-                                    <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
-                                        {{ $data['soal_jawaban']['jawaban']; }}
-                                    </td>
-                                    <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
-                                        <a href="{{ route('admin_psikotest_kecermatan_detil_edit', ['id1' => $id, 'id2' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" title="{{ 'Edit Soal & Jawaban ' }}">
-                                            <ion-icon name="pencil-outline"></ion-icon>
-                                            <span class="hidden">Edit</span>
-                                        </a>
-                                    </td>
-                                    <td class="text-center p-2" style="border-bottom: 1px solid #aaa;">
-                                        <span onclick="fDelete('{{ $id }}', '{{ myfunction::enval($data['id'], true); }}', '{{ $data['soal_jawaban']['soal'][0][0]; }}', '{{ $data['soal_jawaban']['soal'][0][1]; }}', '{{ $data['soal_jawaban']['soal'][0][2]; }}', '{{ $data['soal_jawaban']['soal'][0][3]; }}', '{{ $data['soal_jawaban']['jawaban']; }}')">
-                                            <ion-icon name="trash-outline"></ion-icon>
-                                            <span class="hidden">Delete</span>
-                                        </span>
-                                    </td>
-                                </tr>
-                                @php $numbertable++; @endphp
-                            @endforeach
-                        @else
+                        @forelse($jawaban as $data)
+                            <tr>
+                                <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">{{ $numbertable; }}</td>
+                                <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
+                                    {{ $data['soal_jawaban']['soal'][0][0]; }},
+                                    {{ $data['soal_jawaban']['soal'][0][1]; }},
+                                    {{ $data['soal_jawaban']['soal'][0][2]; }},
+                                    {{ $data['soal_jawaban']['soal'][0][3]; }}
+                                </td>
+                                <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
+                                    {{ $data['soal_jawaban']['jawaban']; }}
+                                </td>
+                                <td class="text-center p-2" style="border-bottom: 1px solid #aaa; border-right: 2px solid #000;">
+                                    <a href="{{ route('admin_psikotest_kecermatan_detil_edit', ['id1' => $id, 'id2' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" title="{{ 'Edit Soal & Jawaban ' }}">
+                                        <ion-icon name="pencil-outline"></ion-icon>
+                                        <span class="hidden">Edit</span>
+                                    </a>
+                                </td>
+                                <td class="text-center p-2" style="border-bottom: 1px solid #aaa;">
+                                    <span onclick="fDelete('{{ $id }}', '{{ myfunction::enval($data['id'], true); }}', '{{ $data['soal_jawaban']['soal'][0][0]; }}', '{{ $data['soal_jawaban']['soal'][0][1]; }}', '{{ $data['soal_jawaban']['soal'][0][2]; }}', '{{ $data['soal_jawaban']['soal'][0][3]; }}', '{{ $data['soal_jawaban']['jawaban']; }}')">
+                                        <ion-icon name="trash-outline"></ion-icon>
+                                        <span class="hidden">Delete</span>
+                                    </span>
+                                </td>
+                            </tr>
+                            @php $numbertable++; @endphp
+                        @empty
                             <tr>
                                 <td colspan="5" class="text-center p-2">
                                     <h2 class="font-bold text-center text-lg text-black">
@@ -97,7 +95,7 @@
                                     </h2>
                                 </td>
                             </tr>
-                        @endif
+                        @endforelse
                     </tbody>
 
                     <tfooter id="data-footer">

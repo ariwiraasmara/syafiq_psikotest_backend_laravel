@@ -30,22 +30,11 @@ Berikut adalah header yang diperlukan dalam menjalankan aplikasi ini :
 4. UserRememberTokenCheck,**
    Header yang digunakan untuk mengecek ketersediaan dan validasi `remember-token`
 
-5. Pranker,**
-   Header yang digunakan untuk meningkatkan keamanan. Yang harus ditambahkan :
-   1. `--unique--` => `I am unique!`
-   2. `isvalid` => `VALID!`
-   3. `isallowed` => any
-   4. `key` => any
-   5. `values` => any
-   6. `isdumb` => `no`
-   7. `challenger` => `of course`
-   8. `pranked` => `absolutely`
-   
-6. LogRequest,**
+5. LogRequest,**
    Header yang digunakan untuk menangkap dan menerima semua request.
 
-7. CacheControlMiddleware::class,**
+6. CacheControlMiddleware::class,**
    Header yang digunakan untuk set `Cache-Control` dengan maksimal usia 3600 dan bersifat publik `(public, max-age=3600)`
    
-8. CSRF_Check,**
+7. CSRF_Check,**
    Header yang digunakan untuk mengecek ketersediaan dan validasi csrf guna menghindari serangan XSS (Cross Site Scripting).

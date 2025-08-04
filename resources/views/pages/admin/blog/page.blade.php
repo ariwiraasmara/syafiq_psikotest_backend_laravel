@@ -68,50 +68,47 @@
         </div>
         <div style="margin-top: 30px">
             <div id="data-container">
-                @if($data)
-                    @foreach($data as $data)
-                        <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 mb-4 border-black shadow-xl">
-                            <div class="static">
-                                <div>
-                                    <span class="font-bold">{{ $data['title'] }}</span><br/>
-                                    <span class="">Kategori: {{ $data['category'] }}</span><br/>
-                                    <span class="">Oleh : {{ $data['name'] }}</span><br/>
-                                    <span class="italic">Dibuat: {{ myfunction::formatTimestamp($data['created_at']) }}</span><br/>
-                                    @if(($data['updated_at'] == $data['created_at']) || ($data['updated_at'] == null))
-                                        <span class="italic">Diperbaharui:</span>
-                                    @else
-                                        <span class="italic">Diperbaharui: {{ myfunction::formatTimestamp($data['updated_at']) }}</span>
-                                    @endif
-                                </div>
-                                <div class="text-center text-xs" style="margin-top: 10px;">
-                                    @php
-                                        if($data['status'] == 'draft') echo '<span class="p-2 rounded-lg" style="background-color: #aaa;">Draft</span>';
-                                        else if($data['status'] == 'public') echo '<span class="p-2 rounded-lg" style="background-color: #0f0;">Public</span>';
-                                        else if($data['status'] == 'deleted')echo '<span class="p-2 rounded-lg" style="background-color: #f33;">Deleted</span>';
-                                    @endphp
-                                    <a href="{{ route('admin_blog_detail', ['id' => myfunction::enval($data['id'], true)]); }}" rel="follow" class="p-2 rounded-lg bg-blue-700 text-white text-center" style="margin-left: 5px;">
-                                        <span class="">Detil</span>
-                                    </a>
-                                    <a href="{{ route('admin_blog_edit', ['id' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" class="p-2 rounded-lg bg-blue-700 text-white text-center" style="margin-right: 5px; margin-left: 5px;">
-                                        <ion-icon name="pencil-outline"></ion-icon>
-                                        <span class="hidden">Edit</span>
-                                    </a>
-                                    <span onclick="fDelete('{{ myfunction::enval($data['id'], true); }}', '{{ $data['title']; }}')" class="p-2 rounded-lg bg-pink-700 text-white text-center">
-                                        <ion-icon name="trash-outline"></ion-icon>
-                                        <span class="hidden">Delete</span>
-                                    </span>
-                                </div>
+                @forelse ($data as $data)
+                    <div class="bg-slate-50 border-b-2 p-3 rounded-t-md mt-2 mb-4 border-black shadow-xl">
+                        <div class="static">
+                            <div>
+                                <span class="font-bold">{{ $data['title'] }}</span><br/>
+                                <span class="">Kategori: {{ $data['category'] }}</span><br/>
+                                <span class="">Oleh : {{ $data['name'] }}</span><br/>
+                                <span class="italic">Dibuat: {{ myfunction::formatTimestamp($data['created_at']) }}</span><br/>
+                                @if(($data['updated_at'] == $data['created_at']) || ($data['updated_at'] == null))
+                                    <span class="italic">Diperbaharui:</span>
+                                @else
+                                    <span class="italic">Diperbaharui: {{ myfunction::formatTimestamp($data['updated_at']) }}</span>
+                                @endif
+                            </div>
+                            <div class="text-center text-xs" style="margin-top: 10px;">
+                                @php
+                                    if($data['status'] == 'draft') echo '<span class="p-2 rounded-lg" style="background-color: #aaa;">Draft</span>';
+                                    else if($data['status'] == 'public') echo '<span class="p-2 rounded-lg" style="background-color: #0f0;">Public</span>';
+                                    else if($data['status'] == 'deleted')echo '<span class="p-2 rounded-lg" style="background-color: #f33;">Deleted</span>';
+                                @endphp
+                                <a href="{{ route('admin_blog_detail', ['id' => myfunction::enval($data['id'], true)]); }}" rel="follow" class="p-2 rounded-lg bg-blue-700 text-white text-center" style="margin-left: 5px;">
+                                    <span class="">Detil</span>
+                                </a>
+                                <a href="{{ route('admin_blog_edit', ['id' => myfunction::enval($data['id'], true)]); }}" rel="nofollow" class="p-2 rounded-lg bg-blue-700 text-white text-center" style="margin-right: 5px; margin-left: 5px;">
+                                    <ion-icon name="pencil-outline"></ion-icon>
+                                    <span class="hidden">Edit</span>
+                                </a>
+                                <span onclick="fDelete('{{ myfunction::enval($data['id'], true); }}', '{{ $data['title']; }}')" class="p-2 rounded-lg bg-pink-700 text-white text-center">
+                                    <ion-icon name="trash-outline"></ion-icon>
+                                    <span class="hidden">Delete</span>
+                                </span>
                             </div>
                         </div>
-                    @endforeach
-                @else
-                    <div class="mt-6">
+                    </div>
+                @empty
+                    <div class="mt-2">
                         <div class="p-4 bg-white text-center text-black text-xl shadow-xl">
-                            Belum Ada Data<br/>
-                            Silahkan Buat Satu Data Baru
+                            Belum Ada Data Blog!
                         </div>
                     </div>
-                @endif
+                @endforelse
             </div>
         </div>
         <button type="button" class="fab bg-blue-700" style="{{ $style_fab }}" onclick="window.location.href = '{{ route('admin_blog_baru') }}'">

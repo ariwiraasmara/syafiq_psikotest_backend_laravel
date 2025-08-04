@@ -60,7 +60,7 @@ class Logout extends Controller {
     public function reactView(Request $request) {
         // $domain = '9002-idx-umkmku-1726831788791.cluster-a3grjzek65cxex762e4mwrzl46.cloudworkstations.dev';
         Auth::logout();
-        // $request->session()->flush();
+        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return Inertia::render('logout/page');
@@ -68,8 +68,10 @@ class Logout extends Controller {
 
     public function bladeView(Request $request) {
         Auth::logout();
+        $request->session()->flush();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        
         return redirect()->route('home')
                 ->cookie('_pas-m5', null, -1, $this->path, $this->domain, true, true, false, 'Strict')
                 ->cookie('_pas-m2', null, -1, $this->path, $this->domain, true, true, false, 'Strict')

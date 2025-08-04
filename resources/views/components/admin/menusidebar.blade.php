@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="p-2" id="nav-admin-blog">
-                    <a href="{{ route('admin_blog', ['sort' => 'title', 'by' => 'asc', 'search' => '-']) }}?page=1" rel='follow' title="Halaman Variabel | Admin">
+                    <a href="{{ route('admin_blog', ['sort' => 'title', 'by' => 'asc', 'search' => '-']) }}?page=1" rel='follow' title="Halaman Blog | Admin">
                         <span class="">
                             <ion-icon name="file-tray-outline"></ion-icon>
                         </span>
@@ -36,13 +36,24 @@
                     </a>
                 </li>
                 @if($roles == 1)
-                    <li class="p-2" id="nav-monitor-userlogactivities">
-                        <a href="{{ route('admin_monitor_userlog_activities', ['sort' => 'Users.name', 'by' => 'asc', 'search' => '-', 'page'=>1]) }}" rel='follow' title="Halaman Variabel | Admin">
-                            <span class="">
-                                <ion-icon name="desktop-outline"></ion-icon>
-                            </span>
-                            <span class="">Monitor User Log Activities</span>
-                        </a>
+                    <li class="p-2">
+                        <span class="">
+                            <ion-icon name="desktop-outline"></ion-icon>
+                        </span>
+                        <span class="">Monitor</span>
+
+                        <ul class="border-t-2 border-b-2 border-white">
+                            <li class="p-2 ml-2" id="nav-monitor-userlogactivities">
+                                <a href="{{ route('admin_monitor_userlog_activities', ['sort' => 'Users.name', 'by' => 'asc', 'search' => '-', 'page'=>1]) }}" rel='follow' title="Halaman Monitor User Log Activities | Admin">
+                                    <span class="text-base">User Log Activities</span>
+                                </a>
+                            </li>
+                            <li class="p-2 ml-2" id="nav-monitor-guestlogactivities">
+                                <a href="{{ route('admin_monitor_guestlog_activities') }}" rel='follow' title="Halaman Monitor Guest Log Activities | Admin">
+                                    <span class="">Guest Log Activities</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="p-2">
                         <span class="">
@@ -51,7 +62,7 @@
                         <span class="">Setting</span>
                         <ul class="border-t-2 border-b-2 border-white">
                             <li class="p-2 ml-2" id="nav-admin-anggota">
-                                <a href="{{ route('admin_anggota', ['sort' => 'name', 'by' => 'asc', 'search' => '-']) }}?page=1" rel='follow' title="Halaman Variabel | Admin">
+                                <a href="{{ route('admin_anggota', ['sort' => 'name', 'by' => 'asc', 'search' => '-']) }}?page=1" rel='follow' title="Halaman Admin | Admin">
                                     <span class="text-base">Admin</span>
                                 </a>
                             </li>

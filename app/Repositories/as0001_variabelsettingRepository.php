@@ -16,7 +16,7 @@ class as0001_variabelsettingRepository {
         $this->model = $model;
     }
 
-    public function all(String $sort = 'variabel', String $by = 'asc', String $search): array|Collection|String|int|null {
+    public function all(String $sort = 'variabel', String $by = 'asc', String $search = null): array|Collection|String|int|null {
         try {
             if($this->model->first()) {
                 if($search == 'null' || $search == '-' || $search == '' || $search == ' ' || $search == null || empty($search) || is_null($search)) {

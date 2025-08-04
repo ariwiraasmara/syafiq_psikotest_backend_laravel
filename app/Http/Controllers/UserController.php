@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Log;
 use App\Services\userService;
 use App\Services\useractivitiesService;
 use App\Services\userdevicehistoryService;
-use App\Services\userdeviceloggingService;
 use App\Services\personalaccesstokensService;
 use App\Services\as1001_peserta_profilService;
 use App\Libraries\branding;
@@ -30,7 +29,6 @@ class UserController extends Controller {
     protected userService|null $service;
     protected useractivitiesService|null $activity;
     protected userdevicehistoryService|null $devicehistory;
-    protected userdeviceloggingService|null $devicelogging;
     protected personalaccesstokensService|null $patService;
     protected as1001_peserta_profilService|null $pesertaService;
     protected branding $brand;
@@ -41,7 +39,6 @@ class UserController extends Controller {
         as1001_peserta_profilService $pesertaService,
         useractivitiesService $activity,
         userdevicehistoryService $devicehistory,
-        userdeviceloggingService $devicelogging,
         branding $brand
     ) {
         // ?
@@ -50,7 +47,6 @@ class UserController extends Controller {
         $this->pesertaService = $pesertaService;
         $this->activity = $activity;
         $this->devicehistory = $devicehistory;
-        $this->devicelogging = $devicelogging;
         $this->brand = $brand;
 
         // ?
@@ -565,7 +561,7 @@ class UserController extends Controller {
         try {
             $credentials = $request->validate([
                 'unique' => 'required',
-                'foto'   => 'required',
+                'foto'   => 'required|mimes:png,webp|max:2048',
             ]);
             if($credentials) {
                 $data = $this->service->get($id);
@@ -702,12 +698,14 @@ class UserController extends Controller {
                     'login_at'   => $login_at,
                     'filename'   => $filename
                 ]);
+                // return $data['success'];
                 if($data['success'] > 0) {
                     if(Auth::attempt($credentials, true)) {
                         $user = Auth::user();
                         Auth::login($user, true);
                         $userDetil = $this->service->detail('id', $data['data'][0]['id']);
                         // $token = fun::encrypt($user->createToken($request->email, ['server:update'])->plainTextToken);
+                        // return $userDetil['user'][0];
                         $pat = $this->patService->get(['name' => $request->email]);
                         $tokenExpire = $pat[0]['expires_at'];
                         if($pat[0]['expires_at'] == date('Y-m-d 00:00:00')) {
@@ -733,8 +731,8 @@ class UserController extends Controller {
                             'nama'         => $data['data'][0]['name'],
                             'email'        => $data['data'][0]['email'],
                             'roles'        => $data['data'][0]['roles'],
-                            'no_identitas' => $userDetil[0]['no_identitas'],
-                            'foto'         => $userDetil[0]['foto'],
+                            'no_identitas' => $userDetil['user'][0]['no_identitas'],
+                            'foto'         => $userDetil['user'][0]['foto'],
                             'admin'        => 1,
                         ];
 
@@ -764,7 +762,7 @@ class UserController extends Controller {
                             'ip_address' => $request->ip(),
                             'path'       => $request->path(),
                             'url'        => $request->fullUrl(),
-                            'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                            'page'       => 'Login | Admin'.$this->titlepage,
                             'event'      => 'API - '.$request->method(),
                             'deskripsi'  => 'login : masuk sistem admin user : '.$data['data'][0]['name'],
                             'properties' => json_encode($request->all())
@@ -825,7 +823,9 @@ class UserController extends Controller {
     #url = '/api/logout/'
     public function logout(Request $request): Response|JsonResponse|String|int|null {
         try {
-            Auth::logout();
+            if ($request->user() && $request->user()->token()) {
+                $request->user()->token()->revoke();
+            }
             $response = new Response([
                 'success' => 1,
                 'pesan'   => 'Akhirnya Logout!',
@@ -869,15 +869,16 @@ class UserController extends Controller {
 
     #GET
     #url = '/api/dashboard_admin/'
-    public function dashboard(Request $request): Response|JsonResponse|String|int|null {
+    public function dashboard(Request $request) {
         try {
-            $token = msr::read($request->bearerToken());
+            // return $request->header('Bearer-Token');
+            $token = msr::read($request->header('Bearer-Token'));
             $this->activity->store([
-                'id_user'    => $token['id'],
+                'id_user'    => $token[0]['id'],
                 'ip_address' => $request->ip(),
                 'path'       => $request->path(),
                 'url'        => $request->fullUrl(),
-                'page'       => $request->header()['titlepage'][0].$this->titlepage,
+                'page'       => 'Dashboard | Admin'.$this->titlepage,
                 'event'      => 'API - '.$request->method(),
                 'deskripsi'  => 'read : melihat data di halaman dashboard',
                 'properties' => json_encode($request->all())
@@ -885,7 +886,7 @@ class UserController extends Controller {
             return jsr::print([
                 'success' => 1,
                 'pesan'   => 'Dashboard!',
-                'profil'  => fun::readable($request->cookie('nama')).', '.fun::readable($request->cookie('email')),
+                'by_user' => Crypt::decrypt(fun::denval($request->header('X-Chiron-F1'), true)),
                 'data'    => $this->pesertaService->allLatest()
             ], 'ok');
         }
@@ -909,7 +910,6 @@ class UserController extends Controller {
         $this->pesertaService = null;
         $this->activity       = null;
         $this->devicehistory  = null;
-        $this->devicelogging  = null;
         $this->titlepage      = null;
         $this->path           = null;
         $this->domain         = null;

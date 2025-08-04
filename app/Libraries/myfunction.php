@@ -90,7 +90,7 @@ class myfunction {
     // SAFETY CONNECTION STRING FROM INJECTION
     public static function escape(String|float $str=null) {
         try {
-            return htmlspecialchars(htmlentities(addslashes($str)));
+            return htmlentities($str, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', true);
         }
         catch(Exception $e) {
             return "Error Function escape() : ".$e;
@@ -99,7 +99,7 @@ class myfunction {
 
     // READABLE FORMAT TEXT
     public static function readable($str=null) {
-        return html_entity_decode(htmlspecialchars_decode($str));
+        return html_entity_decode($str);
     }
 
     public static function rawtext($str=null) {

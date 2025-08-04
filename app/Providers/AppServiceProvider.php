@@ -1,5 +1,8 @@
 <?php
-
+// ! Copyright @
+// ! PT. Solusi Psikologi Banten
+// ! Syafiq Marzuki
+// ! Syahri Ramadhan Wiraasmara (ARI)
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Vite;

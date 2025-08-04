@@ -2,7 +2,7 @@
 // ! PT. Solusi Psikologi Banten
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
-import '../css/app.css';
+import '../css/app_react.css';
 // import './bootstrap';
 
 import { createInertiaApp } from '@inertiajs/react';

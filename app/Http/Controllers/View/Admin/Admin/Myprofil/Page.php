@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -120,6 +122,9 @@ class Page extends Controller {
 
     public function updateFoto(Request $request, $type, $id): Response|JsonResponse|String|int|null {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique' => 'required',
                 'foto'   => 'required',
@@ -142,7 +147,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'edit and update : data admin yang sudah ada.',
                         'properties' => json_encode($request->all())
                     ]);
@@ -157,7 +162,7 @@ class Page extends Controller {
                 }
             }
             else {
-                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Invalid Credentials!');
             }
         }
         catch(Exception $err) {
@@ -173,6 +178,9 @@ class Page extends Controller {
 
     public function updatePassword(Request $request, $id) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Unauthorized!');
+            }
             $credentials = $request->validate([
                 'unique'   => 'required',
                 'password' => 'required',
@@ -186,7 +194,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'edit and update : password baru pada akunku.',
                         'properties' => json_encode($request->all())
                     ]);
@@ -201,7 +209,7 @@ class Page extends Controller {
                 }
             }
             else {
-                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Invalid Credentials!');
             }
         }
         catch(Exception $err) {
@@ -217,6 +225,9 @@ class Page extends Controller {
 
     public function updateRememberToken(Request $request, $roles, $type) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Unauthorized!');
+            }
             if($this->roles == $roles) {
                 $res = $this->service->updateRememberToken($this->id);
                 if(($res != '') || ($res != null) || !is_null($res)) {
@@ -226,7 +237,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'update : remember token baru pada akunku.',
                         'properties' => json_encode($request->all())
                     ]);
@@ -241,7 +252,7 @@ class Page extends Controller {
                 }
             }
             else {
-                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Invalide Credentials!');
             }
         }
         catch(Exception $err) {
@@ -257,6 +268,9 @@ class Page extends Controller {
 
     public function updatePAT(Request $request, $roles, $type) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Unauthorized!');
+            }
             if($this->roles == $roles) {
                 $res = $this->service->updatePAT($this->id);
                 if(($res != '') || ($res != null) || !is_null($res)) {
@@ -266,7 +280,7 @@ class Page extends Controller {
                         'path'       => $request->path(),
                         'url'        => $request->fullUrl(),
                         'page'       => $this->titlepage,
-                        'event'      => $request->method(),
+                        'event'      => 'Web - '.$request->method(),
                         'deskripsi'  => 'update : Personal Access Token pada akunku.',
                         'properties' => json_encode($request->all())
                     ]);
@@ -281,7 +295,7 @@ class Page extends Controller {
                 }
             }
             else {
-                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Terjadi kesalahan! Tidak dapat menyimpan data!');
+                return redirect()->route('admin_myprofil', ['email' => $this->email])->with('error', 'Invalid Credentials!');
             }
         }
         catch(Exception $err) {

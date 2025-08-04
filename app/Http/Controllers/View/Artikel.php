@@ -13,6 +13,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\View\View;
+use App\Services\useractivitiesService;
 use App\Services\userdeviceloggingService;
 use App\Libraries\branding;
 use App\Libraries\myfunction as fun;
@@ -22,12 +23,19 @@ use Meta;
 
 class Artikel extends Controller {
     //
+    protected useractivitiesService|null $activity;
     protected userdeviceloggingService $udl;
     protected branding $brand;
     protected $titlepage, $path, $domain, $unique, $robots;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
-    public function __construct(Request $request, branding $brand) {
+    protected $headerLog, $activitiesLog;
+    public function __construct(
+        Request $request,
+        branding $brand,
+        useractivitiesService $activity
+    ) {
         $this->brand = $brand;
+        $this->activity = $activity;
 
         $this->titlepage = 'Artikel'.$this->brand->getTitlepage();
         $this->path = env('SESSION_PATH', '/');
@@ -35,7 +43,20 @@ class Artikel extends Controller {
         $this->unique = fun::random('combwisp', 50);
         $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
 
-        if($request->session()->has('id')) $this->id = $request->session()->get('id');
+        if($request->session()->has('id')) {
+            $this->id = $request->session()->get('id');
+
+            $this->activity->store([
+                'id_user'    => $this->id,
+                'ip_address' => $request->ip(),
+                'path'       => $request->path(),
+                'url'        => $request->fullUrl(),
+                'page'       => $this->titlepage,
+                'event'      => 'Web - '.$request->method(),
+                'deskripsi'  => 'read : halaman artikel.',
+                'properties' => json_encode($request->all())
+            ]);
+        }
         else $this->id = 0;
 
         if($request->session()->has('nama')) $this->nama = $request->session()->get('nama');
@@ -50,25 +71,31 @@ class Artikel extends Controller {
         if($request->session()->has('fileUDH')) $this->filename = $request->session()->has('fileUDH');
         else $this->filename = date('Ymd');
 
+        $this->headerLog = [
+            'tanggal'       => date('Y-m-d H:i:s'),
+            'host'          => $request->host(),
+            'id_user'       => $this->id,
+            'nama'          => $this->nama,
+            'email'         => $this->email,
+            'roles_user'    => $this->roles,
+            'ip_address'    => $request->ip(),
+        ];
+
+        $this->activitiesLog = [
+            'id_user'       => $this->id,
+            'last_path'     => $request->path(),
+            'last_url'      => $request->fullUrl(),
+            'last_page'     => $this->titlepage,
+            'method_page'   => 'Web - '.$request->method(),
+            'deskripsi'     => 'read : halaman artikel.',
+            'body_content'  => json_encode($request->all())
+        ];
+
         $this->udl = new userdeviceloggingService(
-            $this->id, $this->filename,
-            [
-                'tanggal'       => date('Y-m-d H:i:s'),
-                'host'          => $request->host(),
-                'id_user'       => $this->id,
-                'nama'          => $this->nama,
-                'email'         => $this->email,
-                'roles_user'    => $this->roles,
-                'ip_address'    => $request->ip(),
-            ],
-            [
-                'last_path'     => $request->path(),
-                'last_url'      => $request->fullUrl(),
-                'last_page'     => $this->titlepage,
-                'method_page'   => $request->method(),
-                'ngapain'       => 'read',
-                'body_content'  => json_encode($request->all())
-            ]
+            $this->id,
+            $this->filename,
+            $this->headerLog,
+            $this->activitiesLog
         );
     }
 
@@ -109,7 +136,7 @@ class Artikel extends Controller {
     }
 
     public function __destruct() {
-        $this->udl->print();
+        $this->udl->print($this->activitiesLog);
         $this->titlepage = null;
         $this->path = null;
         $this->domain = null;

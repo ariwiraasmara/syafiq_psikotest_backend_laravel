@@ -8,9 +8,9 @@
     <h2 class="font-bold text-center underline">Grafik Psikotest Kecermatan</h2>
 
     @if($hasiltes->isEmpty())
-    <div>
-        <h3 class="text-center font-bold text-black">Cari Datanya Dulu...</h3>
-    </div>
+        <div>
+            <h3 class="text-center font-bold text-black">Cari Datanya Dulu...</h3>
+        </div>
     @else
     <div>
         <div id="chartContainerNilai" style="overflow-x: scroll; width: 100%;">
