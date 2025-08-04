@@ -34,3 +34,6 @@ obfuscator.md
 .flaskenv*
 !.env.project
 !.env.vault
+.env.testing
+test_performance.jmx
+TODO.md
