@@ -133,15 +133,15 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->store([
-                    'name'          => $request->name,
-                    'email'         => $request->email,
-                    'no_identitas'  => $request->no_identitas,
-                    'roles'         => $request->roles,
-                    'jk'            => $request->jk,
-                    'alamat'        => $request->alamat,
-                    'status'        => $request->status,
-                    'agama'         => $request->agama,
-                    'foto'          => $request->foto
+                    'name'          => fun::escape($request->name),
+                    'email'         => fun::escape($request->email),
+                    'no_identitas'  => fun::escape($request->no_identitas),
+                    'roles'         => fun::escape($request->roles),
+                    'jk'            => fun::escape($request->jk),
+                    'alamat'        => fun::escape($request->alamat),
+                    'status'        => fun::escape($request->status),
+                    'agama'         => fun::escape($request->agama),
+                    'foto'          => fun::escape($request->foto)
                 ]);
                 if($data > 0) {
                     $this->activity->store([

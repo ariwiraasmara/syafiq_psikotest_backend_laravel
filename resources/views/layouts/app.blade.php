@@ -67,7 +67,7 @@
     </body>
 
     @if(env('APP_ENV') === 'production')
-        <script nonce="{{ base64_encode(random_bytes(16)) }}">
+        {{-- <script nonce="{{ base64_encode(random_bytes(16)) }}">
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
                 .then(() => console.log("✅ Service Worker registered"))
@@ -148,6 +148,6 @@
             });
 
         })();
-        </script>
+        </script> --}}
     @endif
 </html>

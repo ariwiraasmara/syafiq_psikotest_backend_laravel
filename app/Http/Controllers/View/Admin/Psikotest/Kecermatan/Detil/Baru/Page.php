@@ -134,16 +134,16 @@ class Page extends Controller {
             if($credentials) {
                 $soal_jawaban = [
                     'soal'=> [[
-                        intval($request->soalA),
-                        intval($request->soalB),
-                        intval($request->soalC),
-                        intval($request->soalD)
+                        intval(fun::escape($request->soalA)),
+                        intval(fun::escape($request->soalB)),
+                        intval(fun::escape($request->soalC)),
+                        intval(fun::escape($request->soalD))
                     ]],
-                    'jawaban'=> intval($request->jawaban)
+                    'jawaban'=> intval(fun::escape($request->jawaban))
                 ];
                 $id2001 = fun::denval($id, true);
                 $data = $this->service->store($id2001, [
-                    'id2001'       => $id2001,
+                    'id2001'       => fun::escape($id2001),
                     'soal_jawaban' => $soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
@@ -179,7 +179,7 @@ class Page extends Controller {
     }
 
     public function __destruct() {
-        $this->activity = null;
+        $this->activity  = null;
         $this->service   = null;
         $this->data      = null;
         $this->titlepage = null;

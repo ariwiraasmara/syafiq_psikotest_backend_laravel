@@ -10,7 +10,10 @@
 @media (min-width: 1024px) {
     body {
         background-color: rgba(200, 200, 255, 0.9);
-        background-image: url('./images/bg21.jpeg');
+        background-image: image-set(
+            url('../images/bg21.webp') type('image/webp'),
+            url('../images/bg21.png') type('image/png')
+        );
         background-attachment: fixed;
         font-family: Georgia, Helvetica, sans-serif;
         background-size: cover;
@@ -22,7 +25,10 @@
 @media (max-width: 767px) {
     body {
         background-color: rgba(200, 200, 255, 0.9);
-        background-image: url('./images/bg20.jpeg');
+        background-image: background-image: image-set(
+            url('../images/bg20.webp') type('image/webp'),
+            url('../images/bg20.png') type('image/png')
+        );
         background-attachment: fixed;
         font-family: Georgia, Helvetica, sans-serif;
         background-size: cover;

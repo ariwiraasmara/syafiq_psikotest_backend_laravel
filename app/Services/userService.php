@@ -350,10 +350,10 @@ class userService {
             $where   = array('email' => $val['email']);
             $cekUser = $this->repo1->get($where);
             if( is_null($cekUser) ) {
-                return collect(['pesan' => 'Email Salah!', 'error' => 1]); //'Wrong Username / Email';
+                return collect(['pesan' => 'Email Salah!', 'success' => 0, 'error' => 1]); //'Wrong Username / Email';
             }
             if (!Hash::check($val['pass'], $cekUser[0]['password'])) {
-                return collect(['pesan' => 'Password Salah! Silahkan Coba Lagi!', 'error' => 2]); //'Wrong Password!';
+                return collect(['pesan' => 'Password Salah! Silahkan Coba Lagi!', 'success' => 0, 'error' => 2]); //'Wrong Password!';
             }
 
             $this->repo3->store([

@@ -8,7 +8,10 @@
 <style>
 body {
     background-color: rgba(200, 200, 255, 0.9);
-    background-image: url('./images/bg19.webp');
+    background-image: image-set(
+        url('../images/bg19.webp') type('image/webp'),
+        url('../images/bg19.png') type('image/png')
+    );
     background-attachment: fixed;
     font-family: Georgia, Helvetica, sans-serif;
     background-size: cover;
@@ -33,9 +36,15 @@ body {
                         />
                     </div>
 
-                     @if(session('error'))
+                    @if(session('error'))
                         <div class="mt-4 font-bold text-center underline" style="color: rgba(200, 0, 0, 0.9);">
                             @php echo session('error') @endphp
+                        </div>
+                    @endif
+
+                    @if(!empty($try_login))
+                        <div class="mt-4 font-bold text-center underline" style="color: rgba(200, 0, 0, 0.9);">
+                            Tunggu {{ $try_login['waiting_time'] / 60 / 60 }} jam sebelum mencoba lagi.
                         </div>
                     @endif
 

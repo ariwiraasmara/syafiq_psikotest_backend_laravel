@@ -145,10 +145,10 @@ class Page extends Controller {
             }
             if($credentials) {
                 $data = $this->service->update(fun::denval($id, true), [
-                    'title'      => fun::readable($request->title),
-                    'category'   => fun::readable($request->category),
-                    'status'     => fun::readable($request->status),
-                    'content'    => fun::readable($request->content),
+                    'title'      => fun::escape($request->title),
+                    'category'   => fun::escape($request->category),
+                    'status'     => fun::escape($request->status),
+                    'content'    => fun::escape($request->content),
                 ]);
                 if($data > 0) {
                     $this->activity->store([

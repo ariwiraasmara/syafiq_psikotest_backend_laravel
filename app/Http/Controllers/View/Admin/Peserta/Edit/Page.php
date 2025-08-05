@@ -137,9 +137,9 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->update(fun::denval($id, true), [
-                    'email'         => fun::readable($request->email),
-                    'tgl_lahir'     => fun::readable($request->tgl_lahir),
-                    'asal'          => fun::readable($request->asal),
+                    'email'         => fun::escape($request->email),
+                    'tgl_lahir'     => fun::escape($request->tgl_lahir),
+                    'asal'          => fun::escape($request->asal),
                 ]);
                 if($data > 0) {
                     $this->activity->store([

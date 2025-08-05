@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
@@ -144,6 +145,11 @@ class Page extends Controller {
             }
         }
 
+        $try_login = 0;
+        if(Cache::has('try_login')) {
+            $try_login = Cache::get('try_login');
+        }
+
         return view('pages.admin.page', [
             'title'                => $this->titlepage,
             'pathURL'              => url()->current(),
@@ -151,42 +157,36 @@ class Page extends Controller {
             'onetime'              => true,
             'breadcrumb'           => '/admin',
             'is_breadcrumb_hidden' => 'hidden',
-            'unique'               => $this->unique
+            'unique'               => $this->unique,
+            'try_login'            => $try_login
         ]);
     }
 
     #POST
     public function login(Request $request, $type) {
         try {
+            // return Cache::get('try_login');
             // if(date('Y-m-d H:i:s') > $request->cookie('_pas-g1')) {
                 $credentials = $request->validate([
                     'email'     => 'required|string',
                     'password'  => 'required|string',
                 ]);
                 if($credentials) {
-                    $key = 'login-attempts:' . $request->ip();
+                    $try_login = null;
+                    if(Cache::has('try_login')) {
+                        $try_login = Cache::get('try_login');
 
-                    if (RateLimiter::tooManyAttempts($key, 5)) { // max 5 percobaan
-                        $seconds = RateLimiter::availableIn($key);
-                        return redirect('/admin')->with('error', "Terlalu banyak percobaan login. Coba lagi setelah $seconds detik.");
-                        // return response()->json([
-                        //     'message' => "Terlalu banyak percobaan login. Coba lagi setelah $seconds detik."
-                        // ], 429);
+                        if($try_login['retry'] > 2) {
+                            $waiting_time = $try_login['waiting_time'];
+                            return redirect('/admin')->with('error', "Terlalu banyak percobaan login. Coba lagi setelah $waiting_time detik.");
+                        }
                     }
-                
-                    // cek kredensial login
-                    if (!Auth::attempt($request->only('email', 'password'))) {
-                        RateLimiter::hit($key, 300); // blok selama 300 detik = 5 menit
-                        return response()->json(['message' => 'Login gagal!'], 401);
-                    }
-                
-                    RateLimiter::clear($key);
-                    
+
                     $login_at = date('Y-m-d H:i:s');
                     $filename = date('Ymd');
                     $data = $this->service->login([
-                        'email'      => fun::readable($request->email),
-                        'pass'       => fun::readable($request->password),
+                        'email'      => fun::escape($request->email),
+                        'pass'       => fun::escape($request->password),
                         'ip_address' => $request->ip(),
                         'user_agent' => $request->header('user-agent'),
                         'login_at'   => $login_at,
@@ -299,6 +299,34 @@ class Page extends Controller {
                         }
                     }
                     else {
+                        // Jika login gagal, simpan percobaan login
+                        if($try_login === null) {
+                            $try_login = [
+                                'ip_address'   => $request->ip(),
+                                'retry'        => 1,
+                            ];
+                            Cache::put('try_login', $try_login, 300);
+                            if($try_login['retry'] > 2) {
+                                $try_login = [
+                                    'ip_address'   => $request->ip(),
+                                    'retry'        => 3,
+                                    'waiting_time' => 12 * 24 * 60 * 60 // waktu tunggu dalam detik
+                                ];
+                                Cache::put('try_login', $try_login, 12 * 24 * 60 * 60);
+                                $waiting_time = $try_login['waiting_time'];
+                                return redirect('/admin')->with('error', "Terlalu banyak percobaan login. Coba lagi setelah $waiting_time detik.");
+                            }
+                        }
+                        else {
+                            $try_login['retry']++;
+                            Cache::put('try_login', $try_login, 300);
+                        }
+
+                        // if(Cache::has('try_login')) {
+                        //     $try_login = Cache::get('try_login');
+                        //     Cache::put('try_login', $try_login + 1, now()->addMinutes(5));
+                        // }
+
                         return redirect('/admin')->with('error', 'Terjadi Kesalahan! Email/Password Salah! Silahkan Coba Lagi!');
                     }
                 }

@@ -132,7 +132,7 @@ class Page extends Controller {
 
     public function delete(Request $request, $id1, $id2) {
         try {
-            if (!Gate::allows('is-super-admin', Auth::user())) {
+            if(!Gate::allows('is-super-admin', Auth::user())) {
                 return jsr::print([
                     'error' => 3,
                     'pesan' => 'Unauthorized!',

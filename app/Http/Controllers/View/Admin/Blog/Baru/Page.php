@@ -143,14 +143,14 @@ class Page extends Controller {
                 ]);
             }
             if($credentials) {
-                $created_at = now();
+                $created_at = date('Y-m-d H:i:s');
                 if($request->tgl_publikasi != null) $created_at = date('Y-m-d H:i:s', strtotime($request->tgl_publikasi));
                 $data = $this->service->store([
                     'id_user'    => $request->session()->get('id'),
-                    'title'      => fun::readable($request->title),
-                    'category'   => fun::readable($request->category),
-                    'status'     => fun::readable($request->status),
-                    'content'    => fun::readable($request->content),
+                    'title'      => fun::escape($request->title),
+                    'category'   => fun::escape($request->category),
+                    'status'     => fun::escape($request->status),
+                    'content'    => fun::escape($request->content),
                     'created_at' => $created_at,
                 ]);
                 if($data > 0) {

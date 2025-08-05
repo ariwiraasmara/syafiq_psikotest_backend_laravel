@@ -146,17 +146,17 @@ class Page extends Controller {
                 'jawaban' => 'required|integer',
             ]);
             if($credentials) {
-                $soaljawaban = [
-                    'soal' => [[
-                        $request->soalA,
-                        $request->soalB,
-                        $request->soalC,
-                        $request->soalD
+                $soal_jawaban = [
+                    'soal'=> [[
+                        intval(fun::escape($request->soalA)),
+                        intval(fun::escape($request->soalB)),
+                        intval(fun::escape($request->soalC)),
+                        intval(fun::escape($request->soalD))
                     ]],
-                    'jawaban' => $request->jawaban
+                    'jawaban'=> intval(fun::escape($request->jawaban))
                 ];
                 $data = $this->service2->update(fun::denval($id1, true), fun::denval($id2, true), [
-                    'soal_jawaban' => $soaljawaban,
+                    'soal_jawaban' => $soal_jawaban,
                 ]);
                 if($data->isNotEmpty()) {
                     $this->activity->store([

@@ -186,7 +186,7 @@ class Page extends Controller {
                 'password' => 'required',
             ]);
             if($credentials) {
-                $res = $this->service->updatePassword($id, $request->password);
+                $res = $this->service->updatePassword($id, fun::escape($request->password));
                 if($res > 0) {
                     $this->activity->store([
                         'id_user'    => $this->id,

@@ -144,15 +144,15 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data2 = $this->service->updateProfil(fun::denval($id, true), [
-                    'no_identitas'  => $request->no_identitas,
-                    'jk'            => $request->jk,
-                    'alamat'        => $request->alamat,
-                    'status'        => $request->status,
-                    'agama'         => $request->agama,
+                    'no_identitas'  => fun::escape($request->no_identitas),
+                    'jk'            => fun::escape($request->jk),
+                    'alamat'        => fun::escape($request->alamat),
+                    'status'        => fun::escape($request->status),
+                    'agama'         => fun::escape($request->agama),
                 ]);
 
                 $data1 = $this->service->updateAccount(fun::denval($id, true), [
-                    'roles'         => $request->roles
+                    'roles' => fun::escape($request->roles)
                 ]);
 
                 if($data2 > 0) {

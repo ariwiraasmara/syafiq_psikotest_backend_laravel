@@ -134,12 +134,12 @@ class Page extends Controller {
             ]);
             if($credentials) {
                 $data = $this->service->store([
-                    'kolom_x' => fun::readable($request->kolom_x),
-                    'nilai_A' => $request->nilai_A,
-                    'nilai_B' => $request->nilai_B,
-                    'nilai_C' => $request->nilai_C,
-                    'nilai_D' => $request->nilai_D,
-                    'nilai_E' => $request->nilai_E,
+                    'kolom_x' => fun::escape($request->kolom_x),
+                    'nilai_A' => fun::escape($request->nilai_A),
+                    'nilai_B' => fun::escape($request->nilai_B),
+                    'nilai_C' => fun::escape($request->nilai_C),
+                    'nilai_D' => fun::escape($request->nilai_D),
+                    'nilai_E' => fun::escape($request->nilai_E),
                 ]);
                 if($data > 0) {
                     $this->activity->store([

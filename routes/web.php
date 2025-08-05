@@ -130,6 +130,12 @@ Route::get('/link-psikotes', myroute::view('LinkPsikotes', 'bladeView'))->name('
 Route::post('/csp-report', myroute::api('Security\CSPReportController', 'store'))
         ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
+// routes/web.php
+Route::get('/.env', function () {
+    abort(403, 'Forbidden');
+});
+
+
 Route::get('/experiment/read-file-json', myroute::view('Experiment', 'read_file_json_reactview'));
 
 Route::get('hello', function(Request $request){
