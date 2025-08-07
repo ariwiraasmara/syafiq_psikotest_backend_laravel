@@ -143,6 +143,7 @@
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_anggota', ['sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
         let data = null;
         let currentpage = 1;
         let lastpage = 1;
@@ -158,9 +159,11 @@
 
         async function fDelete(id, nama, email) {
             if(validator.isBase64(id)) {
+                const urlDelete = `{{ route('admin_anggota_delete', ['id' => 'ID']) }}`;
+                const newUrl = urlDelete.replace('ID', DOMPurify.sanitize(id));
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data admin ini?",
-                    html: `<b>${nama}</b><br/><b>${email}</b>`,
+                    html: `<b>${DOMPurify.sanitize(nama)}</b><br/><b>${DOMPurify.sanitize(email)}</b>`,
                     showConfirmButton: true,
                     showCancelButton: true,
                     confirmButtonText: "Ya",
@@ -172,7 +175,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/public/admin/anggota-delete/${id}`, {
+                            const response = await axios.delete(newUrl, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -213,7 +216,10 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/anggota/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
         }
 
         function byChange() {
@@ -221,7 +227,10 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/anggota/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
         }
 
         function search() {

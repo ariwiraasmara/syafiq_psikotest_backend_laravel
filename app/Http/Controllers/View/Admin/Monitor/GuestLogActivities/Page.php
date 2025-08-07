@@ -95,7 +95,7 @@ class Page extends Controller {
     }
 
     public function bladeView(Request $request) {
-        $directoryPath = storage_path('logs/guest');
+        $directoryPath = storage_path('app/private/logs/guest');
         $files = File::files($directoryPath);
 
         // Ambil nama file
@@ -105,11 +105,20 @@ class Page extends Controller {
         // Contoh: ambil file tertentu
         $filejson = $request->query('file') ?? '';
         $jsonContent = [];
-        if($request->query('file')) {
-            $filePath = storage_path('logs/guest/'.$filejson);
+        $filePath = storage_path('app/private/logs/guest/'.$filejson);
+        $file_date = null;
+        if($request->query('file') && File::exists($filePath)) {
+            $fileNames = null;
+            $jsonContent = null;
+            $file_date = null;
             $fileContent = file_get_contents($filePath);
-
             $jsonContent = json_decode($fileContent);
+
+            $file_trim = trim($filejson, '.json');
+            $file_date_year = substr($file_trim, 0 ,4);
+            $file_date_month = substr($file_trim, 4, 2);
+            $file_date_day = substr($file_trim, 6, 2);
+            $file_date = $file_date_year.'-'.$file_date_month.'-'.$file_date_day;
 
             if (json_last_error() !== JSON_ERROR_NONE) {
                 dd('JSON decode error: ' . json_last_error_msg());
@@ -132,7 +141,8 @@ class Page extends Controller {
             'roles'                => $this->roles,
             'filenames'            => $fileNames,
             'filejson'             => $filejson,
-            'data'                 => $jsonContent
+            'data'                 => $jsonContent,
+            'file_date'            => $file_date,
         ]);
     }
 

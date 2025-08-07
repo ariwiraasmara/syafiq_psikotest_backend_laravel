@@ -25,8 +25,10 @@
     @component('components.appbarku', [
         'nama'         => $nama,
         'email'        => $email,
+        'sidebar'      => false,
         'link_back'    => route('admin_psikotest_kecermatan'),
         'appbar_title' => $appbar_title,
+        'roles'        => $roles
     ]) @endcomponent
 
     <div class="p-4 text-black" style="margin-bottom: 0px;">
@@ -126,8 +128,13 @@
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_psikotest_kecermatan_detil', ['id' => 'ID', 'page' => 'PAGE']) }}";
+
         function pageChange(value) {
             window.location.href= `/public/admin/psikotest/kecermatan/detil/{{ $id }}?page=${value}`;
+            const newUrl = baseUrl.replace('ID', '{{ $id }}')
+                                .replace('PAGE', value);
+            window.location.href = newUrl;
         }
 
         function toAdd(currentpage) {
@@ -142,9 +149,12 @@
 
         async function fDelete(id1, id2, soalA, soalB, soalC, soalD, jawaban) {
             if(validator.isBase64(id1) && validator.isBase64(id2)) {
+                const urlDelete = `{{ route('admin_psikotest_kecermatan_detil_delete', ['id1' => 'ID1', 'id2' => 'ID2']) }}`;
+                const newUrl = urlDelete.replace('ID1', DOMPurify.sanitize(id1))
+                                        .replace('ID2', DOMPurify.sanitize(id2));
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data soal dan jawaban ini?",
-                    html: `Soal : ${soalA}, ${soalB}, ${soalC}, ${soalD}<br/>Jawaban : ${jawaban}`,
+                    html: `Soal : ${DOMPurify.sanitize(soalA)}, ${DOMPurify.sanitize(soalB)}, ${DOMPurify.sanitize(soalC)}, ${DOMPurify.sanitize(soalD)}<br/>Jawaban : ${DOMPurify.sanitize(jawaban)}`,
                     showConfirmButton: true,
                     showCancelButton: true,
                     confirmButtonText: "Ya",
@@ -155,12 +165,10 @@
                         try {
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
-                            axios.defaults.withCredentials = true;
-                            axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`,  {
                                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                             });
-                            const response = await axios.delete(`/public/admin/psikotest/kecermatan/detil-delete/${DOMPurify.sanitize(id1)}/${DOMPurify.sanitize(id2)}`, {
+                            const response = await axios.delete(newUrl, {
                                 withCredentials: true,  // Mengirimkan cookie dalam permintaan
                                 headers: {
                                     'Content-Type': 'application/json',

@@ -12,7 +12,7 @@
         <div class="mt-4 grid md:grid-cols-3 gap-2 text-black section-line">
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Psikotes SIM</h3>
-                <div class="mt-2 justify-items-center items-center">
+                <div class="mt-2 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/bg6.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/bg6.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Psikotes SIM" alt="Psikotes SIM" />
@@ -25,7 +25,7 @@
 
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Psikotes Online & Offline</h3>
-                <div class="mt-2 justify-items-center items-center">
+                <div class="mt-2 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/bg7.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/bg7.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Psikotes Online & Offline" alt="Psikotes Online & Offline" />
@@ -38,7 +38,7 @@
 
             <div class="xs:mt-4 p-2 mx-4 bg-lp-white-glasses rounded-lg shadow-xl">
                 <h3 class="font-bold text-center">Konsultasi Online & Offline</h3>
-                <div class="mt-2 justify-items-center items-center">
+                <div class="mt-2 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/bg8.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/bg8.png') }}" loading="lazy" width="300" height="300" class="rounded-xl" title="Konsultasi Online & Offline" alt="Konsultasi Online & Offline" />
@@ -52,7 +52,7 @@
 
         <div class="mt-4 grid grid-cols-2 gap-2 text-black section-line">
             <div class="bg-lp-white-glasses p-2 mx-4 rounded-md shadow-xl">
-                <div class="p-2 justify-items-center items-center">
+                <div class="p-2 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/Syafiq_Marzuki.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/Syafiq_Marzuki.png') }}" loading="lazy" width="200" height="200" class="rounded-full shadow-xl" width="200" height="350" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
@@ -62,7 +62,7 @@
                 <div class="mt-2 text-right">Syafiq Marzuki, Psikolog</div>
             </div>
             <div class="bg-lp-white-glasses p-2 mx-4 rounded-md shadow-xl">
-                <div class="p-2 justify-items-center items-center">
+                <div class="p-2 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/Muhtar.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/Muhtar.png') }}" loading="lazy" width="200" height="200" class="rounded-full shadow-xl" width="200" height="350" title="Muhtar, Marketing dan IT Support" alt="Muhtar, Marketing dan IT Support" />
@@ -75,7 +75,9 @@
 
         <div class="mt-4">
             @if(($data_blog == null) || ($data_blog == '') || $data_blog == [])
-                <h3 class="font-bold">Tidak Ada Informasi Terbaru</h3>
+                <div class="p-4 bg-white text-black text-center shadow-xl rounded-lg">
+                    <h3 class="font-bold text-xl underline">Tidak Ada Informasi Terbaru</h3>
+                </div>
             @else
                 <h3 class="bg-lp-white-glasses text-black font-bold underline p-2 mt-4 mx-4">Informasi Terbaru...</h3>
 

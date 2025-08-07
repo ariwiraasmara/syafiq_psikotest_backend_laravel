@@ -26,7 +26,7 @@ if($roles > 1) {
     @component('components.appbarku', [
         'nama'         => $nama,
         'email'        => $email,
-        'sidebar'      => false,
+        'sidebar'      => true,
         'link_back'    => route('admin_monitor_userlog_activities', ['sort' => 'Users.name', 'by' => 'asc', 'search' => '-', 'page' => 1]),
         'appbar_title' => $appbar_title,
         'roles'        => $roles,
@@ -40,15 +40,17 @@ if($roles > 1) {
             <select id="" class="p-2 w-full block bg-white text-black rounded-md" onchange="loadLogFile(this.value)">
                 <option value="" disabled selected>Pilih Berkas Monitor...</option>
                 <option value="" disabled>-----</option>
-                @foreach($filenames as $item)
-                    <option value="{{ $item }}">{{ $item }}</option>
-                @endforeach
+                @if(!empty($filenames))
+                    @foreach($filenames as $item)
+                        <option value="{{ $item }}">{{ $item }}</option>
+                    @endforeach
+                @endif
             </select>
         </div>
 
         <div class="mt-6" style="width: 100%; overflow-x: scroll;">
             @if($filejson)
-                <div class="font-bold mb-2">{{ $filejson }}</div>
+                <div class="font-bold mb-2">{{ $filejson }}, {{ $file_date }}</div>
             @endif
             <table class="bg-white text-black shadow-xl border-spacing-2 table-auto" style="width: 100%; overflow-x: scroll;">
                 <thead>
@@ -64,18 +66,20 @@ if($roles > 1) {
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($data as $entry)
-                        <tr>
-                            <td class="text-center" style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->tanggal ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->ip_address ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->device->type ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->operation_system->name ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->browser->name ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->path ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->kunjungan_terakhir_halaman ?? '-' }}</td>
-                            <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->deskripsi ?? '-' }}</td>
-                        </tr>
-                    @empty
+                    @if($data)
+                        @foreach($data as $entry)
+                            <tr>
+                                <td class="text-center" style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->tanggal ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->ip_address ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->device->type ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->operation_system->name ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->perangkat->browser->name ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->path ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->kunjungan_terakhir_halaman ?? '-' }}</td>
+                                <td style="padding: 5px; border-right: 1px solid #eee; border-bottom: 1px solid #ddd;">{{ $entry->aktifitas->deskripsi ?? '-' }}</td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
                             <td colspan="8">
                                 <div class="mt-4 text-center font-bold text-xl">
@@ -83,7 +87,7 @@ if($roles > 1) {
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                    @endif
                 </tbody>
             </table>
         </div>

@@ -137,7 +137,7 @@ class Page extends Controller{
 
     public function softDelete(Request $request, $id) {
         try {
-            if (!Gate::allows('is-super-admin', Auth::user())) {
+            if(!Gate::allows('is-super-admin', Auth::user())) {
                 return jsr::print([
                     'error' => 3,
                     'pesan' => 'Unauthorized!',
@@ -199,7 +199,7 @@ class Page extends Controller{
 
     public function hardDelete(Request $request, $id) {
         try {
-            if (!Gate::allows('is-super-admin', Auth::user())) {
+            if(!Gate::allows('is-super-admin', Auth::user())) {
                 return jsr::print([
                     'error' => 3,
                     'pesan' => 'Unauthorized!',

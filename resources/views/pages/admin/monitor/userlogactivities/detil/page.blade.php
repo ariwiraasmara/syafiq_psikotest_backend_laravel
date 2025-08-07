@@ -161,6 +161,7 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_monitor_userlog_activities_detil', ['type' => 'TYPE', 'id' => 'ID', 'sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
         let data = null;
         let currentpage = 1;
         let lastpage = 1;
@@ -175,7 +176,14 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
         }
 
         function refresh() {
-            window.location.href= `{{ route('admin_monitor_userlog_activities', ['sort' => 'Users.name', 'by' => 'asc', 'search' => '-', 'page' => 1]) }}`;
+            window.location.href= `{{ route('admin_monitor_userlog_activities_detil', [
+                                        'type'   => $type,
+                                        'id'     => $type_val,
+                                        'sort'   => 'id',
+                                        'by'     => 'asc',
+                                        'search' => '-',
+                                        'page'   => 1
+                                    ]) }}`;
         }
 
         function sortChange() {
@@ -183,7 +191,13 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/user/{{ $type_val; }}/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('type', 'user')
+                                .replace('id', `{{ $type_val; }}`)
+                                .replace('SORT', 'user')
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href= newUrl;
         }
 
         function byChange() {
@@ -191,7 +205,14 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/user/{{ $type_val; }}/${sort}/${by}/${search}?page={{ $page }}`;
+            // window.location.href= `/admin/monitor-userlog-activities/user/{{ $type_val; }}/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('type', 'user')
+                                .replace('id', `{{ $type_val; }}`)
+                                .replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href= newUrl;
         }
 
         function search() {
@@ -199,7 +220,13 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/user/{{ $type_val; }}/${sort}/${by}/${search}?page=1`;
+            const newUrl = baseUrl.replace('type', 'user')
+                                .replace('id', `{{ $type_val; }}`)
+                                .replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', 1);
+            window.location.href= newUrl;
         }
 
         function pageChange() {
@@ -208,14 +235,19 @@ $style_paging = 'bottom: 1px; margin-bottom: 0px; padding: 10px;';
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities-detil/user/{{ $type_val; }}/${sort}/${by}/${search}?page=${page}`;
+            const newUrl = baseUrl.replace('type', 'user')
+                                .replace('id', `{{ $type_val; }}`)
+                                .replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', page);
+            window.location.href= newUrl;
         }
 
         function backup() {
-            const signedUrl = `{{ URL::temporarySignedRoute('admin_monitor_userlog_activities_detil_backup', now()->addMinutes(1)) }}`;
-            // window.open(`{{ route('admin_monitor_userlog_activities_backup_all') }}`, '_blank');
+            const signedUrl = `{{ URL::temporarySignedRoute('admin_monitor_userlog_activities_detil_backup', now()->addMinutes(60), ['id' => $data['user'][0]['id']]) }}`;
             window.open(signedUrl, '_blank');
-            window.open(`{{ route('admin_monitor_userlog_activities_detil_backup', ['id' => $type_val]); }}`, '_blank');
+
         }
 
         function deleteAllActivities() {

@@ -44,8 +44,10 @@
             <div class="w-full">
                 <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg bg-white w-full shadow-xl" style="padding: 5px;" onchange="sortChange();">
                     <option value="" disabled>Pilih Berdasarkan...</option>
-                    <option value="variabel" @if($sort == 'variabel') selected @endif >Nama Variabel</option>
-                    <option value="values" @if($sort == 'values') selected @endif >Nilai Variabel</option>
+                    <option value="nama" @if($sort == 'nama') selected @endif >Nama Peserta</option>
+                    <option value="email" @if($sort == 'email') selected @endif >Email Peserta</option>
+                    <option value="no_identitas" @if($sort == 'no_identitas') selected @endif >Nomor Identitas Peserta</option>
+                    <option value="asal" @if($sort == 'asal') selected @endif >Asal Peserta</option>
                 </select>
             </div>
             <div class="w-full">
@@ -93,6 +95,7 @@
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_peserta', ['sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
         let data = null;
         let currentpage = 1;
         let lastpage = 1;
@@ -107,7 +110,7 @@
         }
 
         function refresh() {
-            window.location.href= `{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-']) }}?page=1`;
+            window.location.href= `{{ route('admin_peserta', ['sort' => 'nama', 'by' => 'asc', 'search' => '-', 'page' => 1]) }}`;
         }
 
         function sortChange() {
@@ -115,7 +118,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
 
         function byChange() {
@@ -123,7 +130,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
 
         function search() {
@@ -131,7 +142,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page=1`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', 1);
+            window.location.href = newUrl;
         }
         
         function pageChange() {
@@ -140,7 +155,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/peserta/${sort}/${by}/${search}?page=${page}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', page);
+            window.location.href = newUrl;
         }
     </script>
 @endsection

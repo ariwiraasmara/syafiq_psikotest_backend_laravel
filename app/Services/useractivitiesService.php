@@ -154,7 +154,7 @@ class useractivitiesService {
                 Storage::disk('download')->put($filename, $res);
                 return collect([
                     'success'  => 1,
-                    'filename' => public_path('download/'.$filename)
+                    'filename' => storage_path('app/private/download/'.$filename)
                 ]);
             }
             return 0;
@@ -179,7 +179,7 @@ class useractivitiesService {
                 Storage::disk('download')->put($filename, $res->toJson());
                 return collect([
                     'success'  => 1,
-                    'filename' => public_path('download/'.$filename)
+                    'filename' => storage_path('app/private/download/'.$filename)
                 ]);
             }
             return 0;

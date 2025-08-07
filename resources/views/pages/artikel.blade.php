@@ -17,7 +17,7 @@
         <div class="p-4 bg-lp-white-glasses">
             <h2 class="text-center text-2xl font-bold underline">Artikel</h2>
             <div class="mt-4">
-                <div class="p-2 mb-4 justify-items-center items-center">
+                <div class="p-2 mb-4 flex flex-col items-center justify-center text-center">
                     <picture class="block text-center">
                         <source srcset="{{ asset('images/album/Psikotes-Masal-2.webp') }}" type="image/webp" />
                         <img src="{{ asset('images/album/Psikotes-Masal-2.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />

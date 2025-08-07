@@ -11,7 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Services\useractivitiesService;
@@ -145,8 +147,17 @@ class Page extends Controller {
     
     public function backup(Request $request) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return redirect()->route('admin_variabel_setting', ['sort'=>'variabel', 'by'=>'asc', 'search'=>'-', 'page'=>1])->with('error', 'Unauthorized!');
+            }
             $data = $this->activity->backupAll();
             if($data['success']) {
+                if(!str_starts_with($data['filename'], storage_path('app/private'))) {
+                    abort(400, 'Invalid backup path');
+                }
+                if(!file_exists($data['filename'])) {
+                    abort(404, 'File not found.');
+                }
                 $this->activity->store([
                     'id_user'    => $this->id,
                     'ip_address' => $request->ip(),
@@ -157,7 +168,7 @@ class Page extends Controller {
                     'deskripsi'  => 'backup : mencadangkan semua data admin',
                     'properties' => json_encode($request->all())
                 ]);
-                return response()->download($data['filename']);
+                return response()->download($data['filename'])->deleteFileAfterSend(true);
             }
             else {
                 return jsr::print([
@@ -183,6 +194,12 @@ class Page extends Controller {
 
     public function truncate(Request $request) {
         try {
+            if (!Gate::allows('is-super-admin', Auth::user())) {
+                return jsr::print([
+                    'error' => 3,
+                    'pesan' => 'Unauthorized!',
+                ], 'bad request');
+            }
             $res = $this->activity->truncate();
             if($res) {
                 $this->activity->store([

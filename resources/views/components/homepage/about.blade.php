@@ -4,8 +4,8 @@
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 @endphp
-<div class="p-4 background-aboutt">
-    <div class="p-4 mr-4 bg-lp-white-glasses text-right" style="">
+<div class="p-4 background-about">
+    <div class="p-4 bg-lp-white-glasses text-right">
         <h2 class="text-2xl font-bold underline">Mengenai Kami</h2>
         <h3 class="text-lg">
             <strong>Lembaga Psikologi Terapan SOLUSI Psikologi Banten</strong> adalah Lembaga Psikologi yang sudah terpercaya dan terkenal sejak tahun 2006. Lokasi Kantor dan Klinik Pelayanan Lembaga Psikologi ini berlokasi di Kota Serang Banten.

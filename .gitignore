@@ -3,6 +3,11 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/app/private/csp
+/storage/app/private/download
+/storage/app/private/logs/error
+/storage/app/private/logs/guest
+/storage/app/private/logs/header-request
 /storage/pail
 /storage/logs
 /vendor
@@ -24,7 +29,7 @@ yarn-error.log
 /.vscode
 /.zed
 .qodo
-TODO
+TODO.md
 .zip
 frankenphp
 tailwindcss.exe
@@ -36,8 +41,6 @@ obfuscator.md
 !.env.vault
 .env.testing
 test_performance.jmx
-TODO.md
-test_performance.jmx
-TODO.md
 ZAP - Default Context.context
 .env.testing
+

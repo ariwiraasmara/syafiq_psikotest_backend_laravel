@@ -18,13 +18,13 @@
             <h2 class="text-center text-2xl font-bold underline">Mengenai Kami</h2>
             <div class="mt-4 md:flex md:flex-row">
                 <div class="md:mb-2">
-                    <div class="p-2 mb-4 justify-items-center items-center">
+                    <div class="p-2 mb-4 justify-items-center items-center" style="width: 300px; height: 300px;">
                         <picture class="block text-center">
                             <source srcset="{{ asset('images/Syafiq_Marzuki.webp') }}" type="image/webp" />
                             <img src="{{ asset('images/Syafiq_Marzuki.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black rounded-full shadow-xl" title="Syafiq Marzuki, Psikolog" alt="Syafiq Marzuki, Psikolog" />
                         </picture>
                     </div>
-                    <div class="p-2 mb-4 justify-items-center items-center">
+                    <div class="p-2 mb-4 justify-items-center items-center" style="width: 300px; height: 300px;">
                         <picture class="block text-center">
                             <source srcset="{{ asset('images/HPI.webp') }}" type="image/webp" />
                             <img src="{{ asset('images/HPI.png') }}" loading="lazy" width="300" height="300" class="border-2 border-black shadow-xl" width="200" height="350" title="HPI" alt="HPI" />

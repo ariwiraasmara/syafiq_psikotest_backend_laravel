@@ -119,6 +119,7 @@
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_variabel_setting', ['sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
         let data = null;
         let currentpage = 1;
         let lastpage = 1;
@@ -134,9 +135,11 @@
 
         async function fDelete(id, nvariabel, nvalues) {
             if(validator.isBase64(id)) {
+                const urlDelete = `{{ route('admin_variabel_delete', ['id' => 'ID']) }}`;
+                const newUrl = urlDelete.replace('ID', DOMPurify.sanitize(id));
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data variabel ini?",
-                    html: `<b>${nvariabel}</b> = <b>${nvalues}</b>`,
+                    html: `<b>${DOMPurify.sanitize(nvariabel)}</b> = <b>${DOMPurify.sanitize(nvalues)}</b>`,
                     showConfirmButton: true,
                     showCancelButton: true,
                     confirmButtonText: "Ya",
@@ -148,7 +151,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/admin/variabel-delete/${id}`, {
+                            const response = await axios.delete(newUrl, {
                                 withCredentials: true,
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -190,7 +193,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
 
         function byChange() {
@@ -198,7 +205,11 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page={{ $page }}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
 
         function search() {
@@ -206,16 +217,24 @@
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page=1`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
-        
+
         function pageChange() {
             const page = document.getElementById('select-page').value;
             const sort = document.getElementById('select-sort').value;
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/public/admin/variabel-setting/${sort}/${by}/${search}?page=${page}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href = newUrl;
         }
     </script>
 @endsection

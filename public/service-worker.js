@@ -16,7 +16,7 @@ const urlsToCache = [
     "/images/bg11.png", "/images/bg12.png", "/images/bg13.png", "/images/bg14.png", "/images/bg15.png",
     "/images/bg16.png", "/images/bg17.png", "/images/bg18.png", "/images/bg19.png", "/images/bg20.png",
     "/images/bg21.png", "/images/bg22.png", "/images/bg23.png",
-    "/images/HPI.png", "/images/logo1.png", "/images/Muhtar.png", "/images/Syafiq Marzuki.png",
+    "/images/HPI.png", "/images/logo1.png", "/images/Muhtar.png", "/images/Syafiq_Marzuki.png",
     "/images/album/IMG-20211002-WA0019.png", "/images/album/IMG-20211130-WA0016.png",
 
     "/images/bg1.webp", "/images/bg2.webp", "/images/bg3.webp", "/images/bg4.webp", "/images/bg5.webp",
@@ -24,7 +24,7 @@ const urlsToCache = [
     "/images/bg11.webp", "/images/bg12.webp", "/images/bg13.webp", "/images/bg14.webp", "/images/bg15.webp",
     "/images/bg16.webp", "/images/bg17.webp", "/images/bg18.webp", "/images/bg19.webp", "/images/bg20.webp",
     "/images/bg21.webp", "/images/bg22.webp", "/images/bg23.webp",
-    "/images/HPI.webp", "/images/logo1.webp", "/images/Muhtar.webp", "/images/Syafiq Marzuki.webp",
+    "/images/HPI.webp", "/images/logo1.webp", "/images/Muhtar.webp", "/images/Syafiq_Marzuki.webp",
     "/images/album/IMG-20211002-WA0019.webp", "/images/album/IMG-20211130-WA0016.webp",
 
     "/css/additional.css",
@@ -34,21 +34,22 @@ const urlsToCache = [
 // Install Service Worker
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(async (cache) => {
-            for (const url of urlsToCache) {
-                try {
-                    const response = await fetch(url);
-                    if (response.ok) {
-                        await cache.put(url, response);
-                        console.log(`✅ Cached: ${url}`);
-                    } else {
-                        console.warn(`⚠ Gagal cache (status ${response.status}): ${url}`);
-                    }
-                } catch (err) {
-                    console.warn(`❌ Error fetch: ${url}`, err);
-                }
-            }
-        })
+        caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+        // caches.open(CACHE_NAME).then(async (cache) => {
+        //     for (const url of urlsToCache) {
+        //         try {
+        //             const response = await fetch(url);
+        //             if (response.ok) {
+        //                 await cache.put(url, response);
+        //                 console.log(`✅ Cached: ${url}`);
+        //             } else {
+        //                 console.warn(`⚠ Gagal cache (status ${response.status}): ${url}`);
+        //             }
+        //         } catch (err) {
+        //             console.warn(`❌ Error fetch: ${url}`, err);
+        //         }
+        //     }
+        // })
     );
 });
 

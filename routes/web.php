@@ -12,11 +12,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Middleware\IsWebAdminAuth;
 use App\Http\Middleware\SecurityHeaders;
+use App\Http\Middleware\CSPHeader;
 use App\Libraries\myroute;
 use App\Libraries\myfunction as fun;
 
 Route::middleware(
-    // 'throttle:250,1',
+    'throttle:250,1',
     SecurityHeaders::class
 )->group(function () {
     Route::get('/', myroute::view('Home', 'bladeView'))->name('home');
@@ -30,10 +31,9 @@ Route::middleware(
     SecurityHeaders::class
 )->group(function () {
     Route::get('/peserta', myroute::view('Peserta\Page', 'bladeView'))->name('peserta');
-    
-    Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))
-                ->name('peserta_setup');
-    if( fun::getRawCookie('ispeserta') ) {
+    Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))->name('peserta_setup');
+
+    if(fun::getRawCookie('ispeserta')) {
         Route::get('/peserta/psikotest/kecermatan/{sesi}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'bladeView'))->name('peserta_psikotest_kecermatan');
         Route::post('/peserta-psikotest-kecermatan/{id}', myroute::view('Peserta\Psikotest\Kecermatan\Page', 'store'))->name('peserta_psikotest_kecermatan_store');
         Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'))->name('psikotest_kecermatan_pertanyaan');
@@ -46,9 +46,9 @@ Route::middleware(
     // 'customThrottle:50,1'
     SecurityHeaders::class
 )->group(function () {
-    Route::get('admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
-    Route::post('admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
-    Route::get('logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
+    Route::get('/admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
+        Route::post('/admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
+    Route::get('/logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
 });
 
 Route::middleware([
@@ -93,7 +93,7 @@ Route::middleware([
     Route::get('/admin/psikotest/kecermatan-edit/{id}', myroute::view('Admin\Psikotest\Kecermatan\Edit\Page', 'bladeView'))->name('admin_psikotest_kecermatan_edit');
     Route::put('/admin/psikotest/kecermatan-edit/{id}', myroute::view('Admin\Psikotest\Kecermatan\Edit\Page', 'update'))->name('admin_psikotest_kecermatan_update');
     Route::delete('/admin/psikotest/kecermatan-delete/{id}', myroute::view('Admin\Psikotest\Kecermatan\Page', 'delete'))->name('admin_psikotest_kecermatan_delete');
-    
+
     Route::get('/admin/psikotest/kecermatan/detil/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'bladeView'))->name('admin_psikotest_kecermatan_detil');
     Route::get('/admin/psikotest/kecermatan/detil-baru/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Baru\Page', 'bladeView'))->name('admin_psikotest_kecermatan_detil_baru');
     Route::post('/admin/psikotest/kecermatan/detil-baru/{id}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Baru\Page', 'store'))->name('admin_psikotest_kecermatan_detil_store');
@@ -101,13 +101,21 @@ Route::middleware([
     Route::put('/admin/psikotest/kecermatan/detil-edit/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Edit\Page', 'update'))->name('admin_psikotest_kecermatan_detil_update');
     Route::delete('/admin/psikotest/kecermatan/detil-delete/{id1}/{id2}', myroute::view('Admin\Psikotest\Kecermatan\Detil\Page', 'delete'))->name('admin_psikotest_kecermatan_detil_delete');
 
-    Route::get('admin/monitor/userlog-activities/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'bladeView'))->name('admin_monitor_userlog_activities');
-    Route::get('admin/monitor/guestlog-activities', myroute::view('Admin\Monitor\GuestLogActivities\Page', 'bladeView'))->name('admin_monitor_guestlog_activities');
-    Route::get('admin/monitor/userlog-activities/backup/all',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'backup'))->name('admin_monitor_userlog_activities_backup_all');
-    Route::delete('admin/monitor-userlog-activities/truncate',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'truncate'))->name('admin_monitor_userlog_activities_truncate');
-    Route::get('admin/monitor-userlog-activities-detil/{type}/{id}/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'bladeView'))->name('admin_monitor_userlog_activities_detil');
-    Route::get('admin/monitor-userlog-activities-detil/backup/{id}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'backup'))->name('admin_monitor_userlog_activities_detil_backup');
-    Route::delete('admin/monitor-userlog-activities-detil/delete/{id}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'delete'))->name('admin_monitor_userlog_activities_detil_delete');
+    Route::get('/admin/monitor/userlog-activities/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'bladeView'))->name('admin_monitor_userlog_activities');
+    Route::get('/admin/monitor/guestlog-activities', myroute::view('Admin\Monitor\GuestLogActivities\Page', 'bladeView'))->name('admin_monitor_guestlog_activities');
+    
+    Route::get('/admin/monitor/userlog-activities/backup/all',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'backup'))
+            ->name('admin_monitor_userlog_activities_backup_all');
+            // ->middleware(['signed']);
+
+    Route::delete('/admin/monitor-userlog-activities/truncate',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'truncate'))->name('admin_monitor_userlog_activities_truncate');
+    Route::get('/admin/monitor-userlog-activities-detil/{type}/{id}/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'bladeView'))->name('admin_monitor_userlog_activities_detil');
+
+    Route::get('/admin/monitor-userlog-activities-detil/backup/{id}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'backup'))
+            ->name('admin_monitor_userlog_activities_detil_backup');
+            // ->middleware(['signed']);
+
+    Route::delete('/admin/monitor-userlog-activities-detil/delete/{id}',  myroute::view('Admin\Monitor\UserLogActivities\Detil\Page', 'delete'))->name('admin_monitor_userlog_activities_detil_delete');
 
     Route::get('/admin/variabel-setting/{sort}/{by}/{search}', myroute::view('Admin\Variabel\Page', 'bladeView'))->name('admin_variabel_setting');
     Route::get('/admin/variabel-baru',  myroute::view('Admin\Variabel\Baru\Page', 'bladeView'))->name('admin_variabel_baru');
@@ -117,26 +125,58 @@ Route::middleware([
     Route::delete('/admin/variabel-delete/{id}', myroute::view('Admin\Variabel\Page', 'delete'))->name('admin_variabel_delete');
 });
 
-Route::get('/mengenai_kami', myroute::view('Aboutus', 'bladeView'))->name('mengenai_kami');
-Route::get('/artikel', myroute::view('Artikel', 'bladeView'))->name('artikel');
 Route::get('/blog', myroute::view('Admin\Blog\Public\Page', 'bladeView'))->name('blog');
 // Route::get('/blog-mencari/{cari}', myroute::view('Admin\Blog\Public\Page', 'bladeView'))->name('blog_search');
 Route::get('/blog/{judul}', myroute::view('Admin\Blog\Public\Detil\Page', 'bladeView'))->name('blog_detail');
-Route::get('/kontak', myroute::view('Kontak', 'bladeView'))->name('kontak');
-Route::get('/layanan', myroute::view('Layanan\Page', 'bladeView'))->name('layanan');
-Route::get('/layanan/psikotes-sim', myroute::view('Layanan\PsikotesSIM\Page', 'bladeView'))->name('layanan_psikotessim');
-Route::get('/link-psikotes', myroute::view('LinkPsikotes', 'bladeView'))->name('linkpsikotes');
-
-Route::post('/csp-report', myroute::api('Security\CSPReportController', 'store'))
-        ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-// routes/web.php
-Route::get('/.env', function () {
-    abort(403, 'Forbidden');
-});
-
 
 Route::get('/experiment/read-file-json', myroute::view('Experiment', 'read_file_json_reactview'));
+
+Route::middleware([
+    'signed'
+])->group(function () {
+    Route::get('/mengenai_kami', myroute::view('Aboutus', 'bladeView'))->name('mengenai_kami');
+    Route::get('/artikel', myroute::view('Artikel', 'bladeView'))->name('artikel');
+    Route::get('/kontak', myroute::view('Kontak', 'bladeView'))->name('kontak');
+    Route::get('/layanan', myroute::view('Layanan\Page', 'bladeView'))->name('layanan');
+    Route::get('/layanan/psikotes-sim', myroute::view('Layanan\PsikotesSIM\Page', 'bladeView'))->name('layanan_psikotessim');
+    Route::get('/link-psikotes', myroute::view('LinkPsikotes', 'bladeView'))->name('linkpsikotes');
+});
+
+$forbidden = [
+    '.env',
+    '.env.example',
+    '.env.vault',
+    '.env.local',
+    '.env.testing',
+    '.env.production',
+    '.env.development',
+    '.env.key',
+    '.gitignore',
+    '.git',
+    'composer.json',
+    'composer.lock',
+    'package.json',
+    'package-lock.json',
+    'artisan',
+    '.htaccess',
+    'pgp-key.txt',
+    '.env.backup',
+    'tailwindcss.exe',
+    'tailwind.config.js',
+    'webpack.config.js',
+    'jsconfing.json',
+    'tsconfig.json',
+    'vite.config.js',
+    'scan.ps1',
+    '.rnd',
+    'urls.txt'
+];
+
+foreach($forbidden as $item) {
+    Route::get('/'.$item, function () {
+        abort(403, 'Forbidden');
+    });
+}
 
 Route::get('hello', function(Request $request){
     // Storage::disk('user_admin')->makeDirectory('coba');

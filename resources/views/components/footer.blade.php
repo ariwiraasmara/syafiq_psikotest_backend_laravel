@@ -5,7 +5,7 @@
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
 <footer class="p-2 bg-gradient-to-t from-sky-300 to-sky-500 {{ $hidden }} {{ $otherCSS }}">
-    <div class="justify-items-center items-center w-full mt-2 pb-2 border-b-2 border-black">
+    <div class="flex flex-col items-center justify-center text-center w-full mt-2 pb-2 border-b-2 border-black">
         <h2 class="font-bold text-lg hidden">Sitemap</h2>
         <div class="">
             <a href="{{ URL::temporarySignedRoute('home', now()->addMinutes(10)); }}" class="hover:underline" rel="follow" title="Beranda">

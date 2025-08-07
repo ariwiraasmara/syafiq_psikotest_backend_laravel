@@ -81,9 +81,11 @@
     <script>
         async function fDelete(id, kolom_x) {
             if(validator.isBase64(id)) {
+                const urlDelete = `{{ route('admin_psikotest_kecermatan_delete', ['id' => 'ID']) }}`;
+                const newUrl = urlDelete.replace('ID', DOMPurify.sanitize(id));
                 Swal.fire({
                     title: "Anda yakin ingin menghapus data Psikotest Kecermatan ini?",
-                    html: `Semua data <b>${kolom_x}</b> yang ada didalamnya juga akan terhapus!`,
+                    html: `Semua data <b>${DOMPurify.sanitize(kolom_x)}</b> yang ada didalamnya juga akan terhapus!`,
                     showConfirmButton: true,
                     showCancelButton: true,
                     confirmButtonText: "Ya",
@@ -95,7 +97,7 @@
                             axios.defaults.withCredentials = true;
                             axios.defaults.withXSRFToken = true;
                             const csrfToken = await axios.get(`/sanctum/csrf-cookie`);
-                            const response = await axios.delete(`/public/admin/psikotest/kecermatan-delete/${DOMPurify.sanitize(id)}`, {
+                            const response = await axios.delete(newUrl, {
                                 _token: `{{ csrf_token() }}`,
                                 unique: '{{ $unique; }}',
                                 id: id,

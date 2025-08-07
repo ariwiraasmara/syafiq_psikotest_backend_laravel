@@ -47,10 +47,10 @@ if($roles > 1) {
             <div class="w-full">
                 <select id="select-sort" title="Pilih Berdasarkan..." class="rounded-lg bg-white w-full shadow-xl" style="padding: 5px;" onchange="sortChange();">
                     <option value="" disabled>Pilih Berdasarkan...</option>
-                    <option value="users_activities.id" @if($sort == 'id') selected @endif >ID</option>
-                    <option value="Users.name" @if($sort == 'name') selected @endif >Nama</option>
-                    <option value="Users.email" @if($sort == 'email') selected @endif >Email</option>
-                    <option value="users.tanggal" @if($sort == 'tanggal') selected @endif >Tanggal</option>
+                    <option value="users_activities.id" @if($sort == 'users_activities.id') selected @endif >ID</option>
+                    <option value="Users.name" @if($sort == 'Users.name') selected @endif >Nama</option>
+                    <option value="Users.email" @if($sort == 'Users.email') selected @endif >Email</option>
+                    <option value="users_activities.tanggal" @if($sort == 'users_activities.tanggal') selected @endif >Tanggal</option>
                 </select>
             </div>
             <div class="w-full">
@@ -150,6 +150,8 @@ if($roles > 1) {
     @component('components.footer', ['hidden' => 'hidden', 'otherCSS' => '']) @endcomponent
 
     <script>
+        const baseUrl = "{{ route('admin_monitor_userlog_activities', ['sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
+        const detilURL = "{{ route('admin_monitor_userlog_activities_detil', ['type' => 'TYPE', 'id' => 'ID', 'sort' => 'SORT', 'by' => 'BY', 'search' => 'SEARCH', 'page' => 'PAGE']) }}";
         let data = null;
         let currentpage = 1;
         let lastpage = 1;
@@ -168,11 +170,17 @@ if($roles > 1) {
         }
 
         function sortChange() {
+            const page = document.getElementById('select-page').value;
             const sort = document.getElementById('select-sort').value;
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/${sort}/${by}/${search}?page={{ $page }}`;
+
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', page);
+            window.location.href= newUrl;
         }
 
         function byChange() {
@@ -180,7 +188,12 @@ if($roles > 1) {
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/${sort}/${by}/${search}?page={{ $page }}`;
+            window.location.href= `/admin/monitor-userlog-activities/${sort}/${by}/${search}?page=`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', `{{ $page }}`);
+            window.location.href= newUrl;
         }
 
         function search() {
@@ -188,30 +201,50 @@ if($roles > 1) {
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/${sort}/${by}/${search}?page=1`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', 1);
+            window.location.href= newUrl;
         }
-        
+
         function pageChange() {
             const page = document.getElementById('select-page').value;
             const sort = document.getElementById('select-sort').value;
             const by = document.getElementById('select-by').value;
             let search = document.getElementById('txt-search').value;
             if(search == null || search == '') search = '-';
-            window.location.href= `/admin/monitor-userlog-activities/${sort}/${by}/${search}?page=${page}`;
+            const newUrl = baseUrl.replace('SORT', sort)
+                                .replace('BY', by)
+                                .replace('SEARCH', search)
+                                .replace('PAGE', page);
+            window.location.href= newUrl;
         }
 
         function byChange_AdminUser() {
             const val = document.getElementById('select-userdetail').value;
             window.location.href= `/admin/monitor-userlog-activities-detil/user/${val}/id/asc/-?page=1`;
+            const newUrl = detilURL.replace('TYPE', 'user')
+                                .replace('ID', val)
+                                .replace('SORT', 'id')
+                                .replace('BY', 'asc')
+                                .replace('SEARCH', '-')
+                                .replace('PAGE', 1);
+            window.location.href= newUrl;
         }
 
         function onDetil(val) {
-            window.location.href= `/admin/monitor-userlog-activities-detil/id/${val}/id/asc/-?page=1`;
+            const newUrl = detilURL.replace('TYPE', 'id')
+                                .replace('ID', val)
+                                .replace('SORT', 'id')
+                                .replace('BY', 'asc')
+                                .replace('SEARCH', '-')
+                                .replace('PAGE', 1);
+            window.location.href= newUrl;
         }
 
         function backup() {
             const signedUrl = `{{ URL::temporarySignedRoute('admin_monitor_userlog_activities_backup_all', now()->addMinutes(1)) }}`;
-            // window.open(`{{ route('admin_monitor_userlog_activities_backup_all') }}`, '_blank');
             window.open(signedUrl, '_blank');
         }
 

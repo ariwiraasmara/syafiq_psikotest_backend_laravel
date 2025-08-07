@@ -17,19 +17,18 @@
     ]) @endcomponent
 
     <div class="p-4" style="margin-bottom: 75px;">
-        <h1 class="text-2lg font-bold hidden">{{ $data['title'] }}</h1>
-        
-        
+        <h2 class="text-2lg font-bold hidden">{{ $data['title'] }}</h2>
+
         <div class="p-4 bg-white text-black rounded-lg shadow-xl">
             <p class="">{!! $data['content'] !!}</p>
-            
+
             <div class="mt-2 text-sm border-t-2 border-gray-500">
-                <h2 class="">Kategori: <a href="{{ route('blog').'?kategori='.$data['category'] }}" class="text-blue-800 hover:text-blue-500">{{ $data['category']; }}</a></h2>
-                <h2 class="">Penulis: {{ $data['name']; }}</h2>
-                <h3>Dibuat pada: {{ myfunction::formatTimestamp($data['created_at']) }}</h3>
-    
+                <h3 class="">Kategori: <a href="{{ route('blog').'?kategori='.$data['category'] }}" class="text-blue-800 hover:text-blue-500">{{ $data['category']; }}</a></h3>
+                <h3 class="">Penulis: {{ $data['name']; }}</h3>
+                <h4>Dibuat pada: {{ myfunction::formatTimestamp($data['created_at']) }}</h4>
+
                 @if(($data['updated_at'] != '') || ($data['updated_at'] != null))
-                    <h3 class="italic underline">Informasi ini telah diperbaharui pada: {{ myfunction::formatTimestamp($data['created_at']) }}</h3>
+                    <h4 class="italic underline">Informasi ini telah diperbaharui pada: {{ myfunction::formatTimestamp($data['created_at']) }}</h4>
                 @endif
             </div>
         </div>

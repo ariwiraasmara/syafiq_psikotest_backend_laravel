@@ -17,7 +17,7 @@
     RewriteBase /
 
     # Mencegah akses ke file sensitif
-    <FilesMatch "\.(env|gitignore|git|editorconfig|gitattributes|lock|json|yml)$">
+    <FilesMatch "\.(env|gitignore|git|editorconfig|gitattributes|lock|json|yml|htaccess)$">
         Order allow,deny
         Deny from all
     </FilesMatch>

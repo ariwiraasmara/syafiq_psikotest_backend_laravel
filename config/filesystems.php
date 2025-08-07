@@ -47,29 +47,42 @@ return [
 
         'csp' => [
             'driver' => 'local',
-            'root' => storage_path('csp'),
+            'root' => storage_path('app/private/logs/security/csp'),
+            'serve' => true,
+            'throw' => false,
+        ],
+
+        'sql_injection' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/logs/security/sql_injection'),
             'serve' => true,
             'throw' => false,
         ],
 
         'download' => [
             'driver' => 'local',
-            'root' => public_path('download'),
-            'url' => env('APP_URL').'/download',
-            'visibility' => 'public',
+            'root' => storage_path('app/private/download'),
+            'serve' => true,
             'throw' => false,
         ],
 
         'user_admin' => [
             'driver' => 'local',
-            'root' => storage_path('logs/user_admin'),
+            'root' => storage_path('app/private/logs/user_admin'),
+            'serve' => true,
+            'throw' => false,
+        ],
+
+        'foto_user_admin' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/foto_user_admin'),
             'serve' => true,
             'throw' => false,
         ],
 
         'guest' => [
             'driver' => 'local',
-            'root' => storage_path('logs/guest'),
+            'root' => storage_path('app/private/logs/guest'),
             'serve' => true,
             'throw' => false,
         ],

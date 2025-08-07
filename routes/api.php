@@ -28,6 +28,19 @@ Route::middleware('auth:api')->get('/user', function(Request $request) {
     return $request->user();
 });
 
+Route::middleware([
+    'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    CheckTokenLogin::class,
+    CacheControlMiddleware::class,
+    LogRequest::class
+])->group(function () {
+    Route::middleware(['throttle:login'])->post('/login', myroute::API('UserController', 'login'))
+        ->name('login');
+
+    Route::get('/logout', myroute::API('UserController', 'logout'))
+        ->name('logout');
+});
+
 //? PUBLIC API ROUTE DENGAN LOGIN OTORISASI DAN MIDDLEWARE
 Route::middleware([
     CacheControlMiddleware::class,
@@ -167,19 +180,6 @@ Route::middleware([
         ->name('api_monitor_userlogactivities_backupUser');
 });
 
-Route::middleware([
-    'throttle:10,1', // 5 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    CheckTokenLogin::class,
-    CacheControlMiddleware::class,
-    LogRequest::class
-])->group(function () {
-    Route::middleware(['throttle:login'])->post('/login', myroute::API('UserController', 'login'))
-        ->name('login');
-
-    Route::get('/logout', myroute::API('UserController', 'logout'))
-        ->name('logout');
-});
-
 /*
 Route::middleware([
     CheckTokenLogin::class,
@@ -200,35 +200,38 @@ Route::middleware([
     CacheControlMiddleware::class,
     LogRequest::class
 ])->group(function () {
-        Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'))
-            ->name('api_variabel_setting_get');
+    Route::get('/variabel-setting/{id}', myroute::API('As0001VariabelsettingController', 'get'))
+        ->name('api_variabel_setting_get');
 
-        Route::get('/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allCooked'))
-            ->name('api_kecermatan_soaljawaban_get');
+    Route::get('/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allCooked'))
+        ->name('api_kecermatan_soaljawaban_get');
 
-        Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'))
-            ->name('api_peserta_setup');
+    Route::post('/peserta/setup', myroute::API('As1001PesertaProfilController', 'setUpPesertaTes'))
+        ->name('api_peserta_setup');
 
-        Route::post('/peserta', myroute::API('As1001PesertaProfilController', 'store'))
-            ->name('api_peserta_store');
+    Route::post('/peserta', myroute::API('As1001PesertaProfilController', 'store'))
+        ->name('api_peserta_store');
 
-        Route::put('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'update'))
-            ->name('api_peserta_update');
+    Route::put('/peserta/{id}', myroute::API('As1001PesertaProfilController', 'update'))
+        ->name('api_peserta_update');
 
-        Route::get('/peserta-hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'))
-            ->name('api_peserta_hasil_tes_psikotes_get');
+    Route::get('/peserta-hasil-tes/{id}/{tgl}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'get'))
+        ->name('api_peserta_hasil_tes_psikotes_get');
 
-        Route::post('/peserta-hasil-tes/{id}/{nid}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
-            ->name('api_peserta_hasil_tes_psikotes_store');
+    Route::post('/peserta-hasil-tes/{id}/{nid}', myroute::API('As1002PesertaHasilnilaiTesKecermatanController', 'store'))
+        ->name('api_peserta_hasil_tes_psikotes_store');
 });
 
-Route::get('/signed-url/{name}', myroute::api('GenerateSignedURLController', 'signedUrl'))->name('api_signedUrl');
-Route::get('/signed-temporary-url/{name}/{minute}', myroute::api('GenerateSignedURLController', 'signedTemporaryURL'))->name('api_signedTemporaryURL');
+//? PUBLIC API ROUTE TANPA MIDDLEWARE
+Route::get('/signed-url/{name}', myroute::api('GenerateSignedURLController', 'signedUrl'))
+    ->name('api_signedUrl');
+
+Route::get('/signed-temporary-url/{name}/{minute}', myroute::api('GenerateSignedURLController', 'signedTemporaryURL'))
+    ->name('api_signedTemporaryURL');
 
 Route::post('/csp-report', myroute::api('Security\CSPReportController', 'store'))
-        ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+    ->name('api_csp_report');
 
-//? PUBLIC API ROUTE TANPA MIDDLEWARE
 Route::get('/csrf_token', myroute::API('AnyController', 'csrf_token'))
     ->name('csrf_token');
 
@@ -238,6 +241,16 @@ Route::get('/generate-token-first', myroute::API('AnyController', 'generate_toke
 Route::get('/generate-api-key', myroute::API('AnyController', 'generate_api_key'))
     ->name('generate_api_key');
 
+Route::get('/public-pem', function() {
+    $file = storage_path('app/private/public.pem');
+    if (file_exists($file)) {
+        return response()->file($file);
+    } else {
+        return response()->json(['error' => 'File not found'], 404);
+    }
+})->name('api_public_pem');
+
+//? PUBLIC API ROUTE PERCOBAAN
 Route::post('/testAdminToken', myroute::API('AnyController', 'testAdminToken'))
     ->middleware([SecondBearerTokenCheck::class, UserRememberTokenCheck::class]);
 
@@ -247,7 +260,6 @@ Route::get('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwi
 Route::post('/testAPIwithAnyMiddleware', myroute::API('AnyController', 'testAPIwithAnyMiddleware'))
     ->middleware([SecondBearerTokenCheck::class, CheckTokenLogin::class, MatchingUserData::class, CacheControlMiddleware::class, UserRememberTokenCheck::class, Pranker::class, LogRequest::class]);
 
-//? PUBLIC API ROUTE PERCOBAAN
 Route::get('hello-auth', function(){
     if (Auth::check()) {
         // The user is logged in...

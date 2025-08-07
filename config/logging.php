@@ -60,14 +60,14 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('app/private/logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => storage_path('app/private/logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
@@ -125,51 +125,49 @@ return [
 
         'emergency' => [
             // 'path' => storage_path('logs/laravel.log'),
-            'path' => storage_path('logs/emergency/emergency.log'),
+            'path' => storage_path('app/private/logs/emergency/emergency.log'),
         ],
 
         'error-repositories' => [
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/error/repositories/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/error/repositories/.log'), // Lokasi file log
             'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
             'days' => 30, // Menyimpan log hanya selama 30 hari
         ],
 
         'error-services' => [
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/error/services/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/error/services/.log'), // Lokasi file log
             'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
             'days' => 30, // Menyimpan log hanya selama 30 hari
         ],
 
         'error-controllers' => [
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/error/controller/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/error/controller/.log'), // Lokasi file log
             'level' => 'error', // Mencatat semua log dengan level 'info' dan lebih tinggi
             'days' => 30, // Menyimpan log hanya selama 30 hari
         ],
 
         'debugging' => [
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/debug/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/debug/.log'), // Lokasi file log
             'level' => 'debug', // Mencatat semua log dengan level 'info' dan lebih tinggi
             'days' => 30, // Menyimpan log hanya selama 30 hari
         ],
 
         'information' => [
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/info/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/info/.log'), // Lokasi file log
             'level' => 'info', // Mencatat semua log dengan level 'info' dan lebih tinggi
         ],
 
         'header-request' => [
             // 'driver' => 'single', // Menggunakan driver 'single' untuk satu file log
             'driver' => 'daily', // Menggunakan driver 'daily' untuk memisahkan log per hari
-            'path' => storage_path('logs/header-request/.log'), // Lokasi file log
+            'path' => storage_path('app/private/logs/header-request/.log'), // Lokasi file log
             'level' => 'info', // Mencatat semua log dengan level 'info' dan lebih tinggi
             'days' => 15, // Menyimpan log hanya selama 15 hari
         ],
-
     ],
-
 ];

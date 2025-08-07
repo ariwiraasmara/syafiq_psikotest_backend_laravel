@@ -4,8 +4,9 @@
 // ! Syafiq Marzuki
 // ! Syahri Ramadhan Wiraasmara (ARI)
 use Illuminate\Support\Facades\URL;
+$nonce = request()->attributes->get('csp_nonce');
 @endphp
-<div class="max-md:hidden sticky justify-items-center bg-gradient-to-t from-sky-300 to-sky-700 w-full" style="height: 28px;">
+<div class="max-md:hidden sticky flex flex-col items-center justify-center text-center bg-gradient-to-t from-sky-300 to-sky-700 w-full" style="height: 28px;">
     <h2 id="navbar" class="hidden">Navbar</h2>
     <div id="mainmenu" class="flex flex-row justify-between text-sm">
         <div class="lg:flex lg:flex-row text-white">
@@ -42,7 +43,7 @@ use Illuminate\Support\Facades\URL;
                 </a>
 
                 <div class="flex flex-column text-black">
-                    <div id="submenuinformasi" class="hidden absolute items-center bg-white shadow-lg rounded-lg text-left">
+                    <div id="submenuinformasi" class="hidden absolute items-center bg-white shadow-lg mt-2 rounded-lg text-left">
                         <a href="{{ route('blog') }}" rel="follow" title="Semua | Blog" class="px-4 py-2 block border-b-2 border-black hover:bg-gray-300">Semua</a>
                         <a href="{{ route('blog').'?kategori=acara' }}" rel="follow" title="Acara | Blog" class="px-4 py-2 block border-b-2 border-black hover:bg-gray-300">Acara</a>
                         <a href="{{ route('blog').'?kategori=artikel' }}" rel="follow" title="Artikel | Blog" class="px-4 py-2 block border-b-2 border-black hover:bg-gray-300">Artikel</a>
@@ -173,13 +174,16 @@ use Illuminate\Support\Facades\URL;
     </div>
 </div>
 
+<script nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
+<script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script>
+<script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js" integrity="sha512-nlp9/l96/EpjYBx7EP7pGASVXNe80hGhYAUrjeXnu/fyF5Py0/RXav4BBNs7n5Hx1WFhOEOWSAVjGeC3oKxDVQ==" crossorigin="anonymous"></script>
 <script>
     function toPeserta() {
         try {
             const path = `{{ env('SESSION_PATH') }}`; // Use a valid path or domain option if needed
             const domain = `{{ env('SESSION_DOMAIN') }}`;
-            Cookies.set('poa-ipt', AES(true), { expires: 1, path: path, secure: true, sameSite: 'strict' });
-            localStorage.setItem('poa-ipt', AES(true));
+            Cookies.set('ispeserta', true, { expires: 1, path: path, secure: true, sameSite: 'strict' });
+            localStorage.setItem('ispeserta', true);
             window.location.href = "{{ URL::signedRoute('peserta', absolute: true) }}";
         }
         catch(error) {
@@ -237,15 +241,27 @@ use Illuminate\Support\Facades\URL;
         });
     }
 
-    document.getElementById('desktop-peserta').addEventListener('click', () => toPeserta());
-    document.getElementById('mobile-peserta').addEventListener('click', () => toPeserta());
+    $('#desktop-peserta').on('click', function() {
+        toPeserta();
+    });
 
-    document.getElementById('navbar-desktop-peserta').addEventListener('click', () => submenuToggle('submenupeserta'));
-    document.getElementById('navbar-mobile-peserta').addEventListener('click', () => submenuMobileToggle('mobile-submenupeserta'));
+    $('#mobile-peserta').on('click', function() {
+        toPeserta();
+    });
 
-    document.getElementById('navbar-desktop-blog').addEventListener('click', () => submenuToggle('submenuinformasi'));
-    document.getElementById('navbar-mobile-blog').addEventListener('click', () => submenuMobileToggle('mobile-submenuinformasi'));
+    $('#navbar-desktop-peserta').on('click', function() {
+        submenuToggle('submenupeserta');
+    });
+
+    $('#navbar-mobile-peserta').on('click', function() {
+        submenuMobileToggle('mobile-submenupeserta');
+    });
+
+    $('#navbar-desktop-blog').on('click', function() {
+        submenuToggle('submenuinformasi');
+    });
+
+    $('#navbar-mobile-blog').on('click', function() {
+        submenuMobileToggle('mobile-submenuinformasi');
+    });
 </script>
-{{-- <script defer nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/sweetalert2" integrity="sha512-rBcqrtFFt2PxFGp3ffb/lECz3pYr2DoF1FWmnMLy6qVdAOnaQg2C4wK84m64K36aK0qxkImFrlb/AKgOoeTvSg==" crossorigin="anonymous"></script> --}}
-{{-- <script defer nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js" integrity="sha512-nlp9/l96/EpjYBx7EP7pGASVXNe80hGhYAUrjeXnu/fyF5Py0/RXav4BBNs7n5Hx1WFhOEOWSAVjGeC3oKxDVQ==" crossorigin="anonymous"></script> --}}
-{{-- <script nonce="{{ base64_encode(random_bytes(16)) }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script> --}}
