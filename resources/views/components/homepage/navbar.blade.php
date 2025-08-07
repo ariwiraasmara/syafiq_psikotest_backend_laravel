@@ -220,6 +220,8 @@ $nonce = request()->attributes->get('csp_nonce');
     }
 
     function popupHasilTesPsikotestKecermatan() {
+        const url = `{{ route('peserta_psikotest_kecermatan_hasil', ['no_identitas' => 'NO_IDENTITAS', 'tgl_tes' => 'TGL_TES']); }}`;
+        
         Swal.fire({
             title: 'Hasil Tes Psikotest Kecermatan',
             icon: 'info',
@@ -229,7 +231,11 @@ $nonce = request()->attributes->get('csp_nonce');
                 <input type="date" id="hasiltespsikotestkecermatan-tgltes" class="p-2 border-2 border-black rounded-lg w-full mt-4" placeholder="Tanggal Tes" />
             `,
             focusConfirm: false,
-            preConfirm: () => window.location.href = `/public/peserta/psikotest/kecermatan/hasil/${document.getElementById("hasiltespsikotestkecermatan-noidentitas").value}/${document.getElementById("hasiltespsikotestkecermatan-tgltes").value}`,
+            preConfirm: () => {
+                const newUrl = url.replace('NO_IDENTITAS', document.getElementById("hasiltespsikotestkecermatan-noidentitas").value)
+                                .replace('TGL_TES', document.getElementById("hasiltespsikotestkecermatan-tgltes").value);
+                window.location.href = newUrl
+            },
             allowOutsideClick: true,
             allowEscapeKey: false,
             allowEnterKey: true,

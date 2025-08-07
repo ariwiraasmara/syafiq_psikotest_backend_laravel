@@ -44,8 +44,8 @@ $nonce = request()->attributes->get('csp_nonce');
         <meta name="X-UNIQUE" content="{{ $unique }}" />
         @endif
 
-        <link rel="stylesheet" href="{{ asset('/css/additional.css') }}" />
-        {{-- <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}" /> --}}
+        <link rel="stylesheet" href="{{ asset('css/additional.css') }}" />
+        <link rel="stylesheet" href="{{ tailwindcss('css/app.css') }}" />
         <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}" />
     </head>
     <body id="{{ 'app-'.env('APP_ENV').'-content' }}" class="">
@@ -54,7 +54,7 @@ $nonce = request()->attributes->get('csp_nonce');
         </nav>
         @yield('content')
 
-        <script defer nonce="{{ $nonce }}" type="module" src="{{ asset('/js/myfunction.js') }}"></script>
+        <script defer nonce="{{ $nonce }}" type="module" src="{{ storage_path('/app/private/js/myfunction.js') }}"></script>
         <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous"></script>
         <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous"></script>
         <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script>

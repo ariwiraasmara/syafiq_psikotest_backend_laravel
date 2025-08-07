@@ -4,6 +4,9 @@
 ! Syafiq Marzuki
 ! Syahri Ramadhan Wiraasmara (ARI)
 --}}
+@php
+$nonce = request()->attributes->get('csp_nonce');
+@endphp
 @extends('layouts.app')
 @section('content')
     @if($sessionID > 5)
@@ -53,7 +56,7 @@
         </div>
 
         <div class="border-t-2 border-black p-4">
-            <button type="button" onclick="next_session({{ $sessionID }})" class="right p-2 bg-blue-700 hover:bg-blue-500 shadow-xl text-white rounded-lg text-center w-full">
+            <button type="button" id="btn-next-session" class="right p-2 bg-blue-700 hover:bg-blue-500 shadow-xl text-white rounded-lg text-center w-full">
                 <ion-icon name="arrow-forward-circle-outline" style="font-size: 40px; margin-top: 0px;"></ion-icon>
             </button>
         </div>
@@ -61,7 +64,11 @@
 
     @component('components.footer', ['hidden' => '', 'otherCSS' => 'bottom-0 w-full']) @endcomponent
 
+    <script nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
     <script>
+        const baseUrl = `{{ route('peserta_psikotest_kecermatan', ['sesi' => 'SESI']); }}`;
+        const hasilUrl = `{{ route('peserta_psikotest_kecermatan_hasil', ['no_identitas' => 'NO_IDENTITAS', 'tgl_tes' => 'TGL_TES']) }}`;
+
         let nilaiTotal = 0;
         let jawabanUser = {};
         let timeLeft = parseInt('{{ $variabel }}');
@@ -113,10 +120,13 @@
 
         async function submit() {
             try {
+                const urlStore = `{{ route('peserta_psikotest_kecermatan_store', ['id' => 'ID']) }}`;
                 const id = parseInt(DOMPurify.sanitize(sessionStorage.getItem(`id_peserta_psikotest`)));
+                const newUrl = urlStore.replace('ID', id);
+
                 axios.defaults.withCredentials = true;
                 axios.defaults.withXSRFToken = true;
-                const response = await axios.post(`../../../peserta-psikotest-kecermatan/${id}`, {
+                const response = await axios.post(newUrl, {
                     unique: '{{ $unique; }}',
                     hasilnilai_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`nilai_total_psikotest_kecermatan_kolom1`))),
                     waktupengerjaan_kolom_1: parseInt(DOMPurify.sanitize(sessionStorage.getItem(`waktupengerjaan_kolom_1`))),
@@ -141,18 +151,20 @@
                     }
                 });
 
-                console.info('response', response);
+                // console.info('response', response);
                 if(parseInt(response.data.success)) {
                     localStorage.removeItem('sesi_psikotest_kecermatan');
                     setTimeout(() => {
-                        window.location.href = `/public/peserta/psikotest/kecermatan/hasil/${sessionStorage.getItem('no_identitas_peserta_psikotest')}/${localStorage.getItem('tgl_tes_peserta_psikotest_kecermatan')}`;
+                        const newHasilurl = hasilUrl.replace('NO_IDENTITAS', sessionStorage.getItem('no_identitas_peserta_psikotest'))
+                                                    .replace('TGL_TES', localStorage.getItem('tgl_tes_peserta_psikotest_kecermatan'));
+                        window.location.href = newHasilurl;
                         sessionStorage.clear();
                     }, 3000);
                 }
                 console.info('Tidak dapat menyimpan data sesi');
             }
             catch(err) {
-                console.info('Terjadi Error PesertaPsikotestKecermatan-submit:', err);
+                console.error('Terjadi Error PesertaPsikotestKecermatan-submit:', err);
             }
         }
 
@@ -165,9 +177,15 @@
             else {
                 localStorage.setItem('sesi_psikotest_kecermatan', nextSession);
                 sessionStorage.setItem(`nilai_total_psikotest_kecermatan_kolom${nextSession}`, 0);
-                window.location.href = `/public/peserta/psikotest/kecermatan/${nextSession}`;
+                const newUrl = baseUrl.replace('SESI', nextSession);
+                window.location.href = newUrl;
             }
         }
+
+        document.getElementById("btn-next-session").addEventListener("click", function (e) {
+            e.preventDefault(); // Mencegah pengiriman form secara default
+            next_session({{ $sessionID }});
+        });
 
         document.addEventListener('DOMContentLoaded', function () {
             if (parseInt(DOMPurify.sanitize(localStorage.getItem('sesi_psikotest_kecermatan'))) > 5) {
@@ -187,7 +205,8 @@
                                 const nextSession = parseInt(sessionID) + 1;
                                 localStorage.setItem('sesi_psikotest_kecermatan', nextSession);
                                 sessionStorage.setItem(`nilai_total_psikotest_kecermatan_kolom${nextSession}`, 0);
-                                window.location.href = `/public/peserta/psikotest/kecermatan/${nextSession}`;
+                                const newUrl = baseUrl.replace('SESI', nextSession);
+                                window.location.href = newUrl;
                             }
                         }, 3000);
                     }

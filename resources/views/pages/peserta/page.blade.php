@@ -170,7 +170,7 @@ $nonce = request()->attributes->get('csp_nonce');
                 }
             }
             catch(err) {
-                console.info('Terjadi Error Peserta-checkData:', err);
+                console.error('Terjadi Error Peserta-checkData:', err);
             }
         };
 
@@ -206,7 +206,7 @@ $nonce = request()->attributes->get('csp_nonce');
                             'tokenlogin': random,
                         }
                     });
-                    console.info('response', response);
+                    // console.info('response', response);
                     if(parseInt(response.data.success) > 0) {
                         const expires = 1;
                         const path = `{{ env('SESSION_PATH') }}`; // Use a valid path or domain option if needed
@@ -249,7 +249,7 @@ $nonce = request()->attributes->get('csp_nonce');
                 }
             }
             catch(err) {
-                console.info('Terjadi Error Peserta-submit:', err);
+                console.error('Terjadi Error Peserta-submit:', err);
             }
         }
 
@@ -274,7 +274,7 @@ $nonce = request()->attributes->get('csp_nonce');
                 window.location.href = `{{ route('peserta_psikotest_kecermatan', ['sesi' => 1]) }}`;
             }
             catch(err) {
-                console.info('Terjadi Error Peserta-continueSession:', err);
+                console.error('Terjadi Error Peserta-continueSession:', err);
             }
         }
 
@@ -286,7 +286,7 @@ $nonce = request()->attributes->get('csp_nonce');
                 window.location.href= `{{ route('home') }}`;
             }
             catch(err) {
-                console.info('Terjadi Error Peserta-onBack:', err);
+                console.error('Terjadi Error Peserta-onBack:', err);
             }
         }
 

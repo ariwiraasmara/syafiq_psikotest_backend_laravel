@@ -26,6 +26,7 @@ class Page extends Controller {
     protected branding $brand;
     protected $titlepage, $path, $domain, $unique, $robots, $data;
     protected $id, $nama, $email, $roles, $pat, $rtk, $filename;
+    protected $headerLog, $activitiesLog;
     public function __construct(
         Request $request,
         as1002_peserta_hasilnilai_teskecermatanService $service,
@@ -40,9 +41,6 @@ class Page extends Controller {
         $this->unique = fun::random('combwisp', 50);
         $this->robots = 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate';
 
-        if($request->session()->has('id')) $this->id = $request->session()->get('id');
-        else $this->id = 0;
-
         if($request->session()->has('nama')) $this->nama = $request->session()->get('nama');
         else $this->nama = null;
 
@@ -52,9 +50,16 @@ class Page extends Controller {
         if($request->session()->has('roles')) $this->roles = $request->session()->get('roles');
         else $this->roles = null;
 
-        $this->udl = new userdeviceloggingService(
-            $this->id, $this->filename,
-            [
+        if($request->session()->has('fileUDH')) $this->filename = $request->session()->has('fileUDH');
+        else $this->filename = date('Ymd');
+
+        if($request->session()->has('id'))  {
+            $this->id = $request->session()->get('id');
+        }
+        else {
+            $this->id = 0;
+
+            $this->headerLog = [
                 'tanggal'       => date('Y-m-d H:i:s'),
                 'host'          => $request->host(),
                 'id_user'       => $this->id,
@@ -62,29 +67,37 @@ class Page extends Controller {
                 'email'         => $this->email,
                 'roles_user'    => $this->roles,
                 'ip_address'    => $request->ip(),
-            ],
-            [
+            ];
+
+            $this->activitiesLog = [
+                'id_user'       => 0,
                 'last_path'     => $request->path(),
                 'last_url'      => $request->fullUrl(),
                 'last_page'     => $this->titlepage,
-                'method_page'   => $request->method(),
-                'ngapain'       => 'read',
+                'method_page'   => 'Web - '.$request->method(),
+                'deskripsi'     => 'read : halaman hasil psikotest kecermatan peserta.',
                 'body_content'  => json_encode($request->all())
-            ]
-        );
+            ];
+
+            $this->udl = new userdeviceloggingService(
+                $this->id,
+                $this->filename,
+                $this->headerLog,
+                $this->activitiesLog
+            );
+        }
     }
 
     public function reactView(Request $request, $no_identitas, $tgl_tes): Inar|JsonResponse|Collection|array|String|int|null {
-        $unique = fun::random('combwisp', 20);
         $data = $this->service->get($no_identitas, $tgl_tes);
 
         meta()->title($this->titlepage)
             ->set('og:title', $this->titlepage)
             ->set('canonical', url()->current())
             ->set('og:url', url()->current())
-            ->set('robots', 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate')
+            ->set('robots', $this->robots)
             ->set('XSRF-TOKEN', csrf_token())
-            ->set('__unique__', $unique);
+            ->set('__unique__', $this->unique);
 
         return Inertia::render('peserta/psikotest/kecermatan/hasil/page', [
             'title'        => $this->titlepage,
@@ -96,16 +109,15 @@ class Page extends Controller {
 
     public function bladeView(Request $request, $no_identitas, $tgl_tes): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->get($no_identitas, $tgl_tes);
-        // return $data;
         if($data['hasiltes']->count() > 0) {
             return view('pages.peserta.psikotest.kecermatan.hasil.page', [
                 'title'                => $this->titlepage,
                 'pathURL'              => url()->current(),
-                'robots'               => 'index, follow, snippet, max-snippet:99, max-image-preview:standard, noarchive, notranslate',
+                'robots'               => $this->robots,
                 'onetime'              => false,
                 'breadcrumb'           => '/peserta/psikotest/kecermatan/hasil/'.$no_identitas.'/'.$tgl_tes,
                 'is_breadcrumb_hidden' => 'hidden',
-                'unique'               => fun::random('combwisp', 50),
+                'unique'               => $this->unique,
                 'appbar_title'         => 'Hasil Psikotest Kecermatan',
                 'data'                 => $data,
                 'no_identitas'         => $no_identitas,
@@ -118,7 +130,7 @@ class Page extends Controller {
     }
 
     public function __destruct() {
-        $this->udl->print();
+        $this->udl->print($this->activitiesLog);
         $this->service = null;
         $this->titlepage = null;
         $this->path = null;

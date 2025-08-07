@@ -6,21 +6,23 @@
 --}}
 @extends('layouts.app')
 @section('content')
-    @component('components.appbarku', ['appbar_title' => $appbar_title, 'link_back' => '/']) @endcomponent
+    @component('components.appbarku', [
+        'appbar_title' => $appbar_title,
+        'link_back'    => route('home'),
+        'roles'        => 0
+    ]) @endcomponent
 
     <div class="p-4 text-black">
-        <h1 class='hidden'>Halaman Hasil Psikotest Kecermatan Peserta {{ $data['peserta'][0]['nama']; }}</h1>
+        <h2 class='hidden'>Halaman Hasil Psikotest Kecermatan Peserta {{ $data['peserta'][0]['nama']; }}</h2>
         <div>
-            <div>
-                <h2 class="font-bold underline text-lg">Profil Peserta</h2>
-                <p><span class="font-bold">Nama :</span> {{ $data['peserta'][0]['nama']; }}</p>
-                <p><span class="font-bold">No. Identitas :</span> {{ $no_identitas; }}</p>
-                <p><span class="font-bold">Email :</span> {{ $data['peserta'][0]['email']; }}</p>
-                <p><span class="font-bold">Tanggal Lahir :</span> {{ $data['peserta'][0]['tgl_lahir']; }}</p>
-                <p><span class="font-bold">Usia :</span> {{ $data['peserta'][0]['usia']; }}</p>
-                <p><span class="font-bold">Asal : </span> {{ $data['peserta'][0]['asal']; }}</p>
-                <p><span class="font-bold">Tanggal Tes : </span> {{ $tgl_tes }}</p>
-            </div>
+            <h3 class="font-bold underline text-lg">Profil Peserta</h3>
+            <p><span class="font-bold">Nama :</span> {{ $data['peserta'][0]['nama']; }}</p>
+            <p><span class="font-bold">No. Identitas :</span> {{ $no_identitas; }}</p>
+            <p><span class="font-bold">Email :</span> {{ $data['peserta'][0]['email']; }}</p>
+            <p><span class="font-bold">Tanggal Lahir :</span> {{ $data['peserta'][0]['tgl_lahir']; }}</p>
+            <p><span class="font-bold">Usia :</span> {{ $data['peserta'][0]['usia']; }}</p>
+            <p><span class="font-bold">Asal : </span> {{ $data['peserta'][0]['asal']; }}</p>
+            <p><span class="font-bold">Tanggal Tes : </span> {{ $tgl_tes }}</p>
         </div>
 
         <div class="mt-4 p-2">
@@ -55,7 +57,6 @@
     </div>
 
     @component('components.footer', ['hidden' => '', 'otherCSS' => 'bottom-0 w-full']) @endcomponent
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.clear();

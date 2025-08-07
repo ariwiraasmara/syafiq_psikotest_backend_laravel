@@ -27,6 +27,16 @@ Route::middleware(
 });
 
 Route::middleware(
+    'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
+    // 'customThrottle:50,1'
+    SecurityHeaders::class
+)->group(function () {
+    Route::get('/admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
+        Route::post('/admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
+    Route::get('/logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
+});
+
+Route::middleware(
     'throttle:250,1', // 200 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     SecurityHeaders::class
 )->group(function () {
@@ -39,16 +49,6 @@ Route::middleware(
         Route::get('/psikotest/kecermatan/pertanyaan/{id}', myroute::API('As2001KecermatanKolompertanyaanController', 'allForTes'))->name('psikotest_kecermatan_pertanyaan');
         Route::get('/psikotest/kecermatan/soaljawaban/{id}', myroute::API('As2002KecermatanSoaljawabanController', 'allForTes'))->name('psikotest_kecermatan_soaljawaban');
     }
-});
-
-Route::middleware(
-    'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    // 'customThrottle:50,1'
-    SecurityHeaders::class
-)->group(function () {
-    Route::get('/admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
-        Route::post('/admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
-    Route::get('/logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
 });
 
 Route::middleware([
