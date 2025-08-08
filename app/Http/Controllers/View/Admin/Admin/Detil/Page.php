@@ -98,6 +98,14 @@ class Page extends Controller {
 
     public function bladeView(Request $request, $id): View|Response|JsonResponse|Collection|array|String|int|null {
         $data = $this->service->detail('id', fun::denval($id, true));
+        if($data['user'][0]['foto']) {
+            $foto = asset('foto_user_admin/'.$data['user'][0]['foto']);
+            $alt_foto = $data['user'][0]['name'];
+        }
+        else {
+            $foto = asset('foto_user_admin/default_user_admin.png');
+            $alt_foto = 'tidak ada foto';
+        }
         return view('pages.admin.admin.detil.page', [
             'title'                => $this->titlepage,
             'appbar_title'         => 'Detil Admin',
@@ -114,6 +122,7 @@ class Page extends Controller {
             'roles'                => $this->roles,
             'isprofil'             => false,
             'data'                 => $data,
+            'foto'                 => ['foto' => $foto, 'alt_foto' => $alt_foto],
             'link_back'            => route('admin_anggota', ['sort' => 'name', 'by' => 'asc', 'search' => '-']).'?page=1',
         ]);
     }

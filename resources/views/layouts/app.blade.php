@@ -54,22 +54,23 @@ $nonce = request()->attributes->get('csp_nonce');
         </nav>
         @yield('content')
 
-        <script defer nonce="{{ $nonce }}" type="module" src="{{ storage_path('/app/private/js/myfunction.js') }}"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js" integrity="sha512-Y51n9mtKTVBh3Jbx5pZSJNDDMyY+yGe77DGtBPzRlgsf/YLCh13kSZ3JmfHGzYFCmOndraf0sQgfM654b7dJ3w==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" integrity="sha512-YlctBG9PGZIhh9keoqI3eZkQM9T8QUbiBi7qNYAO/TUEo8jqWX5pLp5+x1cKRQDRzJ/lyGyJ9WUVNIRduxIIFw==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js" integrity="sha512-nlp9/l96/EpjYBx7EP7pGASVXNe80hGhYAUrjeXnu/fyF5Py0/RXav4BBNs7n5Hx1WFhOEOWSAVjGeC3oKxDVQ==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/sweetalert2" integrity="sha512-rBcqrtFFt2PxFGp3ffb/lECz3pYr2DoF1FWmnMLy6qVdAOnaQg2C4wK84m64K36aK0qxkImFrlb/AKgOoeTvSg==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/validator/validator.min.js" integrity="sha512-D1UQZu1TzZtC8ZwtjDngmaTnXcPXKRdgWSqLxfsW9eY3kWcJV8AN0BP+taOmhyoOJe4io2BjkvSrskYZ2OSQ8A==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" integrity="sha512-EyvpeiXzWi5LEZNtV9VN1TEbN0k4QgVJvxz/rM/0h66lz3Z/zD3JGdeL9xO0+bF3pwX0kOxwA4apAxVaFMUuLA==" crossorigin="anonymous"></script>
-        <script defer nonce="{{ $nonce }}" nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" integrity="sha512-I/fJS7jWAgGu7A3wEgtWU3C+Pu0N/wSyy0nWkf53JtB3MhX9hXW3rDL9TdX07mepq+vFv5cdHqGW6Kgl8ix68Q==" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" type="module" src="{{ asset('js/myfunction.js') }}"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" integrity="sha256-BA81LP1os6XfLCoGGW8QArXABI+U4VNDWvhormFxWOk=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js" integrity="sha256-Lye89HGy1p3XhJT24hcvsoRw64Q4IOL5a7hdOflhjTA=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha256-fbDSXoG1W4eJBx/hq3c7X6DpC+5Wx8Ndqj73DWYUZDo=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" integrity="sha256-ieH6dkfLSVNw06mXrOQ4f10V2fTFrxI1LFPapACVYoc=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js" integrity="sha256-WCzAhd2P6gRJF9Hv3oOOd+hFJi/QJbv+Azn4CGB8gfY=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/sweetalert2" integrity="sha256-Ua8fKA4E1l7RSqT5HOjK0m/PrSwP41XFTs++qmtWey8=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/validator/validator.min.js" integrity="sha256-bpSr8wa+lfqpTs0vp5AQbrcMR2NZ3jTkPp3zcD5mhv0=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js" integrity="sha256-Bi+gzul97kP90CUgTGd2rmCdcaVbYRexALy/at85S9I=" crossorigin="anonymous"></script>
+        <script defer nonce="{{ $nonce }}" nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js" integrity="sha256-rrxoBOddMUI9Hqg7AdXOPST4sFpIXm/13+baTHTexRE=" crossorigin="anonymous"></script>
     </body>
 
     @if(env('APP_ENV') === 'production')
     <script defer nonce="{{ $nonce }}">
+		const swUrl = `/public/service-worker.js`;
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
+            navigator.serviceWorker.register(swUrl)
                 .then(() => console.log("✅ Service Worker registered"))
                 .catch(err => console.log("❌ SW failed:", err));
         } else {
@@ -77,28 +78,24 @@ $nonce = request()->attributes->get('csp_nonce');
         }
 
         (function() {
-            // ✅ Daftar pengecekan fitur
             const hasSW = 'serviceWorker' in navigator;
             const hasLocalStorage = typeof window.localStorage !== "undefined";
             const hasFetch = typeof window.fetch === "function" && typeof Promise !== "undefined";
 
-            // ✅ Registrasi Service Worker untuk browser modern
             if (hasSW) {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(() => console.log("✅ Service Worker registered"))
-                    .catch(err => console.log("❌ SW failed:", err));
+                navigator.serviceWorker.register(swUrl)
+									.then(() => console.log("✅ Service Worker registered"))
+									.catch(err => console.log("❌ SW failed:", err));
             } else {
                 console.log("⚠ Service Worker tidak didukung browser ini.");
             }
 
-            // ✅ Fallback caching untuk browser lama
             if (!hasLocalStorage) {
                 console.log("⚠ localStorage tidak tersedia.");
                 return;
             }
 
             /*
-            // ✅ Fungsi Fetch dengan fallback
             function fetchWithFallback(url, callback) {
                 // Ambil cache dari localStorage jika ada
                 try {
@@ -143,7 +140,6 @@ $nonce = request()->attributes->get('csp_nonce');
                 }
             }
 
-            // ✅ Contoh pemakaian
             fetchWithFallback("/api/posts", function(data) {
                 console.log("Posts loaded:", data);
             });

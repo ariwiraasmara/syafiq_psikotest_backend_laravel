@@ -13,8 +13,8 @@ use App\Libraries\myfunction;
 body {
     background-color: rgba(200, 200, 255, 0.9);
     background-image: image-set(
-        url('../images/bg19.webp') type('image/webp'),
-        url('../images/bg19.png') type('image/png')
+        url('images/bg19.webp') type('image/webp'),
+        url('images/bg19.png') type('image/png')
     );
     background-attachment: fixed;
     font-family: Georgia, Helvetica, sans-serif;
@@ -27,6 +27,7 @@ body {
         <div class="flex flex-col gap-8 row-start-2 items-center sm:items-start">
             <div class="form-entry">
                 <form id="form-login" method="POST" action="{{ route('admin_login', ['type' => 'php']) }}">
+                    @csrf
                     <h2 class="text-2xl text-bold uppercase font-bold text-center text-black">Login</h2>
                     <div class='form_admin_peserta text-left'>
                         <input  type="email" id="email" name="email" required
@@ -67,15 +68,11 @@ body {
 
     @component('components.footer', ['hidden' => '', 'otherCSS' => '']) @endcomponent
 
-    <script nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous"></script>
-    <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" integrity="sha512-h9644v03pHqrIHThkvXhB2PJ8zf5E9IyVnrSfZg8Yj8k4RsO4zldcQc4Bi9iVLUCCsqNY0b4WXVV4UB+wbWENA==" crossorigin="anonymous"></script>
-    <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/crypto-js/index.min.js" integrity="sha512-wAL/CX2oapYVhCeLcpIcdxZJjaVJxLl+XhMXV0ZuD7ZIq4WjjhQ3ZHhC4LWmDny3E9n3Cj6BEpVsuoqAeTmdYQ==" crossorigin="anonymous"></script>
-    <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/jsencrypt/lib/index.js" ></script>
-    <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/validator/validator.min.js" integrity="sha512-D1UQZu1TzZtC8ZwtjDngmaTnXcPXKRdgWSqLxfsW9eY3kWcJV8AN0BP+taOmhyoOJe4io2BjkvSrskYZ2OSQ8A==" crossorigin="anonymous"></script>
-    <script defer nonce="{{ $nonce }}" src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js" integrity="sha512-YlctBG9PGZIhh9keoqI3eZkQM9T8QUbiBi7qNYAO/TUEo8jqWX5pLp5+x1cKRQDRzJ/lyGyJ9WUVNIRduxIIFw==" crossorigin="anonymous"></script>
-    <script defer nonce="{{ $nonce }}">
+    <script nonce="{{ request()->attributes->get('csp_nonce'); }}" src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script defer nonce="{{ request()->attributes->get('csp_nonce'); }}" src="https://cdn.jsdelivr.net/npm/jsencrypt/lib/index.js" integrity="sha256-pmhef0M6bcGsgO/ubKicqB6ew8Ua5jj8PjEoGZyCADc=" crossorigin="anonymous"></script>
+    <script nonce="{{ request()->attributes->get('csp_nonce'); }}">
         document.getElementById("btn-form-login-back").addEventListener("click", function (e) {
-            e.preventDefault(); // Mencegah pengiriman form secara default
+            e.preventDefault();
             window.location.href= `{{ route('home') }}`;
         });
 
@@ -84,7 +81,7 @@ body {
                 axios.defaults.withCredentials = true;
                 axios.defaults.withXSRFToken = true;
                 const getKey = await axios.get(`{{ route('api_public_pem') }}`,  {
-                    withCredentials: true,  // Mengirimkan cookie dalam permintaan
+                    withCredentials: true,
                     headers: {
                         'XSRF-TOKEN': '{{ csrf_token(); }}',
                         'Content-Type': 'application/json',
@@ -124,7 +121,7 @@ body {
             }
         }
 
-        document.getElementById("btn-form-login-submit").addEventListener("click", function (e) {
+        document.getElementById("xx").addEventListener("click", function (e) {
             e.preventDefault();
             const email = DOMPurify.sanitize(document.getElementById("email").value);
             const password = DOMPurify.sanitize(document.getElementById("password").value);

@@ -15,8 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Register your custom throttle middleware
         $middleware->api(append: [
             // \App\Http\Middleware\CustomThrottleRequests::class,
-            \App\Http\Middleware\SecurityHeaders::class,
-            \App\Http\Middleware\BlockSensitiveFiles::class
+            // \App\Http\Middleware\SecurityHeaders::class,
+            // \App\Http\Middleware\BlockSensitiveFiles::class
         ]);
 
         $middleware->web(append: [
@@ -24,10 +24,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             // \App\Http\Middleware\CustomThrottleRequests::class,
-            \App\Http\Middleware\SecurityHeaders::class,
+            // \App\Http\Middleware\SecurityHeaders::class,
             // \App\Http\Middleware\MinifyHtml::class,
-            \App\Http\Middleware\CacheControlMiddleware::class,
-            \App\Http\Middleware\BlockSensitiveFiles::class
+            // \App\Http\Middleware\CacheControlMiddleware::class,
+            // \App\Http\Middleware\BlockSensitiveFiles::class
         ]);
 
         // $middleware->web(append: [

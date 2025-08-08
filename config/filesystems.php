@@ -75,7 +75,7 @@ return [
 
         'foto_user_admin' => [
             'driver' => 'local',
-            'root' => storage_path('app/private/foto_user_admin'),
+            'root' => public_path('foto_user_admin'),
             'serve' => true,
             'throw' => false,
         ],

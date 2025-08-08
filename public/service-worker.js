@@ -34,22 +34,7 @@ const urlsToCache = [
 // Install Service Worker
 self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
-        // caches.open(CACHE_NAME).then(async (cache) => {
-        //     for (const url of urlsToCache) {
-        //         try {
-        //             const response = await fetch(url);
-        //             if (response.ok) {
-        //                 await cache.put(url, response);
-        //                 console.log(`✅ Cached: ${url}`);
-        //             } else {
-        //                 console.warn(`⚠ Gagal cache (status ${response.status}): ${url}`);
-        //             }
-        //         } catch (err) {
-        //             console.warn(`❌ Error fetch: ${url}`, err);
-        //         }
-        //     }
-        // })
+        caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)).catch(err => console.error("❌ Gagal cache.addAll():", err))
     );
 });
 

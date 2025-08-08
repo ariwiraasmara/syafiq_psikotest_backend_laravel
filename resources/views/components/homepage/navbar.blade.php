@@ -180,7 +180,7 @@ $nonce = request()->attributes->get('csp_nonce');
 <script>
     function toPeserta() {
         try {
-            const path = `{{ env('SESSION_PATH') }}`; // Use a valid path or domain option if needed
+            const path = `{{ env('SESSION_PATH') }}`;
             const domain = `{{ env('SESSION_DOMAIN') }}`;
             Cookies.set('ispeserta', true, { expires: 1, path: path, secure: true, sameSite: 'strict' });
             localStorage.setItem('ispeserta', true);

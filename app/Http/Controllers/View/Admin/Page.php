@@ -165,7 +165,6 @@ class Page extends Controller {
     #POST
     public function login(Request $request, $type) {
         try {
-            return $request;
             // if(date('Y-m-d H:i:s') > $request->cookie('_pas-g1')) {
                 $credentials = $request->validate([
                     'email'     => 'required|string',

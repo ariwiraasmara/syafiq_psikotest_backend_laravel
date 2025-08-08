@@ -23,21 +23,33 @@
 
     <div class="p-4 text-black" style="margin-bottom: 10px;">
         <div class="items-center justify-items-center">
-            <img src="{{ $data['user'][0]['foto'] }}" height="" width="" class="" alt="{{ $data['user'][0]['name'] }}" title="{{ $data['user'][0]['name'] }}" />
+            <img src="{{ $foto['foto']; }}" height="150" width="150" class="bg-white border-white border-2 rounded-full shadow-xl" alt="{{ $foto['alt_foto']; }}" title="{{ $data['user'][0]['name'] }}" />
         </div>
-        <div class="mt-6">
-            <p><span class="font-bold">Roles :</span> {{ $data['user'][0]['roles'] }}</p>
-            <p><span class="font-bold">Nama :</span> {{ $data['user'][0]['name'] }}</p>
-            <p><span class="font-bold">Email :</span> {{ $data['user'][0]['email'] }}</p>
-            <p><span class="font-bold">No. Identitas :</span> {{ $data['user'][0]['no_identitas'] }}</p>
-            <p><span class="font-bold">Tanggal Lahir :</span> {{ $data['user'][0]['tgl_lahir'] }}</p>
-            <p><span class="font-bold">Jenis Kelamin :</span> {{ $data['user'][0]['jk'] }}</p>
-            <p><span class="font-bold">Status :</span> {{ $data['user'][0]['status'] }}</p>
-            <p><span class="font-bold">Agama :</span> {{ $data['user'][0]['agama'] }}</p>
-            <p><span class="font-bold">Alamat :</span> {{ $data['user'][0]['alamat'] }}</p>
-            <p><span class="font-bold">Dibuat :</span> {{$data['user'][0]['created_at'] }}</p>
-            <p><span class="font-bold">Diperbaharui :</span> {{$data['user'][0]['updated_at'] }}</p>
-            <p><span class="font-bold">Dihapus :</span> {{$data['user'][0]['deleted_at'] }}</p>
+        <form action="{{ route('admin_anggota_update_foto', ['type' => 'php', 'id' => myfunction::enval($data['user'][0]['id'], true)]) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="text" id="unique" name="unique" value="{{ $unique }}" readonly hidden />
+            <div class="mt-4 flex flex-row w-full">
+                <div class="basis-1/2">
+                    <input type="file" id="file_foto" name="file_foto" accept="image/png, image/webp" class="p-2 w-full block bg-white rounded-xl shadow-xl" />
+                </div>
+                <div class="basis-1/2">
+                    <button type="submit" id="btn-form-foto-submit" class="p-2 w-full block bg-blue-700 text-white rounded-xl shadow-xl">Upload Foto</button>
+                </div>
+            </div>
+        </form>
+        <div class="p-4 mt-6 bg-white rounded-xl shadow-xl">
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Roles :</span> {{ $data['user'][0]['roles']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Nama :</span> {{ $data['user'][0]['name']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Email :</span> {{ $data['user'][0]['email']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">No. Identitas :</span> {{ $data['user'][0]['no_identitas']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Tanggal Lahir :</span> {{ $data['user'][0]['tgl_lahir']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Jenis Kelamin :</span> {{ $data['user'][0]['jk']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Status :</span> {{ $data['user'][0]['status']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Agama :</span> {{ $data['user'][0]['agama']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Alamat :</span> {{ $data['user'][0]['alamat']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Dibuat :</span> {{$data['user'][0]['created_at']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Diperbaharui :</span> {{$data['user'][0]['updated_at']; }}</p>
+            <p style="border-bottom: 1px solid #eee;"><span class="font-bold">Dihapus :</span> {{$data['user'][0]['deleted_at']; }}</p>
         </div>
 
         @if($roles == $data['user'][0]['roles'])
