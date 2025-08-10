@@ -1,8 +1,6 @@
 @php
-// ! Copyright @
-// ! PT. Solusi Psikologi Banten
-// ! Syafiq Marzuki
-// ! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmara.sc37@gmail.com, +628176896353. Year 2025
+// ! All Rights Reserved
 @endphp
 <div class="p-2 bg-white rounded-lg border-2 text-black mt-6 border-black ">
     <h4 class="hidden">Hasil Grafik Psikotest Kecermatan</h4>

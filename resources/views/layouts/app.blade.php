@@ -1,13 +1,12 @@
 @php
-// ! Copyright @
-// ! PT. Solusi Psikologi Banten
-// ! Syafiq Marzuki
-// ! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmara.sc37@gmail.com, +628176896353. Year 2025. Year 2025
+// ! All Rights Reserved
 $nonce = request()->attributes->get('csp_nonce');
 @endphp
 <!DOCTYPE html>
 <html lang="id">
     <head>
+        <meta name="copyrights" content="Copyrights @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmra.sc37@gmail.com, +628176896353. Year: {{ date('Y'); }}. All Rights Reserved." />
         <meta charSet="utf-8" />
         <title>{{ $title }}</title>
         <meta property="og:title" content="{{ $title }}" />
@@ -17,7 +16,6 @@ $nonce = request()->attributes->get('csp_nonce');
         <meta name="author" content="Syafiq. Syahri Ramadhan Wiraasmara (ARI)" />
         <meta name="publisher" content="Syafiq. Syahri Ramadhan Wiraasmara (ARI)" />
         <meta name="developer" content="Syahri Ramadhan Wiraasmara (ARI)" />
-        <meta name="copyright" content="Syafiq. Syahri Ramadhan Wiraasmara (ARI). Year: {{ date('Y'); }}" />
         <link rel="author" href="https://github.com/ariwiraasmara" />
         <link rel="repository" href="https://github.com/ariwiraasmara/syafiq_psikotest_backend_laravel" />
         <link rel="license" href="https://github.com/ariwiraasmara/syafiq_psikotest_backend_laravel?tab=AGPL-3.0-1-ov-file#" />

@@ -1,5 +1,6 @@
 <?php
-
+// ! Copyright @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmara.sc37@gmail.com, +628176896353. Year 2025
+// ! All Rights Reserved
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;

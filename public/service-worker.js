@@ -1,3 +1,5 @@
+// ! Copyright @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmara.sc37@gmail.com, +628176896353. Year 2025
+// ! All Rights Reserved
 const CACHE_NAME = "app-cache-v1";
 const CACHE_EXPIRY = 1000 * 60 * 60 * 12; // 12 jam dalam milidetik
 const urlsToCache = [

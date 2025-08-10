@@ -1,7 +1,5 @@
-// ! Copyright @
-// ! PT. Solusi Psikologi Banten
-// ! Syafiq Marzuki
-// ! Syahri Ramadhan Wiraasmara (ARI)
+// ! Copyright @ Syahri Ramadhan Wiraasmara (ARI), ariwiraasmara.sc37@gmail.com, +628176896353. Year 2025
+// ! All Rights Reserved
 function setCookie(vname, vvalue, vexpire, vpath, vdomain) {
     const d = new Date();
     d.setTime(d.getTime() + vexpire);
